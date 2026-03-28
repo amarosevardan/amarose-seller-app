@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AMAROSE SELLER</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to bottom, #eaf6ff, #f7fbff);
+      color: #1f3552;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 16px 16px 90px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .brand-pill {
+      flex: 1;
+      background: rgba(255,255,255,0.95);
+      border: 1px solid #cfe6ff;
+      border-radius: 999px;
+      padding: 14px 18px;
+      text-align: center;
+      color: #5d84a8;
+      letter-spacing: 3px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .lang-switch {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      max-width: 210px;
+    }
+
+    .lang-btn {
+      border: 1px solid #cfe6ff;
+      background: white;
+      color: #4b78a3;
+      border-radius: 12px;
+      padding: 10px 10px;
+      font-weight: 700;
+      min-width: 48px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .lang-btn.active {
+      background: #67b7ff;
+      color: white;
+      border-color: #67b7ff;
+    }
+
+    .logo {
+      text-align: center;
+      margin: 10px 0 18px;
+    }
+
+    .logo h1 {
+      font-size: 54px;
+      color: #4f8fca;
+      letter-spacing: 1px;
+      font-weight: 700;
+    }
+
+    .logo p {
+      margin-top: 6px;
+      color: #6d8eaf;
+      font-size: 18px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.96);
+      border: 1px solid #d8ebff;
+      border-radius: 28px;
+      padding: 18px;
+      box-shadow: 0 8px 24px rgba(90, 150, 210, 0.08);
+      margin-bottom: 18px;
+    }
+
+    .eyebrow {
+      color: #7ba8d2;
+      letter-spacing: 4px;
+      font-size: 12px;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .title {
+      font-size: 22px;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 10px;
+      color: #24476d;
+    }
+
+    .text {
+      color: #5b7693;
+      line-height: 1.55;
+      font-size: 16px;
+    }
+
+    .primary-btn, .secondary-btn {
+      width: 100%;
+      border: none;
+      border-radius: 18px;
+      padding: 16px;
+      font-size: 18px;
+      font-weight: 800;
+      margin-top: 14px;
+      cursor: pointer;
+    }
+
+    .primary-btn {
+      background: linear-gradient(to right, #67b7ff, #3d93e6);
+      color: white;
+    }
+
+    .secondary-btn {
+      background: white;
+      color: #4c83b5;
+      border: 1px solid #cfe6ff;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 22px 0 14px;
+      gap: 10px;
+    }
+
+    .section-title h2 {
+      font-size: 22px;
+      color: #24476d;
+    }
+
+    .section-title span {
+      color: #7fa7cf;
+      font-size: 14px;
+      text-align: right;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .option-card {
+      background: rgba(255,255,255,0.96);
+      border: 1px solid #d8ebff;
+      border-radius: 22px;
+      padding: 18px 10px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .option-card.active {
+      background: #dff0ff;
+      border-color: #8ec7ff;
+    }
+
+    .icon {
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+
+    .option-card div:last-child {
+      font-weight: 700;
+      color: #355c84;
+      font-size: 14px;
+    }
+
+    .field {
+      margin-bottom: 12px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 8px;
+      color: #51769a;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .field input, .field select, .field textarea {
+      width: 100%;
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid #d1e7ff;
+      background: white;
+      font-size: 15px;
+      color: #27486e;
+    }
+
+    .field textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .plan-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .plan-card {
+      border: 1px solid #d8ebff;
+      background: rgba(255,255,255,0.96);
+      border-radius: 24px;
+      padding: 18px;
+    }
+
+    .plan-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 10px;
+    }
+
+    .plan-name {
+      font-size: 22px;
+      font-weight: 800;
+      color: #24476d;
+    }
+
+    .price-tag {
+      color: #4f8fca;
+      font-size: 22px;
+      font-weight: 800;
+      text-align: right;
+    }
+
+    .plan-note {
+      color: #5c7a99;
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+
+    .bullet {
+      color: #4c7397;
+      margin-bottom: 6px;
+      font-size: 15px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .stat-box {
+      background: rgba(255,255,255,0.96);
+      border: 1px solid #d8ebff;
+      border-radius: 22px;
+      padding: 18px;
+    }
+
+    .stat-num {
+      font-size: 28px;
+      font-weight: 800;
+      color: #3d93e6;
+    }
+
+    .stat-label {
+      margin-top: 6px;
+      color: #6383a3;
+      font-size: 14px;
+    }
+
+    .list-card {
+      background: rgba(255,255,255,0.96);
+      border: 1px solid #d8ebff;
+      border-radius: 24px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .item-title {
+      font-weight: 800;
+      color: #27486e;
+      font-size: 20px;
+      margin-bottom: 4px;
+    }
+
+    .item-sub {
+      color: #6a89aa;
+      font-size: 14px;
+    }
+
+    .item-price {
+      font-weight: 800;
+      color: #4f8fca;
+      font-size: 26px;
+      white-space: nowrap;
+    }
+
+    .status-pill {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #e7f5ff;
+      color: #3d93e6;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255,255,255,0.98);
+      border-top: 1px solid #d8ebff;
+      padding: 10px 12px 12px;
+    }
+
+    .bottom-nav-inner {
+      max-width: 480px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+
+    .nav-item {
+      text-align: center;
+      color: #6e8eb0;
+      font-size: 13px;
+      cursor: pointer;
+      padding: 8px 4px;
+    }
+
+    .nav-item.active {
+      color: #3d93e6;
+      font-weight: 800;
+    }
+
+    .nav-icon {
+      font-size: 22px;
+      margin-bottom: 4px;
+    }
+
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .small-note {
+      margin-top: 10px;
+      color: #7394b7;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 430px) {
+      .grid-3 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .logo h1 {
+        font-size: 46px;
+      }
+      .lang-switch {
+        max-width: 180px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="screen active" id="screen-home">
+      <div class="topbar">
+        <div class="brand-pill" data-i="brandSeller">AMAROSE SELLER</div>
+        <div class="lang-switch">
+          <button class="lang-btn" onclick="setLang('HY', this)">HY</button>
+          <button class="lang-btn" onclick="setLang('RU', this)">RU</button>
+          <button class="lang-btn active" onclick="setLang('EN', this)">EN</button>
+          <button class="lang-btn" onclick="setLang('ES', this)">ES</button>
+          <button class="lang-btn" onclick="setLang('DE', this)">DE</button>
+          <button class="lang-btn" onclick="setLang('FR', this)">FR</button>
+        </div>
+      </div>
+
+      <div class="logo">
+        <h1 data-i="sellerTitle">SELLER</h1>
+        <p data-i="sellerSubtitle">Grow with AMAROSE inside Telegram</p>
+      </div>
+
+      <div class="card">
+        <div class="eyebrow" data-i="welcome">WELCOME</div>
+        <div class="title" data-i="joinVerified">Join as a verified seller</div>
+        <div class="text" data-i="homeText">
+          Apply, upload documents, choose your seller plan, and manage products and orders in one place.
+        </div>
+        <button class="primary-btn" onclick="showScreen('screen-onboarding')" data-i="applySeller">Apply as Seller</button>
+        <button class="secondary-btn" onclick="showScreen('screen-pricing')" data-i="viewPlans">View Plans</button>
+      </div>
+
+      <div class="section-title">
+        <h2 data-i="sellerTypes">Seller types</h2>
+        <span data-i="chooseOne">Choose one</span>
+      </div>
+
+      <div class="grid-3">
+        <div class="option-card" onclick="selectSellerType('individual', this)">
+          <div class="icon">👤</div>
+          <div data-i="individual">Individual</div>
+        </div>
+        <div class="option-card" onclick="selectSellerType('ip', this)">
+          <div class="icon">🧾</div>
+          <div data-i="ip">Sole Proprietor</div>
+        </div>
+        <div class="option-card" onclick="selectSellerType('company', this)">
+          <div class="icon">🏢</div>
+          <div data-i="company">Company</div>
+        </div>
+      </div>
+
+      <div class="section-title">
+        <h2 data-i="whySell">Why sell with us</h2>
+        <span data-i="lowerFees">Lower fees</span>
+      </div>
+
+      <div class="card">
+        <div class="text" data-i="whySellText">
+          AMAROSE gives sellers lower fees than large marketplaces, a soft luxury brand environment, and direct owner review before approval.
+        </div>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-onboarding">
+      <div class="topbar">
+        <div class="brand-pill" data-i="sellerOnboarding">SELLER ONBOARDING</div>
+      </div>
+
+      <div class="card">
+        <div class="eyebrow" data-i="step1">STEP 1</div>
+        <div class="title" data-i="sellerApplication">Seller application</div>
+        <div class="text" data-i="reviewByOwner">
+          Complete the form below. Your documents will be reviewed by the owner before approval.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="field">
+          <label data-i="sellerTypeLabel">Seller Type</label>
+          <select id="sellerType" onchange="toggleSellerFields()">
+            <option value="individual" data-i="individual">Individual</option>
+            <option value="ip" data-i="ipFull">Sole Proprietor / IP</option>
+            <option value="company" data-i="companyFull">Company / LLC</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label data-i="fullName">Full Name</label>
+          <input type="text" data-ph="fullNamePh" placeholder="Enter full name">
+        </div>
+
+        <div id="companyFields" class="hidden">
+          <div class="field">
+            <label data-i="companyName">Company Name</label>
+            <input type="text" data-ph="companyNamePh" placeholder="Enter company name">
+          </div>
+          <div class="field">
+            <label data-i="registrationNumber">Registration Number</label>
+            <input type="text" data-ph="registrationNumberPh" placeholder="Enter registration number">
+          </div>
+        </div>
+
+        <div id="ipFields" class="hidden">
+          <div class="field">
+            <label data-i="businessName">Business / IP Name</label>
+            <input type="text" data-ph="businessNamePh" placeholder="Enter IP name">
+          </div>
+          <div class="field">
+            <label data-i="taxNumber">Tax Number</label>
+            <input type="text" data-ph="taxNumberPh" placeholder="Enter tax number">
+          </div>
+        </div>
+
+        <div class="field">
+          <label data-i="email">Email</label>
+          <input type="email" data-ph="emailPh" placeholder="Enter email">
+        </div>
+
+        <div class="field">
+          <label data-i="phone">Phone</label>
+          <input type="text" data-ph="phonePh" placeholder="Enter phone">
+        </div>
+
+        <div class="field">
+          <label data-i="country">Country</label>
+          <input type="text" data-ph="countryPh" placeholder="Enter country">
+        </div>
+
+        <div class="field">
+          <label data-i="city">City</label>
+          <input type="text" data-ph="cityPh" placeholder="Enter city">
+        </div>
+
+        <div class="field">
+          <label data-i="telegramUsername">Telegram Username</label>
+          <input type="text" data-ph="telegramUsernamePh" placeholder="@username">
+        </div>
+
+        <div class="field">
+          <label data-i="sellWhat">What do you want to sell?</label>
+          <textarea data-ph="sellWhatPh" placeholder="Beauty, fashion, gifts, home items..."></textarea>
+        </div>
+
+        <div class="field">
+          <label data-i="identityDocument">Identity Document</label>
+          <input type="file">
+        </div>
+
+        <div class="field">
+          <label data-i="businessDocument">Business Document</label>
+          <input type="file">
+        </div>
+
+        <div class="field">
+          <label data-i="selfieDocument">Selfie with Document</label>
+          <input type="file">
+        </div>
+
+        <div class="field">
+          <label data-i="paymentMethod">Payment Method</label>
+          <select>
+            <option data-i="bankTransfer">Bank Transfer</option>
+            <option data-i="card">Card</option>
+            <option data-i="paypal">PayPal</option>
+            <option data-i="crypto">Crypto</option>
+            <option data-i="other">Other</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label data-i="beneficiaryName">Beneficiary Name</label>
+          <input type="text" data-ph="beneficiaryNamePh" placeholder="Enter beneficiary name">
+        </div>
+
+        <div class="field">
+          <label data-i="ibanAccount">IBAN / Account Number</label>
+          <input type="text" data-ph="ibanAccountPh" placeholder="Enter IBAN or account number">
+        </div>
+
+        <div class="field">
+          <label data-i="bankWallet">Bank / Wallet / Provider</label>
+          <input type="text" data-ph="bankWalletPh" placeholder="Enter bank or wallet provider">
+        </div>
+
+        <div class="field">
+          <label data-i="paymentNotes">Payment Notes</label>
+          <textarea data-ph="paymentNotesPh" placeholder="Optional payment details"></textarea>
+        </div>
+
+        <button class="primary-btn" onclick="showScreen('screen-review')" data-i="submitApplication">Submit Application</button>
+        <button class="secondary-btn" onclick="showScreen('screen-home')" data-i="back">Back</button>
+
+        <div class="small-note" data-i="underReviewNote">
+          After submission, your status will become Under Review. You will get seller panel access only after approval.
+        </div>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-review">
+      <div class="card">
+        <div class="eyebrow" data-i="status">STATUS</div>
+        <div class="title" data-i="underReviewTitle">Your application is under review</div>
+        <div class="text" data-i="underReviewText">
+          AMAROSE owner will check your documents, business type, seller category, and payment details before approval.
+        </div>
+        <div class="status-pill" data-i="underReview">Under Review</div>
+        <button class="primary-btn" onclick="showScreen('screen-dashboard')" data-i="demoOpenPanel">Demo: Open Seller Panel</button>
+        <button class="secondary-btn" onclick="showScreen('screen-home')" data-i="backHome">Back to Home</button>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-pricing">
+      <div class="section-title">
+        <h2 data-i="sellerPlans">Seller plans</h2>
+        <span data-i="lowerThanAmazon">Lower than Amazon</span>
+      </div>
+
+      <div class="plan-list">
+        <div class="plan-card">
+          <div class="plan-top">
+            <div class="plan-name" data-i="basic">Basic</div>
+            <div class="price-tag" data-i="basicPrice">7%</div>
+          </div>
+          <div class="plan-note" data-i="basicNote">€0/month. Best for new sellers.</div>
+          <div class="bullet" data-i="basicB1">• Access to seller panel</div>
+          <div class="bullet" data-i="basicB2">• Product listing</div>
+          <div class="bullet" data-i="basicB3">• Standard support</div>
+          <div class="bullet" data-i="basicB4">• Owner verification required</div>
+        </div>
+
+        <div class="plan-card">
+          <div class="plan-top">
+            <div class="plan-name" data-i="pro">Pro</div>
+            <div class="price-tag" data-i="proPrice">€19 + 5%</div>
+          </div>
+          <div class="plan-note" data-i="proNote">Monthly plan for active sellers.</div>
+          <div class="bullet" data-i="proB1">• All Basic features</div>
+          <div class="bullet" data-i="proB2">• Priority placement</div>
+          <div class="bullet" data-i="proB3">• Verified seller badge</div>
+          <div class="bullet" data-i="proB4">• Faster support</div>
+        </div>
+
+        <div class="plan-card">
+          <div class="plan-top">
+            <div class="plan-name" data-i="promotion">Promotion</div>
+            <div class="price-tag" data-i="promotionPrice">€3 / €7 / €15</div>
+          </div>
+          <div class="plan-note" data-i="promotionNote">Boost products inside the marketplace.</div>
+          <div class="bullet" data-i="promotionB1">• Featured product — €3 / 7 days</div>
+          <div class="bullet" data-i="promotionB2">• Top category — €7 / 7 days</div>
+          <div class="bullet" data-i="promotionB3">• Main banner — €15 / 7 days</div>
+        </div>
+      </div>
+
+      <button class="primary-btn" onclick="showScreen('screen-onboarding')" data-i="applyNow">Apply Now</button>
+      <button class="secondary-btn" onclick="showScreen('screen-home')" data-i="back">Back</button>
+    </div>
+
+    <div class="screen" id="screen-dashboard">
+      <div class="section-title">
+        <h2 data-i="sellerDashboard">Seller dashboard</h2>
+        <span data-i="approved">Approved</span>
+      </div>
+
+      <div class="stats">
+        <div class="stat-box">
+          <div class="stat-num">12</div>
+          <div class="stat-label" data-i="products">Products</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">8</div>
+          <div class="stat-label" data-i="orders">Orders</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">3</div>
+          <div class="stat-label" data-i="pendingReview">Pending review</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">€420</div>
+          <div class="stat-label" data-i="sales">Sales</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px;">
+        <div class="eyebrow" data-i="access">ACCESS</div>
+        <div class="title" data-i="verifiedSeller">Verified seller</div>
+        <div class="text" data-i="approvedText">
+          Your seller account is approved. You can now add products and manage orders.
+        </div>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-products">
+      <div class="section-title">
+        <h2 data-i="myProducts">My products</h2>
+        <span data-i="sellerItems">Seller items</span>
+      </div>
+
+      <div class="list-card">
+        <div class="row">
+          <div>
+            <div class="item-title">Rose Glow Set</div>
+            <div class="item-sub">Beauty • AMAROSE</div>
+          </div>
+      
