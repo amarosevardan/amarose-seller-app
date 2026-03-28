@@ -1,581 +1,183 @@
+why: 'Почему прода
 <!DOCTYPE html>
-<h<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AMAROSE SELLER</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
-    body {
-      background: linear-gradient(to bottom, #eaf6ff, #f7fbff);
-      color: #1f3552;
-      min-height: 100vh;
+    body{
+      margin:0;
+      font-family:Arial,sans-serif;
+      background:#eaf6ff;
+      color:#24476d;
     }
-    .container {
-      max-width: 480px;
-      margin: 0 auto;
-      padding: 16px 16px 90px;
+    .wrap{
+      max-width:480px;
+      margin:0 auto;
+      padding:20px 20px 100px;
     }
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 18px;
+    .screen{display:none;}
+    .screen.active{display:block;}
+    .card{
+      background:#fff;
+      border:1px solid #d8ebff;
+      border-radius:24px;
+      padding:18px;
+      margin-bottom:16px;
     }
-    .brand-pill {
-      flex: 1;
-      background: rgba(255,255,255,0.95);
-      border: 1px solid #cfe6ff;
-      border-radius: 999px;
-      padding: 14px 18px;
-      text-align: center;
-      color: #5d84a8;
-      letter-spacing: 3px;
-      font-size: 12px;
-      font-weight: 700;
+    h1{
+      text-align:center;
+      color:#4f8fca;
+      font-size:42px;
+      margin:20px 0 10px;
     }
-    .lang-switch {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      max-width: 210px;
+    p{
+      color:#5b7693;
+      line-height:1.5;
     }
-    .lang-btn {
-      border: 1px solid #cfe6ff;
-      background: white;
-      color: #4b78a3;
-      border-radius: 12px;
-      padding: 10px 10px;
-      font-weight: 700;
-      min-width: 48px;
-      font-size: 12px;
-      cursor: pointer;
+    button{
+      width:100%;
+      padding:16px;
+      border:none;
+      border-radius:16px;
+      margin-top:12px;
+      font-size:18px;
+      font-weight:700;
+      cursor:pointer;
     }
-    .lang-btn.active {
-      background: #67b7ff;
-      color: white;
-      border-color: #67b7ff;
+    .primary{
+      background:#4f9eed;
+      color:#fff;
     }
-    .logo {
-      text-align: center;
-      margin: 10px 0 18px;
+    .secondary{
+      background:#fff;
+      color:#4f8fca;
+      border:1px solid #cfe6ff;
     }
-    .logo h1 {
-      font-size: 54px;
-      color: #4f8fca;
-      letter-spacing: 1px;
-      font-weight: 700;
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:16px;
     }
-    .logo p {
-      margin-top: 6px;
-      color: #6d8eaf;
-      font-size: 18px;
+    .box{
+      background:#fff;
+      border:1px solid #d8ebff;
+      border-radius:20px;
+      padding:20px;
+      text-align:center;
+      font-weight:700;
+      cursor:pointer;
     }
-    .card {
-      background: rgba(255,255,255,0.96);
-      border: 1px solid #d8ebff;
-      border-radius: 28px;
-      padding: 18px;
-      box-shadow: 0 8px 24px rgba(90,150,210,0.08);
-      margin-bottom: 18px;
+    .nav{
+      position:fixed;
+      left:0; right:0; bottom:0;
+      background:#fff;
+      border-top:1px solid #d8ebff;
+      padding:10px;
     }
-    .eyebrow {
-      color: #7ba8d2;
-      letter-spacing: 4px;
-      font-size: 12px;
-      margin-bottom: 14px;
-      text-transform: uppercase;
-      font-weight: 700;
+    .navin{
+      max-width:480px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:8px;
     }
-    .title {
-      font-size: 22px;
-      font-weight: 800;
-      line-height: 1.2;
-      margin-bottom: 10px;
-      color: #24476d;
-    }
-    .text {
-      color: #5b7693;
-      line-height: 1.55;
-      font-size: 16px;
-    }
-    .primary-btn, .secondary-btn {
-      width: 100%;
-      border: none;
-      border-radius: 18px;
-      padding: 16px;
-      font-size: 18px;
-      font-weight: 800;
-      margin-top: 14px;
-      cursor: pointer;
-    }
-    .primary-btn {
-      background: linear-gradient(to right, #67b7ff, #3d93e6);
-      color: white;
-    }
-    .secondary-btn {
-      background: white;
-      color: #4c83b5;
-      border: 1px solid #cfe6ff;
-    }
-    .section-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 22px 0 14px;
-      gap: 10px;
-    }
-    .section-title h2 {
-      font-size: 22px;
-      color: #24476d;
-    }
-    .section-title span {
-      color: #7fa7cf;
-      font-size: 14px;
-      text-align: right;
-    }
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-    }
-    .option-card {
-      background: rgba(255,255,255,0.96);
-      border: 1px solid #d8ebff;
-      border-radius: 22px;
-      padding: 18px 10px;
-      text-align: center;
-      cursor: pointer;
-    }
-    .option-card.active {
-      background: #dff0ff;
-      border-color: #8ec7ff;
-    }
-    .icon {
-      font-size: 30px;
-      margin-bottom: 8px;
-    }
-    .option-card div:last-child {
-      font-weight: 700;
-      color: #355c84;
-      font-size: 14px;
-    }
-    .field { margin-bottom: 12px; }
-    .field label {
-      display: block;
-      margin-bottom: 8px;
-      color: #51769a;
-      font-weight: 700;
-      font-size: 14px;
-    }
-    .field input, .field select, .field textarea {
-      width: 100%;
-      padding: 14px;
-      border-radius: 16px;
-      border: 1px solid #d1e7ff;
-      background: white;
-      font-size: 15px;
-      color: #27486e;
-    }
-    .field textarea {
-      min-height: 90px;
-      resize: vertical;
-    }
-    .plan-card, .list-card, .stat-box {
-      background: rgba(255,255,255,0.96);
-      border: 1px solid #d8ebff;
-      border-radius: 24px;
-      padding: 16px;
-      margin-bottom: 12px;
-    }
-    .plan-top, .row {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      align-items: center;
-    }
-    .plan-name, .item-title {
-      font-size: 20px;
-      font-weight: 800;
-      color: #24476d;
-    }
-    .price-tag, .item-price, .stat-num {
-      font-size: 24px;
-      font-weight: 800;
-      color: #4f8fca;
-    }
-    .plan-note, .item-sub, .stat-label {
-      color: #6383a3;
-      margin-top: 6px;
-      line-height: 1.5;
-    }
-    .bullet {
-      color: #4c7397;
-      margin-top: 8px;
-      font-size: 15px;
-    }
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
-    .status-pill {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: #e7f5ff;
-      color: #3d93e6;
-      font-weight: 700;
-      font-size: 13px;
-    }
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: rgba(255,255,255,0.98);
-      border-top: 1px solid #d8ebff;
-      padding: 10px 12px 12px;
-    }
-    .bottom-nav-inner {
-      max-width: 480px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
-    }
-    .nav-item {
-      text-align: center;
-      color: #6e8eb0;
-      font-size: 13px;
-      cursor: pointer;
-      padding: 8px 4px;
-    }
-    .nav-item.active {
-      color: #3d93e6;
-      font-weight: 800;
-    }
-    .nav-icon {
-      font-size: 22px;
-      margin-bottom: 4px;
-    }
-    .screen { display: none; }
-    .screen.active { display: block; }
-    .hidden { display: none; }
-    @media (max-width: 430px) {
-      .grid-3 { grid-template-columns: repeat(2, 1fr); }
-      .logo h1 { font-size: 46px; }
-      .lang-switch { max-width: 180px; }
+    .navbtn{
+      text-align:center;
+      color:#5d84a8;
+      font-size:14px;
+      cursor:pointer;
+      padding:8px 4px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="wrap">
 
-    <div class="screen active" id="screen-home">
-      <div class="topbar">
-        <div class="brand-pill">AMAROSE SELLER</div>
-        <div class="lang-switch">
-          <button class="lang-btn" onclick="setLang('HY', this)">HY</button>
-          <button class="lang-btn" onclick="setLang('RU', this)">RU</button>
-          <button class="lang-btn active" onclick="setLang('EN', this)">EN</button>
-          <button class="lang-btn" onclick="setLang('ES', this)">ES</button>
-          <button class="lang-btn" onclick="setLang('DE', this)">DE</button>
-          <button class="lang-btn" onclick="setLang('FR', this)">FR</button>
-        </div>
-      </div>
-
-      <div class="logo">
-        <h1 id="sellerTitle">SELLER</h1>
-        <p id="sellerSubtitle">Grow with AMAROSE inside Telegram</p>
-      </div>
-
+    <div class="screen active" id="home">
+      <h1>SELLER</h1>
       <div class="card">
-        <div class="eyebrow" id="welcomeText">WELCOME</div>
-        <div class="title" id="joinText">Join as a verified seller</div>
-        <div class="text" id="homeText">Apply, upload documents, choose your seller plan, and manage products and orders in one place.</div>
-        <button class="primary-btn" id="applyBtn" onclick="showScreen('screen-onboarding')">Apply as Seller</button>
-        <button class="secondary-btn" id="plansBtn" onclick="showScreen('screen-pricing')">View Plans</button>
+        <p>Join as a verified seller and manage products and orders.</p>
+        <button class="primary" onclick="showScreen('apply')">Apply as Seller</button>
+        <button class="secondary" onclick="showScreen('plans')">View Plans</button>
       </div>
 
-      <div class="section-title">
-        <h2 id="sellerTypesTitle">Seller types</h2>
-        <span id="chooseText">Choose one</span>
+      <div class="grid">
+        <div class="box" onclick="showScreen('apply')">Individual</div>
+        <div class="box" onclick="showScreen('apply')">Sole Proprietor</div>
+        <div class="box" onclick="showScreen('apply')">Company</div>
       </div>
+    </div>
 
-      <div class="grid-3">
-        <div class="option-card" onclick="selectSellerType('individual', this)">
-          <div class="icon">👤</div>
-          <div id="individualText">Individual</div>
-        </div>
-        <div class="option-card" onclick="selectSellerType('ip', this)">
-          <div class="icon">🧾</div>
-          <div id="ipText">Sole Proprietor</div>
-        </div>
-        <div class="option-card" onclick="selectSellerType('company', this)">
-          <div class="icon">🏢</div>
-          <div id="companyText">Company</div>
-        </div>
-      </div>
-
-      <div class="section-title">
-        <h2 id="whyTitle">Why sell with us</h2>
-        <span id="lowerFeesText">Lower fees</span>
-      </div>
-
+    <div class="screen" id="apply">
       <div class="card">
-        <div class="text" id="whyBody">AMAROSE gives sellers lower fees than large marketplaces, a soft luxury brand environment, and direct owner review before approval.</div>
+        <h2>Seller Application</h2>
+        <p>This is the apply screen.</p>
+        <button class="primary" onclick="showScreen('review')">Submit Application</button>
+        <button class="secondary" onclick="showScreen('home')">Back</button>
       </div>
     </div>
 
-    <div class="screen" id="screen-onboarding">
+    <div class="screen" id="plans">
       <div class="card">
-        <div class="eyebrow">STEP 1</div>
-        <div class="title">Seller application</div>
-        <div class="text">Complete the form below. Your documents will be reviewed by the owner before approval.</div>
+        <h2>Seller Plans</h2>
+        <p>Basic 7%</p>
+        <p>Pro €19 + 5%</p>
+        <button class="secondary" onclick="showScreen('home')">Back</button>
       </div>
+    </div>
 
+    <div class="screen" id="review">
       <div class="card">
-        <div class="field">
-          <label>Seller Type</label>
-          <select id="sellerType" onchange="toggleSellerFields()">
-            <option value="individual">Individual</option>
-            <option value="ip">Sole Proprietor / IP</option>
-            <option value="company">Company / LLC</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>Full Name</label>
-          <input type="text" placeholder="Enter full name">
-        </div>
-
-        <div id="companyFields" class="hidden">
-          <div class="field">
-            <label>Company Name</label>
-            <input type="text" placeholder="Enter company name">
-          </div>
-          <div class="field">
-            <label>Registration Number</label>
-            <input type="text" placeholder="Enter registration number">
-          </div>
-        </div>
-
-        <div id="ipFields" class="hidden">
-          <div class="field">
-            <label>Business / IP Name</label>
-            <input type="text" placeholder="Enter IP name">
-          </div>
-          <div class="field">
-            <label>Tax Number</label>
-            <input type="text" placeholder="Enter tax number">
-          </div>
-        </div>
-
-        <div class="field">
-          <label>Email</label>
-          <input type="email" placeholder="Enter email">
-        </div>
-
-        <div class="field">
-          <label>Phone</label>
-          <input type="text" placeholder="Enter phone">
-        </div>
-
-        <div class="field">
-          <label>Country</label>
-          <input type="text" placeholder="Enter country">
-        </div>
-
-        <div class="field">
-          <label>City</label>
-          <input type="text" placeholder="Enter city">
-        </div>
-
-        <div class="field">
-          <label>Telegram Username</label>
-          <input type="text" placeholder="@username">
-        </div>
-
-        <div class="field">
-          <label>What do you want to sell?</label>
-          <textarea placeholder="Beauty, fashion, gifts, home items..."></textarea>
-        </div>
-
-        <div class="field">
-          <label>Identity Document</label>
-          <input type="file">
-        </div>
-
-        <div class="field">
-          <label>Business Document</label>
-          <input type="file">
-        </div>
-
-        <div class="field">
-          <label>Selfie with Document</label>
-          <input type="file">
-        </div>
-
-        <button class="primary-btn" onclick="showScreen('screen-review')">Submit Application</button>
-        <button class="secondary-btn" onclick="showScreen('screen-home')">Back</button>
+        <h2>Under Review</h2>
+        <p>Your application is under review.</p>
+        <button class="primary" onclick="showScreen('dashboard')">Open Seller Panel</button>
+        <button class="secondary" onclick="showScreen('home')">Back Home</button>
       </div>
     </div>
 
-    <div class="screen" id="screen-review">
+    <div class="screen" id="dashboard">
       <div class="card">
-        <div class="eyebrow">STATUS</div>
-        <div class="title">Your application is under review</div>
-        <div class="text">AMAROSE owner will check your documents and seller category before approval.</div>
-        <div class="status-pill">Under Review</div>
-        <button class="primary-btn" onclick="showScreen('screen-dashboard')">Open Seller Panel</button>
-        <button class="secondary-btn" onclick="showScreen('screen-home')">Back to Home</button>
+        <h2>Dashboard</h2>
+        <p>Products: 12</p>
+        <p>Orders: 8</p>
       </div>
     </div>
 
-    <div class="screen" id="screen-pricing">
-      <div class="section-title">
-        <h2>Seller plans</h2>
-        <span>Lower than Amazon</span>
-      </div>
-
-      <div class="plan-card">
-        <div class="plan-top">
-          <div class="plan-name">Basic</div>
-          <div class="price-tag">7%</div>
-        </div>
-        <div class="plan-note">€0/month. Best for new sellers.</div>
-        <div class="bullet">• Product listing</div>
-        <div class="bullet">• Standard support</div>
-      </div>
-
-      <div class="plan-card">
-        <div class="plan-top">
-          <div class="plan-name">Pro</div>
-          <div class="price-tag">€19 + 5%</div>
-        </div>
-        <div class="plan-note">For active sellers.</div>
-        <div class="bullet">• Priority placement</div>
-        <div class="bullet">• Faster support</div>
-      </div>
-
-      <button class="primary-btn" onclick="showScreen('screen-onboarding')">Apply Now</button>
-      <button class="secondary-btn" onclick="showScreen('screen-home')">Back</button>
-    </div>
-
-    <div class="screen" id="screen-dashboard">
-      <div class="section-title">
-        <h2>Seller dashboard</h2>
-        <span>Approved</span>
-      </div>
-
-      <div class="stats">
-        <div class="stat-box"><div class="stat-num">12</div><div class="stat-label">Products</div></div>
-        <div class="stat-box"><div class="stat-num">8</div><div class="stat-label">Orders</div></div>
-        <div class="stat-box"><div class="stat-num">3</div><div class="stat-label">Pending</div></div>
-        <div class="stat-box"><div class="stat-num">€420</div><div class="stat-label">Sales</div></div>
-      </div>
-
-      <div class="card" style="margin-top:16px;">
-        <div class="eyebrow">ACCESS</div>
-        <div class="title">Verified seller</div>
-        <div class="text">Your seller account is approved. You can now manage products and orders.</div>
+    <div class="screen" id="products">
+      <div class="card">
+        <h2>Products</h2>
+        <p>Rose Glow Set</p>
+        <p>Pink Elegance Bag</p>
       </div>
     </div>
 
-    <div class="screen" id="screen-products">
-      <div class="section-title">
-        <h2>My products</h2>
-        <span>Seller items</span>
-      </div>
-
-      <div class="list-card">
-        <div class="row">
-          <div>
-            <div class="item-title">Rose Glow Set</div>
-            <div class="item-sub">Beauty • AMAROSE</div>
-          </div>
-          <div class="item-price">€29</div>
-        </div>
-        <div class="status-pill">Approved</div>
-      </div>
-
-      <div class="list-card">
-        <div class="row">
-          <div>
-            <div class="item-title">Pink Elegance Bag</div>
-            <div class="item-sub">Bags • AMAROSE</div>
-          </div>
-          <div class="item-price">€59</div>
-        </div>
-        <div class="status-pill">Pending</div>
-      </div>
-    </div>
-
-    <div class="screen" id="screen-orders">
-      <div class="section-title">
+    <div class="screen" id="orders">
+      <div class="card">
         <h2>Orders</h2>
-        <span>My sales</span>
-      </div>
-
-      <div class="list-card">
-        <div class="row">
-          <div>
-            <div class="item-title">#1024</div>
-            <div class="item-sub">Rose Glow Set • New</div>
-          </div>
-          <div class="item-price">€29</div>
-        </div>
-        <div class="status-pill">New</div>
-      </div>
-
-      <div class="list-card">
-        <div class="row">
-          <div>
-            <div class="item-title">#1023</div>
-            <div class="item-sub">Luxury Gift Box • Processing</div>
-          </div>
-          <div class="item-price">€39</div>
-        </div>
-        <div class="status-pill">Processing</div>
+        <p>#1024 New</p>
+        <p>#1023 Processing</p>
       </div>
     </div>
 
-    <div class="screen" id="screen-support">
+    <div class="screen" id="support">
       <div class="card">
-        <div class="eyebrow">HELP</div>
-        <div class="title">Seller support</div>
-        <div class="text">Contact AMAROSE owner for review, status, moderation and account issues.</div>
-        <button class="primary-btn" onclick="alert('Support will be connected next')">Contact Owner</button>
-        <button class="secondary-btn" onclick="showScreen('screen-home')">Back to Home</button>
+        <h2>Support</h2>
+        <button class="primary" onclick="alert('Support connected')">Contact Owner</button>
       </div>
     </div>
 
   </div>
 
-  <div class="bottom-nav">
-    <div class="bottom-nav-inner">
-      <div class="nav-item active" onclick="activateNav(this); showScreen('screen-home')">
-        <div class="nav-icon">🏠</div>
-        <div>Home</div>
-      </div>
-      <div class="nav-item" onclick="activateNav(this); showScreen('screen-products')">
-        <div class="nav-icon">📦</div>
-        <div>Products</div>
-      </div>
-      <div class="nav-item" onclick="activateNav(this); showScreen('screen-orders')">
-        <div class="nav-icon">🧾</div>
-        <div>Orders</div>
-      </div>
-      <div class="nav-item" onclick="activateNav(this); showScreen('screen-support')">
-        <div class="nav-icon">💬</div>
-        <div>Support</div>
-      </div>
+  <div class="nav">
+    <div class="navin">
+      <div class="navbtn" onclick="showScreen('home')">Home</div>
+      <div class="navbtn" onclick="showScreen('products')">Products</div>
+      <div class="navbtn" onclick="showScreen('orders')">Orders</div>
+      <div class="navbtn" onclick="showScreen('support')">Support</div>
     </div>
   </div>
 
@@ -585,72 +187,11 @@
       Telegram.WebApp.expand();
     }
 
-    function showScreen(id) {
-      document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
-      const target = document.getElementById(id);
-      if (target) target.classList.add('active');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    function showScreen(id){
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      window.scrollTo(0,0);
     }
-
-    function activateNav(el) {
-      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-      if (el) el.classList.add('active');
-    }
-
-    function selectSellerType(type, el) {
-      document.querySelectorAll('.option-card').forEach(card => card.classList.remove('active'));
-      if (el) el.classList.add('active');
-      const sellerType = document.getElementById('sellerType');
-      if (sellerType) sellerType.value = type;
-      toggleSellerFields();
-      showScreen('screen-onboarding');
-    }
-
-    function toggleSellerFields() {
-      const sellerType = document.getElementById('sellerType');
-      if (!sellerType) return;
-
-      const companyFields = document.getElementById('companyFields');
-      const ipFields = document.getElementById('ipFields');
-
-      companyFields.classList.add('hidden');
-      ipFields.classList.add('hidden');
-
-      if (sellerType.value === 'company') companyFields.classList.remove('hidden');
-      if (sellerType.value === 'ip') ipFields.classList.remove('hidden');
-    }
-
-    function setLang(lang, btn) {
-      document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-      if (btn) btn.classList.add('active');
-
-      const map = {
-        EN: {
-          seller: 'SELLER',
-          subtitle: 'Grow with AMAROSE inside Telegram',
-          welcome: 'WELCOME',
-          join: 'Join as a verified seller',
-          home: 'Apply, upload documents, choose your seller plan, and manage products and orders in one place.',
-          sellerTypes: 'Seller types',
-          choose: 'Choose one',
-          individual: 'Individual',
-          ip: 'Sole Proprietor',
-          company: 'Company',
-          why: 'Why sell with us',
-          lower: 'Lower fees',
-          whyText: 'AMAROSE gives sellers lower fees than large marketplaces, a soft luxury brand environment, and direct owner review before approval.',
-          apply: 'Apply as Seller',
-          plans: 'View Plans'
-        },
-        RU: {
-          seller: 'ПРОДАВЕЦ',
-          subtitle: 'Развивайтесь с AMAROSE внутри Telegram',
-          welcome: 'ДОБРО ПОЖАЛОВАТЬ',
-          join: 'Станьте проверенным продавцом',
-          home: 'Подайте заявку, загрузите документы, выберите тариф продавца и управляйте товарами и заказами в одном месте.',
-          sellerTypes: 'Типы продавцов',
-          choose: 'Выберите один',
-          individual: 'Частное лицо',
-          ip: 'ИП',
-          company: 'Компания',
-          why: 'Почему прода
+  </script>
+</body>
+</html>
