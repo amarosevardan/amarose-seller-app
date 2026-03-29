@@ -1,598 +1,428 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AMAROSE Seller App</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f7fb;
-      color: #111827;
-    }
-    .app {
-      max-width: 480px;
-      margin: 0 auto;
-      min-height: 100vh;
-      background: #fff;
-      box-shadow: 0 0 20px rgba(0,0,0,0.06);
-    }
-    .topbar {
-      background: #175cd3;
-      color: white;
-      padding: 18px 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .brand {
-      font-size: 22px;
-      font-weight: 800;
-    }
-    .sub {
-      font-size: 13px;
-      opacity: 0.9;
-      margin-top: 4px;
-    }
-    .content {
-      padding: 16px;
-    }
-    .card {
-      border: 1px solid #e5e7eb;
-      border-radius: 14px;
-      padding: 14px;
-      margin-bottom: 14px;
-      background: #fff;
-    }
-    .title {
-      font-size: 24px;
-      font-weight: 800;
-      margin: 0 0 16px;
-    }
-    input, select {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #d0d5dd;
-      border-radius: 12px;
-      margin-bottom: 12px;
-      font-size: 15px;
-      background: white;
-    }
-    button {
-      width: 100%;
-      border: none;
-      border-radius: 12px;
-      padding: 14px;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      margin-bottom: 10px;
-    }
-    .btn-primary { background: #175cd3; color: white; }
-    .btn-secondary { background: #e9effd; color: #175cd3; }
-    .btn-danger { background: rgba(255,255,255,0.16); color: white; width: auto; margin: 0; padding: 10px 14px; }
-    .tabs {
-      display: flex;
-      gap: 10px;
-      padding: 12px 16px 0;
-    }
-    .tab {
-      flex: 1;
-      padding: 12px;
-      border-radius: 12px;
-      border: none;
-      background: #f2f4f7;
-      color: #344054;
-      font-weight: 700;
-    }
-    .tab.active {
-      background: #175cd3;
-      color: white;
-    }
-    .hidden { display: none; }
-    .row { margin-bottom: 8px; font-size: 14px; }
-    .status {
-      display: inline-block;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 700;
-      margin-top: 6px;
-    }
-    .status.pending { background: #eff8ff; color: #175cd3; }
-    .status.approved { background: #ecfdf3; color: #027a48; }
-    .status.rejected { background: #fef3f2; color: #b42318; }
-    .status.manual_review { background: #fff7ed; color: #b54708; }
-    .sysbox {
-      margin: 16px;
-      padding: 12px;
-      border-radius: 12px;
-      font-size: 13px;
-      border: 1px solid #d0d5dd;
-      background: #f8fafc;
-      white-space: pre-wrap;
-    }
-    .ok { background: #ecfdf3; border-color: #abefc6; color: #027a48; }
-    .err { background: #fef3f2; border-color: #fecdca; color: #b42318; }
-    .warn { background: #fffaeb; border-color: #fedf89; color: #b54708; }
-  </style>
-</head>
-<body>
-  <div class="app">
-    <div class="topbar">
-      <div>
-        <div class="brand">AMAROSE</div>
-        <div class="sub">Seller App</div>
-      </div>
-      <button id="logoutBtn" class="btn-danger hidden" type="button">Logout</button>
-    </div>
+<script>
+  const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+  const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
 
-    <div id="systemBox" class="sysbox warn">Loading...</div>
+  let supabase = null;
+  let currentUser = null;
 
-    <div id="authView" class="content">
-      <h1 class="title">Seller Login</h1>
-      <div class="card">
-        <input id="email" type="email" placeholder="Email" />
-        <input id="password" type="password" placeholder="Password" />
-        <button id="loginBtn" class="btn-primary" type="button">Login</button>
-        <button id="signupBtn" class="btn-secondary" type="button">Create account</button>
-        <button id="resetBtn" class="btn-secondary" type="button">Reset password</button>
-      </div>
-    </div>
+  const els = {
+    systemBox: document.getElementById('systemBox'),
+    authView: document.getElementById('authView'),
+    appView: document.getElementById('appView'),
+    logoutBtn: document.getElementById('logoutBtn'),
+    loginBtn: document.getElementById('loginBtn'),
+    signupBtn: document.getElementById('signupBtn'),
+    resetBtn: document.getElementById('resetBtn'),
+    tabProfile: document.getElementById('tabProfile'),
+    tabDocuments: document.getElementById('tabDocuments'),
+    profileTab: document.getElementById('profileTab'),
+    documentsTab: document.getElementById('documentsTab'),
+    saveProfileBtn: document.getElementById('saveProfileBtn'),
+    uploadBtn: document.getElementById('uploadBtn'),
+    email: document.getElementById('email'),
+    password: document.getElementById('password'),
+    full_name: document.getElementById('full_name'),
+    company_name: document.getElementById('company_name'),
+    seller_type: document.getElementById('seller_type'),
+    phone: document.getElementById('phone'),
+    country: document.getElementById('country'),
+    city: document.getElementById('city'),
+    language: document.getElementById('language'),
+    currency: document.getElementById('currency'),
+    accountEmail: document.getElementById('accountEmail'),
+    accountRole: document.getElementById('accountRole'),
+    accountStatus: document.getElementById('accountStatus'),
+    verificationStatus: document.getElementById('verificationStatus'),
+    ratingAvg: document.getElementById('ratingAvg'),
+    ratingCount: document.getElementById('ratingCount'),
+    activityScore: document.getElementById('activityScore'),
+    documentType: document.getElementById('documentType'),
+    documentFile: document.getElementById('documentFile'),
+    documentsList: document.getElementById('documentsList'),
+  };
 
-    <div id="appView" class="hidden">
-      <div class="tabs">
-        <button id="tabProfile" class="tab active" type="button">Profile</button>
-        <button id="tabDocuments" class="tab" type="button">Documents</button>
-      </div>
+  function setStatus(text, kind) {
+    els.systemBox.textContent = text;
+    els.systemBox.className = 'sysbox ' + (kind || 'warn');
+  }
 
-      <div id="profileTab" class="content">
-        <h1 class="title">Seller Profile</h1>
+  function showAuth() {
+    els.authView.classList.remove('hidden');
+    els.appView.classList.add('hidden');
+    els.logoutBtn.classList.add('hidden');
+  }
 
-        <div class="card">
-          <div class="row"><strong>Email:</strong> <span id="accountEmail">-</span></div>
-          <div class="row"><strong>Role:</strong> <span id="accountRole">seller</span></div>
-          <div class="row"><strong>Account status:</strong> <span id="accountStatus">-</span></div>
-          <div class="row"><strong>Verification:</strong> <span id="verificationStatus">-</span></div>
-          <div class="row"><strong>Rating avg:</strong> <span id="ratingAvg">0</span></div>
-          <div class="row"><strong>Rating count:</strong> <span id="ratingCount">0</span></div>
-          <div class="row"><strong>Activity score:</strong> <span id="activityScore">0</span></div>
-        </div>
+  function showApp() {
+    els.authView.classList.add('hidden');
+    els.appView.classList.remove('hidden');
+    els.logoutBtn.classList.remove('hidden');
+  }
 
-        <div class="card">
-          <input id="full_name" placeholder="Full name" />
-          <input id="company_name" placeholder="Company name" />
-          <input id="seller_type" placeholder="Seller type" />
-          <input id="phone" placeholder="Phone" />
-          <input id="country" placeholder="Country" />
-          <input id="city" placeholder="City" />
-          <input id="language" placeholder="Language" />
-          <select id="currency">
-            <option value="EUR">EUR</option>
-            <option value="USD">USD</option>
-            <option value="AMD">AMD</option>
-            <option value="RUB">RUB</option>
-          </select>
-          <button id="saveProfileBtn" class="btn-primary" type="button">Save profile</button>
-        </div>
-      </div>
+  function openProfile() {
+    els.profileTab.classList.remove('hidden');
+    els.documentsTab.classList.add('hidden');
+    els.tabProfile.classList.add('active');
+    els.tabDocuments.classList.remove('active');
+  }
 
-      <div id="documentsTab" class="content hidden">
-        <h1 class="title">Documents</h1>
+  function openDocuments() {
+    els.documentsTab.classList.remove('hidden');
+    els.profileTab.classList.add('hidden');
+    els.tabDocuments.classList.add('active');
+    els.tabProfile.classList.remove('active');
+  }
 
-        <div class="card">
-          <select id="documentType">
-            <option value="passport">Passport</option>
-            <option value="business_license">Business license</option>
-            <option value="address_proof">Address proof</option>
-          </select>
-          <input id="documentFile" type="file" />
-          <button id="uploadBtn" class="btn-primary" type="button">Upload document</button>
-        </div>
+  function alertMsg(msg) {
+    alert(msg);
+    setStatus(msg, 'warn');
+  }
 
-        <div class="card">
-          <div id="documentsList">No documents yet</div>
-        </div>
-      </div>
-    </div>
-  </div>
+  async function signUp() {
+    try {
+      const email = els.email.value.trim();
+      const password = els.password.value.trim();
 
-  <script>
-    const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
-
-    let supabase = null;
-    let currentUser = null;
-
-    const els = {
-      systemBox: document.getElementById('systemBox'),
-      authView: document.getElementById('authView'),
-      appView: document.getElementById('appView'),
-      logoutBtn: document.getElementById('logoutBtn'),
-      loginBtn: document.getElementById('loginBtn'),
-      signupBtn: document.getElementById('signupBtn'),
-      resetBtn: document.getElementById('resetBtn'),
-      tabProfile: document.getElementById('tabProfile'),
-      tabDocuments: document.getElementById('tabDocuments'),
-      profileTab: document.getElementById('profileTab'),
-      documentsTab: document.getElementById('documentsTab'),
-      saveProfileBtn: document.getElementById('saveProfileBtn'),
-      uploadBtn: document.getElementById('uploadBtn'),
-      email: document.getElementById('email'),
-      password: document.getElementById('password'),
-      full_name: document.getElementById('full_name'),
-      company_name: document.getElementById('company_name'),
-      seller_type: document.getElementById('seller_type'),
-      phone: document.getElementById('phone'),
-      country: document.getElementById('country'),
-      city: document.getElementById('city'),
-      language: document.getElementById('language'),
-      currency: document.getElementById('currency'),
-      accountEmail: document.getElementById('accountEmail'),
-      accountRole: document.getElementById('accountRole'),
-      accountStatus: document.getElementById('accountStatus'),
-      verificationStatus: document.getElementById('verificationStatus'),
-      ratingAvg: document.getElementById('ratingAvg'),
-      ratingCount: document.getElementById('ratingCount'),
-      activityScore: document.getElementById('activityScore'),
-      documentType: document.getElementById('documentType'),
-      documentFile: document.getElementById('documentFile'),
-      documentsList: document.getElementById('documentsList'),
-    };
-
-    function setStatus(text, kind = 'warn') {
-      els.systemBox.textContent = text;
-      els.systemBox.className = 'sysbox ' + kind;
-    }
-
-    function showAuth() {
-      els.authView.classList.remove('hidden');
-      els.appView.classList.add('hidden');
-      els.logoutBtn.classList.add('hidden');
-    }
-
-    function showApp() {
-      els.authView.classList.add('hidden');
-      els.appView.classList.remove('hidden');
-      els.logoutBtn.classList.remove('hidden');
-    }
-
-    function openProfile() {
-      els.profileTab.classList.remove('hidden');
-      els.documentsTab.classList.add('hidden');
-      els.tabProfile.classList.add('active');
-      els.tabDocuments.classList.remove('active');
-    }
-
-    function openDocuments() {
-      els.documentsTab.classList.remove('hidden');
-      els.profileTab.classList.add('hidden');
-      els.tabDocuments.classList.add('active');
-      els.tabProfile.classList.remove('active');
-    }
-
-    function alertMsg(msg) {
-      alert(msg);
-      setStatus(msg, 'warn');
-    }
-
-    async function signUp() {
-      try {
-        const email = els.email.value.trim();
-        const password = els.password.value.trim();
-
-        if (!email || !password) {
-          alertMsg('Enter email and password');
-          return;
-        }
-
-        setStatus('Creating account...', 'warn');
-        const { error } = await supabase.auth.signUp({ email, password });
-
-        if (error) throw error;
-
-        setStatus('Account created. Now press Login.', 'ok');
-        alert('Account created. Now press Login.');
-      } catch (e) {
-        setStatus('Sign up failed: ' + e.message, 'err');
-        alert('Sign up failed: ' + e.message);
-      }
-    }
-
-    async function signIn() {
-      try {
-        const email = els.email.value.trim();
-        const password = els.password.value.trim();
-
-        if (!email || !password) {
-          alertMsg('Enter email and password');
-          return;
-        }
-
-        setStatus('Logging in...', 'warn');
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-
-        if (error) throw error;
-
-        await bootUser();
-        setStatus('Logged in successfully', 'ok');
-      } catch (e) {
-        setStatus('Login failed: ' + e.message, 'err');
-        alert('Login failed: ' + e.message);
-      }
-    }
-
-    async function resetPassword() {
-      try {
-        const email = els.email.value.trim();
-
-        if (!email) {
-          alertMsg('Enter email first');
-          return;
-        }
-
-        setStatus('Sending reset email...', 'warn');
-        const { error } = await supabase.auth.resetPasswordForEmail(email);
-
-        if (error) throw error;
-
-        setStatus('Reset email sent', 'ok');
-        alert('Reset email sent');
-      } catch (e) {
-        setStatus('Reset failed: ' + e.message, 'err');
-        alert('Reset failed: ' + e.message);
-      }
-    }
-
-    async function logout() {
-      try {
-        const { error } = await supabase.auth.signOut();
-        if (error) throw error;
-        currentUser = null;
-        showAuth();
-        setStatus('Logged out', 'ok');
-      } catch (e) {
-        setStatus('Logout failed: ' + e.message, 'err');
-        alert('Logout failed: ' + e.message);
-      }
-    }
-
-    async function bootUser() {
-      const { data, error } = await supabase.auth.getUser();
-      if (error || !data.user) {
-        currentUser = null;
-        showAuth();
-        setStatus('User session not found', 'warn');
+      if (!email || !password) {
+        alertMsg('Enter email and password');
         return;
       }
 
-      currentUser = data.user;
-      showApp();
-      openProfile();
+      if (!supabase) {
+        alertMsg('Supabase not loaded yet');
+        return;
+      }
+
+      setStatus('Creating account...', 'warn');
+      const result = await supabase.auth.signUp({ email, password });
+
+      if (result.error) throw result.error;
+
+      setStatus('Account created. Now press Login.', 'ok');
+      alert('Account created. Now press Login.');
+    } catch (e) {
+      setStatus('Sign up failed: ' + e.message, 'err');
+      alert('Sign up failed: ' + e.message);
+    }
+  }
+
+  async function signIn() {
+    try {
+      const email = els.email.value.trim();
+      const password = els.password.value.trim();
+
+      if (!email || !password) {
+        alertMsg('Enter email and password');
+        return;
+      }
+
+      if (!supabase) {
+        alertMsg('Supabase not loaded yet');
+        return;
+      }
+
+      setStatus('Logging in...', 'warn');
+      const result = await supabase.auth.signInWithPassword({ email, password });
+
+      if (result.error) throw result.error;
+
+      await bootUser();
+      setStatus('Logged in successfully', 'ok');
+    } catch (e) {
+      setStatus('Login failed: ' + e.message, 'err');
+      alert('Login failed: ' + e.message);
+    }
+  }
+
+  async function resetPassword() {
+    try {
+      const email = els.email.value.trim();
+
+      if (!email) {
+        alertMsg('Enter email first');
+        return;
+      }
+
+      if (!supabase) {
+        alertMsg('Supabase not loaded yet');
+        return;
+      }
+
+      setStatus('Sending reset email...', 'warn');
+      const result = await supabase.auth.resetPasswordForEmail(email);
+
+      if (result.error) throw result.error;
+
+      setStatus('Reset email sent', 'ok');
+      alert('Reset email sent');
+    } catch (e) {
+      setStatus('Reset failed: ' + e.message, 'err');
+      alert('Reset failed: ' + e.message);
+    }
+  }
+
+  async function logout() {
+    try {
+      if (!supabase) {
+        alertMsg('Supabase not loaded yet');
+        return;
+      }
+
+      const result = await supabase.auth.signOut();
+      if (result.error) throw result.error;
+
+      currentUser = null;
+      showAuth();
+      setStatus('Logged out', 'ok');
+    } catch (e) {
+      setStatus('Logout failed: ' + e.message, 'err');
+      alert('Logout failed: ' + e.message);
+    }
+  }
+
+  async function bootUser() {
+    const result = await supabase.auth.getUser();
+
+    if (result.error || !result.data.user) {
+      currentUser = null;
+      showAuth();
+      setStatus('No user session found', 'warn');
+      return;
+    }
+
+    currentUser = result.data.user;
+    showApp();
+    openProfile();
+    await loadProfile();
+    await loadDocuments();
+  }
+
+  async function loadProfile() {
+    try {
+      if (!currentUser) return;
+
+      const result = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', currentUser.id)
+        .single();
+
+      if (result.error) throw result.error;
+
+      const data = result.data;
+      els.accountEmail.textContent = data.email || currentUser.email || '-';
+      els.accountRole.textContent = data.role || 'seller';
+      els.accountStatus.textContent = data.account_status || '-';
+      els.verificationStatus.textContent = data.verification_status || '-';
+      els.ratingAvg.textContent = String(data.rating_avg || 0);
+      els.ratingCount.textContent = String(data.rating_count || 0);
+      els.activityScore.textContent = String(data.activity_score || 0);
+
+      els.full_name.value = data.full_name || '';
+      els.company_name.value = data.company_name || '';
+      els.seller_type.value = data.seller_type || '';
+      els.phone.value = data.phone || '';
+      els.country.value = data.country || '';
+      els.city.value = data.city || '';
+      els.language.value = data.language || '';
+      els.currency.value = data.currency || 'EUR';
+
+      setStatus('Profile loaded', 'ok');
+    } catch (e) {
+      setStatus('Profile load failed: ' + e.message, 'err');
+      alert('Profile load failed: ' + e.message);
+    }
+  }
+
+  async function saveProfile() {
+    try {
+      if (!currentUser) return;
+
+      const payload = {
+        full_name: els.full_name.value.trim() || null,
+        company_name: els.company_name.value.trim() || null,
+        seller_type: els.seller_type.value.trim() || null,
+        phone: els.phone.value.trim() || null,
+        country: els.country.value.trim() || null,
+        city: els.city.value.trim() || null,
+        language: els.language.value.trim() || null,
+        currency: els.currency.value
+      };
+
+      const result = await supabase
+        .from('profiles')
+        .update(payload)
+        .eq('id', currentUser.id);
+
+      if (result.error) throw result.error;
+
       await loadProfile();
+      setStatus('Profile saved', 'ok');
+      alert('Profile saved');
+    } catch (e) {
+      setStatus('Profile save failed: ' + e.message, 'err');
+      alert('Profile save failed: ' + e.message);
+    }
+  }
+
+  async function loadDocuments() {
+    try {
+      if (!currentUser) return;
+
+      const result = await supabase
+        .from('seller_documents')
+        .select('*')
+        .eq('seller_id', currentUser.id)
+        .order('created_at', { ascending: false });
+
+      if (result.error) throw result.error;
+
+      const data = result.data || [];
+      if (!data.length) {
+        els.documentsList.innerHTML = 'No documents yet';
+        return;
+      }
+
+      let html = '';
+      for (let i = 0; i < data.length; i++) {
+        const item = data[i];
+        html +=
+          '<div class="card" style="margin-bottom:10px;">' +
+            '<div class="row"><strong>Type:</strong> ' + item.document_type + '</div>' +
+            '<div class="row"><strong>File:</strong> ' + item.file_name + '</div>' +
+            '<div class="status ' + item.status + '">' + item.status + '</div>' +
+            (item.review_note ? '<div class="row" style="margin-top:8px;"><strong>Note:</strong> ' + item.review_note + '</div>' : '') +
+            '<div class="row" style="margin-top:8px;"><strong>Uploaded:</strong> ' + new Date(item.created_at).toLocaleString() + '</div>' +
+          '</div>';
+      }
+
+      els.documentsList.innerHTML = html;
+    } catch (e) {
+      setStatus('Documents load failed: ' + e.message, 'err');
+      alert('Documents load failed: ' + e.message);
+    }
+  }
+
+  async function uploadDocument() {
+    try {
+      if (!currentUser) return;
+
+      const file = els.documentFile.files[0];
+      const documentType = els.documentType.value;
+
+      if (!file) {
+        alertMsg('Choose file first');
+        return;
+      }
+
+      const safeName = file.name.replace(/[^\w.\-]/g, '_');
+      const path = currentUser.id + '/' + documentType + '/' + Date.now() + '_' + safeName;
+
+      const uploadResult = await supabase.storage
+        .from('seller-documents')
+        .upload(path, file, { cacheControl: '3600', upsert: false });
+
+      if (uploadResult.error) throw uploadResult.error;
+
+      const dbResult = await supabase
+        .from('seller_documents')
+        .insert({
+          seller_id: currentUser.id,
+          document_type: documentType,
+          file_name: safeName,
+          file_path: path,
+          file_size: file.size,
+          mime_type: file.type || 'application/octet-stream',
+          status: 'pending'
+        });
+
+      if (dbResult.error) throw dbResult.error;
+
+      els.documentFile.value = '';
       await loadDocuments();
+      setStatus('Document uploaded', 'ok');
+      alert('Document uploaded');
+    } catch (e) {
+      setStatus('Upload failed: ' + e.message, 'err');
+      alert('Upload failed: ' + e.message);
     }
+  }
 
-    async function loadProfile() {
-      try {
-        if (!currentUser) return;
+  function bindButtons() {
+    els.loginBtn.onclick = signIn;
+    els.signupBtn.onclick = signUp;
+    els.resetBtn.onclick = resetPassword;
+    els.logoutBtn.onclick = logout;
+    els.tabProfile.onclick = openProfile;
+    els.tabDocuments.onclick = openDocuments;
+    els.saveProfileBtn.onclick = saveProfile;
+    els.uploadBtn.onclick = uploadDocument;
+    setStatus('Buttons connected', 'ok');
+  }
 
-        setStatus('Loading profile...', 'warn');
+  function loadSupabaseScript(callback) {
+    const script = document.createElement('script');
+    script.src = 'https://unpkg.com/@supabase/supabase-js@2';
+    script.onload = callback;
+    script.onerror = function () {
+      setStatus('Supabase CDN failed to load. Turn off VPN or try another browser.', 'err');
+    };
+    document.head.appendChild(script);
+  }
 
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', currentUser.id)
-          .single();
+  document.addEventListener('DOMContentLoaded', function () {
+    try {
+      bindButtons();
 
-        if (error) throw error;
-
-        els.accountEmail.textContent = data.email || currentUser.email || '-';
-        els.accountRole.textContent = data.role || 'seller';
-        els.accountStatus.textContent = data.account_status || '-';
-        els.verificationStatus.textContent = data.verification_status || '-';
-        els.ratingAvg.textContent = data.rating_avg ?? 0;
-        els.ratingCount.textContent = data.rating_count ?? 0;
-        els.activityScore.textContent = data.activity_score ?? 0;
-
-        els.full_name.value = data.full_name || '';
-        els.company_name.value = data.company_name || '';
-        els.seller_type.value = data.seller_type || '';
-        els.phone.value = data.phone || '';
-        els.country.value = data.country || '';
-        els.city.value = data.city || '';
-        els.language.value = data.language || '';
-        els.currency.value = data.currency || 'EUR';
-
-        setStatus('Profile loaded', 'ok');
-      } catch (e) {
-        setStatus('Profile load failed: ' + e.message, 'err');
-        alert('Profile load failed: ' + e.message);
+      if (SUPABASE_URL === 'YOUR_SUPABASE_URL' || SUPABASE_ANON_KEY === 'YOUR_SUPABASE_ANON_KEY') {
+        setStatus('Replace YOUR_SUPABASE_URL and YOUR_SUPABASE_ANON_KEY first', 'err');
+        return;
       }
-    }
 
-    async function saveProfile() {
-      try {
-        if (!currentUser) return;
+      setStatus('Loading Supabase library...', 'warn');
 
-        setStatus('Saving profile...', 'warn');
+      loadSupabaseScript(async function () {
+        try {
+          if (!window.supabase || !window.supabase.createClient) {
+            setStatus('Supabase library loaded incorrectly', 'err');
+            return;
+          }
 
-        const payload = {
-          full_name: els.full_name.value.trim() || null,
-          company_name: els.company_name.value.trim() || null,
-          seller_type: els.seller_type.value.trim() || null,
-          phone: els.phone.value.trim() || null,
-          country: els.country.value.trim() || null,
-          city: els.city.value.trim() || null,
-          language: els.language.value.trim() || null,
-          currency: els.currency.value
-        };
+          supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        const { error } = await supabase
-          .from('profiles')
-          .update(payload)
-          .eq('id', currentUser.id);
+          const sessionResult = await supabase.auth.getSession();
 
-        if (error) throw error;
-
-        await loadProfile();
-        setStatus('Profile saved', 'ok');
-        alert('Profile saved');
-      } catch (e) {
-        setStatus('Profile save failed: ' + e.message, 'err');
-        alert('Profile save failed: ' + e.message);
-      }
-    }
-
-    async function loadDocuments() {
-      try {
-        if (!currentUser) return;
-
-        setStatus('Loading documents...', 'warn');
-
-        const { data, error } = await supabase
-          .from('seller_documents')
-          .select('*')
-          .eq('seller_id', currentUser.id)
-          .order('created_at', { ascending: false });
-
-        if (error) throw error;
-
-        if (!data || data.length === 0) {
-          els.documentsList.innerHTML = 'No documents yet';
-          setStatus('Documents loaded', 'ok');
-          return;
-        }
-
-        els.documentsList.innerHTML = data.map(item => `
-          <div class="card" style="margin-bottom:10px;">
-            <div class="row"><strong>Type:</strong> ${item.document_type}</div>
-            <div class="row"><strong>File:</strong> ${item.file_name}</div>
-            <div class="status ${item.status}">${item.status}</div>
-            ${item.review_note ? `<div class="row" style="margin-top:8px;"><strong>Note:</strong> ${item.review_note}</div>` : ''}
-            <div class="row" style="margin-top:8px;"><strong>Uploaded:</strong> ${new Date(item.created_at).toLocaleString()}</div>
-          </div>
-        `).join('');
-
-        setStatus('Documents loaded', 'ok');
-      } catch (e) {
-        setStatus('Documents load failed: ' + e.message, 'err');
-        alert('Documents load failed: ' + e.message);
-      }
-    }
-
-    async function uploadDocument() {
-      try {
-        if (!currentUser) return;
-
-        const documentType = els.documentType.value;
-        const file = els.documentFile.files[0];
-
-        if (!file) {
-          alertMsg('Choose file first');
-          return;
-        }
-
-        setStatus('Uploading document...', 'warn');
-
-        const safeName = file.name.replace(/[^\w.\-]/g, '_');
-        const path = `${currentUser.id}/${documentType}/${Date.now()}_${safeName}`;
-
-        const { error: uploadError } = await supabase.storage
-          .from('seller-documents')
-          .upload(path, file, { cacheControl: '3600', upsert: false });
-
-        if (uploadError) throw uploadError;
-
-        const { error: dbError } = await supabase
-          .from('seller_documents')
-          .insert({
-            seller_id: currentUser.id,
-            document_type: documentType,
-            file_name: safeName,
-            file_path: path,
-            file_size: file.size,
-            mime_type: file.type || 'application/octet-stream',
-            status: 'pending'
-          });
-
-        if (dbError) throw dbError;
-
-        els.documentFile.value = '';
-        await loadDocuments();
-        setStatus('Document uploaded', 'ok');
-        alert('Document uploaded');
-      } catch (e) {
-        setStatus('Upload failed: ' + e.message, 'err');
-        alert('Upload failed: ' + e.message);
-      }
-    }
-
-    function bindEvents() {
-      els.loginBtn.addEventListener('click', signIn);
-      els.signupBtn.addEventListener('click', signUp);
-      els.resetBtn.addEventListener('click', resetPassword);
-      els.logoutBtn.addEventListener('click', logout);
-      els.tabProfile.addEventListener('click', openProfile);
-      els.tabDocuments.addEventListener('click', openDocuments);
-      els.saveProfileBtn.addEventListener('click', saveProfile);
-      els.uploadBtn.addEventListener('click', uploadDocument);
-      setStatus('Buttons connected', 'ok');
-    }
-
-    async function init() {
-      try {
-        if (SUPABASE_URL === 'YOUR_SUPABASE_URL' || SUPABASE_ANON_KEY === 'YOUR_SUPABASE_ANON_KEY') {
-          setStatus('Replace YOUR_SUPABASE_URL and YOUR_SUPABASE_ANON_KEY first', 'err');
-          return;
-        }
-
-        if (!window.supabase || !window.supabase.createClient) {
-          setStatus('Supabase library did not load from CDN', 'err');
-          return;
-        }
-
-        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        bindEvents();
-
-        const { data } = await supabase.auth.getSession();
-
-        if (data.session && data.session.user) {
-          currentUser = data.session.user;
-          showApp();
-          openProfile();
-          await loadProfile();
-          await loadDocuments();
-          setStatus('Session restored', 'ok');
-        } else {
-          showAuth();
-          setStatus('Ready. Enter email and password.', 'ok');
-        }
-
-        supabase.auth.onAuthStateChange(async (_event, session) => {
-          if (session && session.user) {
-            currentUser = session.user;
+          if (sessionResult.data && sessionResult.data.session && sessionResult.data.session.user) {
+            currentUser = sessionResult.data.session.user;
             showApp();
             openProfile();
             await loadProfile();
             await loadDocuments();
-            setStatus('Authenticated', 'ok');
+            setStatus('Session restored', 'ok');
           } else {
-            currentUser = null;
             showAuth();
-            setStatus('Signed out', 'warn');
+            setStatus('Ready. Enter email and password.', 'ok');
           }
-        });
-      } catch (e) {
-        setStatus('Init failed: ' + e.message, 'err');
-      }
-    }
 
-    window.addEventListener('load', init);
+          supabase.auth.onAuthStateChange(async function (_event, session) {
+            if (session && session.user) {
+              currentUser = session.user;
+              showApp();
+              openProfile();
+              await loadProfile();
+              await loadDocuments();
+              setStatus('Authenticated', 'ok');
+            } else {
+              currentUser = null;
+              showAuth();
+              setStatus('Signed out', 'warn');
+            }
+          });
+        } catch (e) {
+          setStatus('Init failed: ' + e.message, 'err');
+        }
+      });
+    } catch (e) {
+      setStatus('Startup failed: ' + e.message, 'err');
+    }
+  });
   </script>
-</body>
-  </html>
