@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>AMAROSE Seller App Mini V2</title>
+  <title>AMAROSE Seller App V3</title>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -13,7 +13,7 @@
       color: #101828;
     }
     .app {
-      max-width: 480px;
+      max-width: 520px;
       margin: 0 auto;
       min-height: 100vh;
       background: #f5f7fb;
@@ -26,13 +26,16 @@
       justify-content: space-between;
       align-items: center;
       gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 5;
     }
     .brand {
       font-size: 17px;
       font-weight: 800;
     }
     .lang {
-      width: 150px;
+      width: 160px;
       border: none;
       border-radius: 12px;
       padding: 10px 12px;
@@ -60,6 +63,7 @@
       padding: 16px;
       margin-bottom: 16px;
     }
+    .hidden { display: none !important; }
     h1 {
       font-size: 32px;
       font-weight: 800;
@@ -70,6 +74,11 @@
       font-size: 24px;
       font-weight: 800;
     }
+    h3 {
+      margin: 0 0 12px;
+      font-size: 18px;
+      font-weight: 800;
+    }
     .label {
       display: block;
       font-size: 13px;
@@ -77,7 +86,7 @@
       color: #344054;
       margin-bottom: 6px;
     }
-    input {
+    input, select, textarea {
       width: 100%;
       padding: 14px;
       border: 1px solid #d0d5dd;
@@ -86,6 +95,10 @@
       margin-bottom: 12px;
       background: #fff;
       color: #101828;
+    }
+    textarea {
+      min-height: 90px;
+      resize: vertical;
     }
     button {
       width: 100%;
@@ -100,7 +113,30 @@
     .primary { background: #175cd3; color: #fff; }
     .secondary { background: #e8eefc; color: #175cd3; }
     .danger { background: #fee4e2; color: #b42318; }
-    .hidden { display: none !important; }
+    .success {
+      background: #ecfdf3;
+      color: #067647;
+    }
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .tab {
+      border: none;
+      border-radius: 14px;
+      padding: 12px 8px;
+      font-size: 14px;
+      font-weight: 800;
+      background: #eaecf0;
+      color: #344054;
+      margin: 0;
+    }
+    .tab.active {
+      background: #175cd3;
+      color: #fff;
+    }
     .row {
       display: flex;
       justify-content: space-between;
@@ -119,19 +155,43 @@
       background: #fffaeb;
       color: #b54708;
     }
+    .pill.green {
+      background: #ecfdf3;
+      color: #067647;
+    }
+    .pill.red {
+      background: #fee4e2;
+      color: #b42318;
+    }
     .small {
       color: #667085;
       font-size: 14px;
       line-height: 1.5;
     }
-    .successbox {
-      background: #ecfdf3;
-      border: 1px solid #abefc6;
-      color: #067647;
-      border-radius: 16px;
-      padding: 16px;
-      font-size: 16px;
-      font-weight: 700;
+    .cardLine {
+      padding: 12px 0;
+      border-bottom: 1px solid #eaecf0;
+    }
+    .cardLine:last-child {
+      border-bottom: none;
+    }
+    .tariffCard {
+      border: 1px solid #d0d5dd;
+      border-radius: 18px;
+      padding: 14px;
+      margin-bottom: 12px;
+      background: #fff;
+    }
+    .tariffTitle {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+    .price {
+      font-size: 24px;
+      font-weight: 800;
+      color: #175cd3;
+      margin-bottom: 8px;
     }
   </style>
 </head>
@@ -142,6 +202,10 @@
       <select id="langSelect" class="lang" onchange="changeLanguage(this.value)">
         <option value="en">English</option>
         <option value="ru">Русский</option>
+        <option value="hy">Հայերեն</option>
+        <option value="fr">Français</option>
+        <option value="de">Deutsch</option>
+        <option value="es">Español</option>
       </select>
     </div>
 
@@ -164,7 +228,7 @@
 
       <div id="resetResult" class="box hidden">
         <h2 id="resetTitle">Password reset</h2>
-        <div id="resetMessage" class="successbox">Reset request created.</div>
+        <div id="resetMessage" class="small"></div>
       </div>
 
       <div class="box">
@@ -174,24 +238,147 @@
     </div>
 
     <div id="appView" class="content hidden">
-      <div class="box">
-        <h2 id="insideTitle">Seller App</h2>
-        <div class="row"><strong id="ovEmail">Email</strong><span id="viewEmail">-</span></div>
-        <div class="row"><strong id="ovRole">Role</strong><span id="viewRole">seller</span></div>
-        <div class="row"><strong id="ovStatus">Status</strong><span id="viewStatus">active</span></div>
-        <div class="row"><strong id="ovVerification">Verification</strong><span class="pill" id="viewVerification">pending</span></div>
+      <div class="tabs">
+        <button id="tabProfileBtn" class="tab active" type="button" onclick="setTab('profile')">Profile</button>
+        <button id="tabDocumentsBtn" class="tab" type="button" onclick="setTab('documents')">Documents</button>
+        <button id="tabTariffsBtn" class="tab" type="button" onclick="setTab('tariffs')">Tariffs</button>
+        <button id="tabStatsBtn" class="tab" type="button" onclick="setTab('stats')">Stats</button>
       </div>
 
-      <div class="box">
-        <button id="logoutBtn" class="danger" type="button" onclick="logoutNow()">Logout</button>
+      <div id="profileTab">
+        <div class="box">
+          <h2 id="overviewTitle">Account Overview</h2>
+          <div class="row"><strong id="ovEmail">Email</strong><span id="viewEmail">-</span></div>
+          <div class="row"><strong id="ovRole">Role</strong><span id="viewRole">seller</span></div>
+          <div class="row"><strong id="ovStatus">Status</strong><span id="viewStatus">active</span></div>
+          <div class="row"><strong id="ovVerification">Verification</strong><span class="pill" id="viewVerification">pending</span></div>
+          <div class="row"><strong id="ovTariff">Tariff</strong><span id="viewTariff">Start - 1 month</span></div>
+        </div>
+
+        <div class="box">
+          <h2 id="profileTitle">Seller Profile</h2>
+
+          <label class="label" id="fullNameLabel">Full name</label>
+          <input id="fullName" type="text" placeholder="Full name">
+
+          <label class="label" id="companyLabel">Company name</label>
+          <input id="companyName" type="text" placeholder="Company name">
+
+          <label class="label" id="sellerTypeLabel">Seller type</label>
+          <select id="sellerType">
+            <option value="individual">Individual</option>
+            <option value="company">Company</option>
+            <option value="brand">Brand</option>
+          </select>
+
+          <label class="label" id="phoneLabel">Phone</label>
+          <input id="phone" type="text" placeholder="+374 / +7 / +31">
+
+          <label class="label" id="countryLabel">Country</label>
+          <input id="country" type="text" placeholder="Country">
+
+          <label class="label" id="cityLabel">City</label>
+          <input id="city" type="text" placeholder="City">
+
+          <label class="label" id="languagePrefLabel">Language</label>
+          <select id="languagePref">
+            <option value="en">English</option>
+            <option value="ru">Русский</option>
+            <option value="hy">Հայերեն</option>
+            <option value="fr">Français</option>
+            <option value="de">Deutsch</option>
+            <option value="es">Español</option>
+          </select>
+
+          <label class="label" id="currencyLabel">Currency</label>
+          <select id="currency">
+            <option value="EUR">EUR</option>
+            <option value="USD">USD</option>
+            <option value="AMD">AMD</option>
+            <option value="RUB">RUB</option>
+          </select>
+
+          <button id="saveProfileBtn" class="primary" type="button" onclick="saveProfile()">Save profile</button>
+        </div>
+
+        <div class="box">
+          <button id="logoutBtn" class="danger" type="button" onclick="logoutNow()">Logout</button>
+        </div>
+      </div>
+
+      <div id="documentsTab" class="hidden">
+        <div class="box">
+          <h2 id="documentsTitle">Documents</h2>
+
+          <label class="label" id="docNameLabel">Document name</label>
+          <input id="docName" type="text" placeholder="Passport / License / Registration">
+
+          <label class="label" id="docTypeLabel">Document type</label>
+          <select id="docType">
+            <option value="passport">Passport</option>
+            <option value="license">License</option>
+            <option value="company_registration">Company registration</option>
+            <option value="tax_document">Tax document</option>
+          </select>
+
+          <label class="label" id="docCommentLabel">Comment</label>
+          <textarea id="docComment" placeholder="Short note"></textarea>
+
+          <button id="uploadDocBtn" class="primary" type="button" onclick="uploadDocument()">Upload document</button>
+        </div>
+
+        <div class="box">
+          <h2 id="docListTitle">Uploaded documents</h2>
+          <div id="documentsList" class="small"></div>
+        </div>
+      </div>
+
+      <div id="tariffsTab" class="hidden">
+        <div class="box">
+          <h2 id="tariffsTitle">Tariffs</h2>
+
+          <div class="tariffCard">
+            <div class="tariffTitle" id="tariffStartTitle">START</div>
+            <div class="price">€19</div>
+            <div class="small" id="tariffStartDesc">Basic access for a new seller.</div>
+            <button class="secondary" type="button" onclick="buyTariff('START','1 month')">START - 1 month</button>
+            <button class="secondary" type="button" onclick="buyTariff('START','6 months')">START - 6 months</button>
+            <button class="secondary" type="button" onclick="buyTariff('START','1 year')">START - 1 year</button>
+          </div>
+
+          <div class="tariffCard">
+            <div class="tariffTitle" id="tariffProTitle">PRO</div>
+            <div class="price">€49</div>
+            <div class="small" id="tariffProDesc">More visibility and more seller tools.</div>
+            <button class="secondary" type="button" onclick="buyTariff('PRO','1 month')">PRO - 1 month</button>
+            <button class="secondary" type="button" onclick="buyTariff('PRO','6 months')">PRO - 6 months</button>
+            <button class="secondary" type="button" onclick="buyTariff('PRO','1 year')">PRO - 1 year</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="statsTab" class="hidden">
+        <div class="box">
+          <h2 id="statsTitle">Stats</h2>
+          <div class="row"><strong id="statsRatingLabel">Rating</strong><span id="statsRating">4.8 / 5</span></div>
+          <div class="row"><strong id="statsReviewsLabel">Reviews</strong><span id="statsReviews">12</span></div>
+          <div class="row"><strong id="statsActivityLabel">Activity</strong><span id="statsActivity">Stable</span></div>
+          <div class="row"><strong id="statsOrdersLabel">Orders</strong><span id="statsOrders">24</span></div>
+          <div class="row"><strong id="statsTrendLabel">Trend</strong><span id="statsTrend">Up</span></div>
+        </div>
+
+        <div class="box">
+          <h2 id="statsInfoTitle">Seller note</h2>
+          <div id="statsInfoText" class="small">Your rating and activity are visible here so you can track seller performance.</div>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-    const KEY = 'amarose_seller_mini_v2';
+    const KEY = 'amarose_seller_v3';
 
-    const T = {
+    const text = {
       en: {
         brand: 'AMAROSE Seller App',
         loginTitle: 'Seller Login',
@@ -202,23 +389,60 @@
         loginBtn: 'Login',
         createBtn: 'Create account',
         resetBtn: 'Reset password',
+        resetTitle: 'Password reset',
+        resetMessage: 'Password reset request created successfully.',
         demoTitle: 'Demo access',
         demoText: 'You can login with any email and any password. Data is saved in this browser.',
-        insideTitle: 'Seller App',
+        overviewTitle: 'Account Overview',
         ovEmail: 'Email',
         ovRole: 'Role',
         ovStatus: 'Status',
         ovVerification: 'Verification',
+        ovTariff: 'Tariff',
+        profileTitle: 'Seller Profile',
+        fullNameLabel: 'Full name',
+        companyLabel: 'Company name',
+        sellerTypeLabel: 'Seller type',
+        phoneLabel: 'Phone',
+        countryLabel: 'Country',
+        cityLabel: 'City',
+        languagePrefLabel: 'Language',
+        currencyLabel: 'Currency',
+        saveProfileBtn: 'Save profile',
         logoutBtn: 'Logout',
-        resetTitle: 'Password reset',
-        resetMessage: 'Reset request created successfully.',
+        documentsTitle: 'Documents',
+        docNameLabel: 'Document name',
+        docTypeLabel: 'Document type',
+        docCommentLabel: 'Comment',
+        uploadDocBtn: 'Upload document',
+        docListTitle: 'Uploaded documents',
+        tariffsTitle: 'Tariffs',
+        tariffStartTitle: 'START',
+        tariffStartDesc: 'Basic access for a new seller.',
+        tariffProTitle: 'PRO',
+        tariffProDesc: 'More visibility and more seller tools.',
+        statsTitle: 'Stats',
+        statsRatingLabel: 'Rating',
+        statsReviewsLabel: 'Reviews',
+        statsActivityLabel: 'Activity',
+        statsOrdersLabel: 'Orders',
+        statsTrendLabel: 'Trend',
+        statsInfoTitle: 'Seller note',
+        statsInfoText: 'Your rating and activity are visible here so you can track seller performance.',
+        tabProfile: 'Profile',
+        tabDocuments: 'Documents',
+        tabTariffs: 'Tariffs',
+        tabStats: 'Stats',
         statusLoaded: 'Application loaded successfully.',
         statusNeedEmail: 'Enter email first.',
         statusNeedEmailPassword: 'Enter email and password.',
         statusLogin: 'Logged in successfully.',
         statusCreate: 'Account created successfully.',
         statusReset: 'Password reset request created.',
-        statusLogout: 'Logged out successfully.'
+        statusLogout: 'Logged out successfully.',
+        statusProfileSaved: 'Profile saved successfully.',
+        statusDocumentUploaded: 'Document uploaded successfully.',
+        statusTariffBought: 'Tariff selected successfully.'
       },
       ru: {
         brand: 'AMAROSE Seller App',
@@ -230,189 +454,113 @@
         loginBtn: 'Войти',
         createBtn: 'Создать аккаунт',
         resetBtn: 'Сбросить пароль',
+        resetTitle: 'Сброс пароля',
+        resetMessage: 'Запрос на сброс пароля успешно создан.',
         demoTitle: 'Демо доступ',
         demoText: 'Можно войти с любой почтой и любым паролем. Данные сохраняются в браузере.',
-        insideTitle: 'Seller App',
+        overviewTitle: 'Обзор аккаунта',
         ovEmail: 'Почта',
         ovRole: 'Роль',
         ovStatus: 'Статус',
         ovVerification: 'Проверка',
+        ovTariff: 'Тариф',
+        profileTitle: 'Профиль продавца',
+        fullNameLabel: 'Полное имя',
+        companyLabel: 'Название компании',
+        sellerTypeLabel: 'Тип продавца',
+        phoneLabel: 'Телефон',
+        countryLabel: 'Страна',
+        cityLabel: 'Город',
+        languagePrefLabel: 'Язык',
+        currencyLabel: 'Валюта',
+        saveProfileBtn: 'Сохранить профиль',
         logoutBtn: 'Выйти',
-        resetTitle: 'Сброс пароля',
-        resetMessage: 'Запрос на сброс пароля успешно создан.',
+        documentsTitle: 'Документы',
+        docNameLabel: 'Название документа',
+        docTypeLabel: 'Тип документа',
+        docCommentLabel: 'Комментарий',
+        uploadDocBtn: 'Загрузить документ',
+        docListTitle: 'Загруженные документы',
+        tariffsTitle: 'Тарифы',
+        tariffStartTitle: 'START',
+        tariffStartDesc: 'Базовый доступ для нового продавца.',
+        tariffProTitle: 'PRO',
+        tariffProDesc: 'Больше видимости и больше инструментов продавца.',
+        statsTitle: 'Статистика',
+        statsRatingLabel: 'Рейтинг',
+        statsReviewsLabel: 'Отзывы',
+        statsActivityLabel: 'Активность',
+        statsOrdersLabel: 'Заказы',
+        statsTrendLabel: 'Тренд',
+        statsInfoTitle: 'Заметка продавцу',
+        statsInfoText: 'Здесь видны ваш рейтинг и активность, чтобы вы могли следить за показателями.',
+        tabProfile: 'Профиль',
+        tabDocuments: 'Документы',
+        tabTariffs: 'Тарифы',
+        tabStats: 'Статистика',
         statusLoaded: 'Приложение загружено.',
         statusNeedEmail: 'Сначала введите почту.',
         statusNeedEmailPassword: 'Введите почту и пароль.',
         statusLogin: 'Вход выполнен успешно.',
         statusCreate: 'Аккаунт успешно создан.',
         statusReset: 'Запрос на сброс пароля создан.',
-        statusLogout: 'Вы вышли из аккаунта.'
-      }
-    };
-
-    let state = {
-      language: 'en',
-      loggedIn: false,
-      email: '',
-      resetShown: false
-    };
-
-    function saveState() {
-      localStorage.setItem(KEY, JSON.stringify(state));
-    }
-
-    function loadState() {
-      try {
-        const raw = localStorage.getItem(KEY);
-        if (!raw) return;
-        const parsed = JSON.parse(raw);
-        if (parsed) state = parsed;
-      } catch (e) {}
-    }
-
-    function tr(key) {
-      const lang = state.language === 'ru' ? 'ru' : 'en';
-      return T[lang][key] || key;
-    }
-
-    function setStatus(text) {
-      document.getElementById('status').innerText = text;
-    }
-
-    function applyLanguage() {
-      document.getElementById('brand').innerText = tr('brand');
-      document.getElementById('loginTitle').innerText = tr('loginTitle');
-      document.getElementById('emailLabel').innerText = tr('emailLabel');
-      document.getElementById('passwordLabel').innerText = tr('passwordLabel');
-      document.getElementById('loginBtn').innerText = tr('loginBtn');
-      document.getElementById('createBtn').innerText = tr('createBtn');
-      document.getElementById('resetBtn').innerText = tr('resetBtn');
-      document.getElementById('demoTitle').innerText = tr('demoTitle');
-      document.getElementById('demoText').innerText = tr('demoText');
-      document.getElementById('insideTitle').innerText = tr('insideTitle');
-      document.getElementById('ovEmail').innerText = tr('ovEmail');
-      document.getElementById('ovRole').innerText = tr('ovRole');
-      document.getElementById('ovStatus').innerText = tr('ovStatus');
-      document.getElementById('ovVerification').innerText = tr('ovVerification');
-      document.getElementById('logoutBtn').innerText = tr('logoutBtn');
-      document.getElementById('resetTitle').innerText = tr('resetTitle');
-      document.getElementById('resetMessage').innerText = tr('resetMessage');
-
-      document.getElementById('email').placeholder = tr('emailPlaceholder');
-      document.getElementById('password').placeholder = tr('passwordPlaceholder');
-      document.getElementById('langSelect').value = state.language;
-    }
-
-    function showAuth() {
-      document.getElementById('authView').classList.remove('hidden');
-      document.getElementById('appView').classList.add('hidden');
-    }
-
-    function showApp() {
-      document.getElementById('authView').classList.add('hidden');
-      document.getElementById('appView').classList.remove('hidden');
-    }
-
-    function renderResetBox() {
-      const box = document.getElementById('resetResult');
-      if (state.resetShown && !state.loggedIn) {
-        box.classList.remove('hidden');
-      } else {
-        box.classList.add('hidden');
-      }
-    }
-
-    function render() {
-      applyLanguage();
-      document.getElementById('viewEmail').innerText = state.email || '-';
-      renderResetBox();
-
-      if (state.loggedIn) {
-        showApp();
-        setStatus(tr('statusLogin'));
-      } else {
-        showAuth();
-        if (state.resetShown) {
-          setStatus(tr('statusReset'));
-        } else {
-          setStatus(tr('statusLoaded'));
-        }
-      }
-    }
-
-    function changeLanguage(lang) {
-      state.language = lang === 'ru' ? 'ru' : 'en';
-      saveState();
-      render();
-    }
-
-    function loginNow() {
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value.trim();
-
-      if (!email || !password) {
-        setStatus(tr('statusNeedEmailPassword'));
-        return;
-      }
-
-      state.loggedIn = true;
-      state.email = email;
-      state.resetShown = false;
-      saveState();
-      showApp();
-      applyLanguage();
-      document.getElementById('viewEmail').innerText = state.email;
-      setStatus(tr('statusLogin'));
-    }
-
-    function createAccountNow() {
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value.trim();
-
-      if (!email || !password) {
-        setStatus(tr('statusNeedEmailPassword'));
-        return;
-      }
-
-      state.loggedIn = true;
-      state.email = email;
-      state.resetShown = false;
-      saveState();
-      showApp();
-      applyLanguage();
-      document.getElementById('viewEmail').innerText = state.email;
-      setStatus(tr('statusCreate'));
-    }
-
-    function resetPasswordNow() {
-      const email = document.getElementById('email').value.trim();
-
-      if (!email) {
-        setStatus(tr('statusNeedEmail'));
-        return;
-      }
-
-      state.loggedIn = false;
-      state.resetShown = true;
-      state.email = email;
-      saveState();
-      showAuth();
-      renderResetBox();
-      setStatus(tr('statusReset'));
-    }
-
-    function logoutNow() {
-      state.loggedIn = false;
-      state.resetShown = false;
-      saveState();
-      showAuth();
-      renderResetBox();
-      applyLanguage();
-      setStatus(tr('statusLogout'));
-    }
-
-    loadState();
-    render();
-  </script>
-</body>
-</html>
+        statusLogout: 'Вы вышли из аккаунта.',
+        statusProfileSaved: 'Профиль успешно сохранён.',
+        statusDocumentUploaded: 'Документ успешно загружен.',
+        statusTariffBought: 'Тариф успешно выбран.'
+      },
+      hy: {
+        brand: 'AMAROSE Seller App',
+        loginTitle: 'Վաճառողի մուտք',
+        emailLabel: 'Էլ. հասցե',
+        passwordLabel: 'Գաղտնաբառ',
+        emailPlaceholder: 'seller@amarose.com',
+        passwordPlaceholder: 'Մուտքագրեք գաղտնաբառը',
+        loginBtn: 'Մուտք',
+        createBtn: 'Ստեղծել հաշիվ',
+        resetBtn: 'Վերականգնել գաղտնաբառը',
+        resetTitle: 'Գաղտնաբառի վերականգնում',
+        resetMessage: 'Գաղտնաբառի վերականգնման հարցումը ստեղծվել է։',
+        demoTitle: 'Դեմո մուտք',
+        demoText: 'Կարող եք մուտք գործել ցանկացած էլ. հասցեով և գաղտնաբառով։ Տվյալները պահվում են բրաուզերում։',
+        overviewTitle: 'Հաշվի տեսություն',
+        ovEmail: 'Էլ. հասցե',
+        ovRole: 'Դեր',
+        ovStatus: 'Կարգավիճակ',
+        ovVerification: 'Ստուգում',
+        ovTariff: 'Սակագին',
+        profileTitle: 'Վաճառողի պրոֆիլ',
+        fullNameLabel: 'Ամբողջական անուն',
+        companyLabel: 'Ընկերության անուն',
+        sellerTypeLabel: 'Վաճառողի տեսակ',
+        phoneLabel: 'Հեռախոս',
+        countryLabel: 'Երկիր',
+        cityLabel: 'Քաղաք',
+        languagePrefLabel: 'Լեզու',
+        currencyLabel: 'Արժույթ',
+        saveProfileBtn: 'Պահպանել պրոֆիլը',
+        logoutBtn: 'Դուրս գալ',
+        documentsTitle: 'Փաստաթղթեր',
+        docNameLabel: 'Փաստաթղթի անուն',
+        docTypeLabel: 'Փաստաթղթի տեսակ',
+        docCommentLabel: 'Մեկնաբանություն',
+        uploadDocBtn: 'Վերբեռնել փաստաթուղթ',
+        docListTitle: 'Վերբեռնված փաստաթղթեր',
+        tariffsTitle: 'Սակագներ',
+        tariffStartTitle: 'START',
+        tariffStartDesc: 'Հիմնական մուտք նոր վաճառողի համար։',
+        tariffProTitle: 'PRO',
+        tariffProDesc: 'Ավելի շատ տեսանելիություն և գործիքներ։',
+        statsTitle: 'Վիճակագրություն',
+        statsRatingLabel: 'Վարկանիշ',
+        statsReviewsLabel: 'Կարծիքներ',
+        statsActivityLabel: 'Ակտիվություն',
+        statsOrdersLabel: 'Պատվերներ',
+        statsTrendLabel: 'Միտում',
+        statsInfoTitle: 'Նշում վաճառողին',
+        statsInfoText: 'Այստեղ երևում են ձեր վարկանիշն ու ակտիվությունը։',
+        tabProfile: 'Պրոֆիլ',
+        tabDocuments: 'Փաստաթղթեր',
+        tabTariffs: 'Սակագներ',
+        tabStats: 'Վիճակագրություն',
+        statusLoaded: 'Հա
