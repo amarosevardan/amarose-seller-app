@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -22,8 +23,6 @@
       background: #175cd3;
       color: #fff;
       padding: 18px 16px;
-    }
-    .topbar-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -35,7 +34,6 @@
     }
     .lang {
       width: 150px;
-      margin: 0;
       border: none;
       border-radius: 12px;
       padding: 10px 12px;
@@ -49,7 +47,7 @@
       background: #fffaeb;
       color: #b54708;
       font-size: 14px;
-      min-height: 52px;
+      min-height: 48px;
     }
     .content {
       padding: 16px;
@@ -61,7 +59,7 @@
       padding: 16px;
       margin-bottom: 16px;
     }
-    .title {
+    h1 {
       font-size: 32px;
       font-weight: 800;
       margin: 0 0 20px;
@@ -88,10 +86,6 @@
       background: #fff;
       color: #101828;
     }
-    textarea {
-      min-height: 90px;
-      resize: vertical;
-    }
     button {
       width: 100%;
       padding: 15px;
@@ -102,503 +96,246 @@
       margin-bottom: 10px;
       cursor: pointer;
     }
-    .primary {
-      background: #175cd3;
-      color: #fff;
-    }
-    .secondary {
-      background: #e8eefc;
-      color: #175cd3;
-    }
-    .danger {
-      background: #fee4e2;
-      color: #b42318;
-    }
-    .tabs {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-    .tabbtn {
-      background: #f2f4f7;
-      color: #344054;
-      border-radius: 12px;
-      padding: 12px 8px;
-      font-size: 12px;
-      font-weight: 800;
-      margin: 0;
-    }
-    .tabbtn.active {
-      background: #175cd3;
-      color: #fff;
-    }
-    .hidden {
-      display: none !important;
-    }
-    .row {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 12px 0;
-      border-bottom: 1px solid #eaecf0;
-      font-size: 14px;
-    }
-    .row:last-child {
-      border-bottom: none;
-    }
-    .pill {
-      display: inline-block;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 800;
-      background: #fffaeb;
-      color: #b54708;
-    }
-    .small {
-      color: #667085;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-    .doc {
-      border: 1px solid #d0d5dd;
-      border-radius: 14px;
-      padding: 12px;
-      margin-bottom: 10px;
-    }
-    .stat {
-      border: 1px solid #d0d5dd;
-      border-radius: 14px;
-      padding: 12px;
-      margin-bottom: 10px;
-      background: #fafafa;
-    }
-    .stat-value {
-      font-size: 24px;
-      font-weight: 800;
-      color: #175cd3;
-      margin-top: 6px;
-    }
+    .primary { background: #175cd3; color: #fff; }
+    .secondary { background: #e8eefc; color: #175cd3; }
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
   <div class="app">
     <div class="topbar">
-      <div class="topbar-row">
-        <div class="brand" id="brandTitle">AMAROSE Seller App</div>
-        <select id="topLanguage" class="lang" onchange="changeLanguage(this.value)">
-          <option value="en">English</option>
-          <option value="ru">Русский</option>
-          <option value="hy">Հայերեն</option>
-          <option value="fr">Français</option>
-          <option value="de">Deutsch</option>
-          <option value="es">Español</option>
-        </select>
-      </div>
+      <div class="brand" id="brand">AMAROSE Seller App</div>
+      <select id="langSelect" class="lang">
+        <option value="en">English</option>
+        <option value="ru">Русский</option>
+      </select>
     </div>
 
-    <div id="statusBox" class="status"></div>
+    <div id="status" class="status"></div>
 
     <div id="authView" class="content">
-      <h1 id="loginTitle" class="title">Seller Login</h1>
+      <h1 id="loginTitle">Seller Login</h1>
 
       <div class="box">
-        <label id="labelEmail" class="label">Email</label>
+        <label class="label" id="emailLabel">Email</label>
         <input id="email" type="email" placeholder="seller@amarose.com">
 
-        <label id="labelPassword" class="label">Password</label>
+        <label class="label" id="passwordLabel">Password</label>
         <input id="password" type="password" placeholder="Enter password">
 
-        <button id="loginBtn" class="primary" onclick="loginNow()">Login</button>
-        <button id="createBtn" class="secondary" onclick="createAccountNow()">Create account</button>
-        <button id="resetBtn" class="secondary" onclick="resetPasswordNow()">Reset password</button>
+        <button id="loginBtn" class="primary">Login</button>
+        <button id="createBtn" class="secondary">Create account</button>
+        <button id="resetBtn" class="secondary">Reset password</button>
       </div>
 
       <div class="box">
         <h2 id="demoTitle">Demo access</h2>
-        <div id="demoText" class="small">You can login with any email and any password. Data is saved in this browser.</div>
+        <div id="demoText">You can login with any email and any password. Data is saved in this browser.</div>
       </div>
     </div>
 
     <div id="appView" class="content hidden">
-      <div class="tabs">
-        <button id="tabProfileBtn" class="tabbtn active" onclick="openTab('profile')">Profile</button>
-        <button id="tabDocumentsBtn" class="tabbtn" onclick="openTab('documents')">Documents</button>
-        <button id="tabTariffsBtn" class="tabbtn" onclick="openTab('tariffs')">Tariffs</button>
-        <button id="tabStatsBtn" class="tabbtn" onclick="openTab('stats')">Stats</button>
+      <div class="box">
+        <h2 id="welcomeTitle">Welcome</h2>
+        <div id="welcomeText"></div>
       </div>
 
-      <div id="profileTab">
-        <div class="box">
-          <h2 id="overviewTitle">Account Overview</h2>
-          <div class="row"><strong id="ovEmail">Email</strong><span id="viewEmail">-</span></div>
-          <div class="row"><strong id="ovRole">Role</strong><span id="viewRole">seller</span></div>
-          <div class="row"><strong id="ovStatus">Status</strong><span id="viewStatus">active</span></div>
-          <div class="row"><strong id="ovVerification">Verification</strong><span class="pill" id="viewVerification">pending</span></div>
-        </div>
-
-        <div class="box">
-          <h2 id="profileTitle">Seller Profile</h2>
-
-          <label id="labelFullName" class="label">Full name</label>
-          <input id="fullName" type="text" placeholder="Full name">
-
-          <label id="labelCompanyName" class="label">Company name</label>
-          <input id="companyName" type="text" placeholder="Company name">
-
-          <label id="labelSellerType" class="label">Seller type</label>
-          <select id="sellerType">
-            <option value="Individual">Individual</option>
-            <option value="Company">Company</option>
-            <option value="Brand">Brand</option>
-            <option value="Store">Store</option>
-          </select>
-
-          <label id="labelPhone" class="label">Phone</label>
-          <input id="phone" type="text" placeholder="+374 / +7 / +31">
-
-          <label id="labelCountry" class="label">Country</label>
-          <input id="country" type="text" placeholder="Country">
-
-          <label id="labelCity" class="label">City</label>
-          <input id="city" type="text" placeholder="City">
-
-          <label id="labelCurrency" class="label">Currency</label>
-          <select id="currency">
-            <option value="EUR">EUR</option>
-            <option value="USD">USD</option>
-            <option value="AMD">AMD</option>
-            <option value="RUB">RUB</option>
-          </select>
-
-          <button id="saveProfileBtn" class="primary" onclick="saveProfileNow()">Save profile</button>
-        </div>
-
-        <div class="box">
-          <button id="logoutBtn" class="danger" onclick="logoutNow()">Logout</button>
-        </div>
-      </div>
-
-      <div id="documentsTab" class="hidden">
-        <div class="box">
-          <h2 id="uploadTitle">Upload Document</h2>
-
-          <label id="labelDocType" class="label">Document type</label>
-          <select id="docType">
-            <option value="Passport">Passport</option>
-            <option value="ID Card">ID Card</option>
-            <option value="Business License">Business License</option>
-            <option value="Tax Certificate">Tax Certificate</option>
-            <option value="Address Proof">Address Proof</option>
-          </select>
-
-          <label id="labelDocNote" class="label">Document note</label>
-          <textarea id="docNote" placeholder="Add note"></textarea>
-
-          <button id="addDocBtn" class="primary" onclick="addDocumentNow()">Add document</button>
-        </div>
-
-        <div class="box">
-          <h2 id="docsListTitle">Documents List</h2>
-          <div id="docsList"></div>
-        </div>
-      </div>
-
-      <div id="tariffsTab" class="hidden">
-        <div class="box">
-          <h2>Basic</h2>
-          <div class="small">1 month — 20 €</div>
-          <div class="small">6 months — 108 €</div>
-          <div class="small">1 year — 192 €</div>
-          <br>
-          <select id="basicPlan">
-            <option value="1">1 month</option>
-            <option value="6">6 months</option>
-            <option value="12">1 year</option>
-          </select>
-          <button id="buyBasicBtn" class="primary" onclick="buyBasicNow()">Buy Basic</button>
-        </div>
-
-        <div class="box">
-          <h2>Pro</h2>
-          <div class="small">1 month — 40 €</div>
-          <div class="small">6 months — 216 €</div>
-          <div class="small">1 year — 384 €</div>
-          <br>
-          <select id="proPlan">
-            <option value="1">1 month</option>
-            <option value="6">6 months</option>
-            <option value="12">1 year</option>
-          </select>
-          <button id="buyProBtn" class="primary" onclick="buyProNow()">Buy Pro</button>
-        </div>
-
-        <div class="box">
-          <h2 id="currentTariffTitle">Current Tariff</h2>
-          <div class="row"><strong id="currentPlanLabel">Plan</strong><span id="currentPlanView">Basic</span></div>
-          <div class="row"><strong id="currentPeriodLabel">Period</strong><span id="currentPeriodView">1 month</span></div>
-          <div class="row"><strong id="currentPriceLabel">Final price</strong><span id="currentPriceView">20 €</span></div>
-        </div>
-      </div>
-
-      <div id="statsTab" class="hidden">
-        <div class="box">
-          <h2 id="statsTitle">Seller Stats</h2>
-          <div class="stat">
-            <div id="ratingLabel">Rating average</div>
-            <div class="stat-value">4.8</div>
-          </div>
-          <div class="stat">
-            <div id="reviewsLabel">Reviews count</div>
-            <div class="stat-value">26</div>
-          </div>
-          <div class="stat">
-            <div id="activityLabel">Activity score</div>
-            <div class="stat-value">82</div>
-          </div>
-          <div class="stat">
-            <div id="ordersLabel">Orders</div>
-            <div class="stat-value">14</div>
-          </div>
-        </div>
+      <div class="box">
+        <button id="logoutBtn" class="secondary">Logout</button>
       </div>
     </div>
   </div>
 
   <script>
-    const KEY = 'amarose_seller_final_v1';
+    const STORAGE_KEY = "amarose_simple_lang_app_v1";
 
-    const texts = {
+    const T = {
       en: {
-        brandTitle: 'AMAROSE Seller App',
-        loginTitle: 'Seller Login',
-        labelEmail: 'Email',
-        labelPassword: 'Password',
-        loginBtn: 'Login',
-        createBtn: 'Create account',
-        resetBtn: 'Reset password',
-        demoTitle: 'Demo access',
-        demoText: 'You can login with any email and any password. Data is saved in this browser.',
-        tabProfileBtn: 'Profile',
-        tabDocumentsBtn: 'Documents',
-        tabTariffsBtn: 'Tariffs',
-        tabStatsBtn: 'Stats',
-        overviewTitle: 'Account Overview',
-        ovEmail: 'Email',
-        ovRole: 'Role',
-        ovStatus: 'Status',
-        ovVerification: 'Verification',
-        profileTitle: 'Seller Profile',
-        labelFullName: 'Full name',
-        labelCompanyName: 'Company name',
-        labelSellerType: 'Seller type',
-        labelPhone: 'Phone',
-        labelCountry: 'Country',
-        labelCity: 'City',
-        labelCurrency: 'Currency',
-        saveProfileBtn: 'Save profile',
-        logoutBtn: 'Logout',
-        uploadTitle: 'Upload Document',
-        labelDocType: 'Document type',
-        labelDocNote: 'Document note',
-        addDocBtn: 'Add document',
-        docsListTitle: 'Documents List',
-        currentTariffTitle: 'Current Tariff',
-        currentPlanLabel: 'Plan',
-        currentPeriodLabel: 'Period',
-        currentPriceLabel: 'Final price',
-        statsTitle: 'Seller Stats',
-        ratingLabel: 'Rating average',
-        reviewsLabel: 'Reviews count',
-        activityLabel: 'Activity score',
-        ordersLabel: 'Orders',
-        statusLoaded: 'Stable version loaded.',
-        statusLoginOk: 'Logged in successfully.',
-        statusCreateOk: 'Account created successfully.',
-        statusNeedEmail: 'Enter email first.',
-        statusNeedLoginData: 'Enter email and password.',
-        statusResetOk: 'Password reset request saved.',
-        statusProfileOk: 'Profile saved successfully.',
-        statusDocOk: 'Document added successfully.',
-        statusLogout: 'You are logged out.',
-        plan1: '1 month',
-        plan6: '6 months',
-        plan12: '1 year'
+        brand: "AMAROSE Seller App",
+        loginTitle: "Seller Login",
+        emailLabel: "Email",
+        passwordLabel: "Password",
+        emailPlaceholder: "seller@amarose.com",
+        passwordPlaceholder: "Enter password",
+        loginBtn: "Login",
+        createBtn: "Create account",
+        resetBtn: "Reset password",
+        demoTitle: "Demo access",
+        demoText: "You can login with any email and any password. Data is saved in this browser.",
+        welcomeTitle: "Welcome",
+        welcomeText: "You are logged in.",
+        logoutBtn: "Logout",
+        statusLoaded: "Stable version loaded.",
+        statusNeedEmailPassword: "Enter email and password.",
+        statusNeedEmail: "Enter email first.",
+        statusLogin: "Logged in successfully.",
+        statusCreate: "Account created successfully.",
+        statusReset: "Password reset request saved.",
+        statusLogout: "You are logged out."
       },
       ru: {
-        brandTitle: 'AMAROSE Seller App',
-        loginTitle: 'Вход продавца',
-        labelEmail: 'Почта',
-        labelPassword: 'Пароль',
-        loginBtn: 'Войти',
-        createBtn: 'Создать аккаунт',
-        resetBtn: 'Сбросить пароль',
-        demoTitle: 'Демо доступ',
-        demoText: 'Можно войти с любой почтой и любым паролем. Данные сохраняются в браузере.',
-        tabProfileBtn: 'Профиль',
-        tabDocumentsBtn: 'Документы',
-        tabTariffsBtn: 'Тарифы',
-        tabStatsBtn: 'Статистика',
-        overviewTitle: 'Обзор аккаунта',
-        ovEmail: 'Почта',
-        ovRole: 'Роль',
-        ovStatus: 'Статус',
-        ovVerification: 'Проверка',
-        profileTitle: 'Профиль продавца',
-        labelFullName: 'Полное имя',
-        labelCompanyName: 'Название компании',
-        labelSellerType: 'Тип продавца',
-        labelPhone: 'Телефон',
-        labelCountry: 'Страна',
-        labelCity: 'Город',
-        labelCurrency: 'Валюта',
-        saveProfileBtn: 'Сохранить профиль',
-        logoutBtn: 'Выйти',
-        uploadTitle: 'Загрузка документа',
-        labelDocType: 'Тип документа',
-        labelDocNote: 'Заметка к документу',
-        addDocBtn: 'Добавить документ',
-        docsListTitle: 'Список документов',
-        currentTariffTitle: 'Текущий тариф',
-        currentPlanLabel: 'План',
-        currentPeriodLabel: 'Период',
-        currentPriceLabel: 'Итоговая цена',
-        statsTitle: 'Статистика продавца',
-        ratingLabel: 'Средний рейтинг',
-        reviewsLabel: 'Количество отзывов',
-        activityLabel: 'Показатель активности',
-        ordersLabel: 'Заказы',
-        statusLoaded: 'Стабильная версия загружена.',
-        statusLoginOk: 'Вход выполнен успешно.',
-        statusCreateOk: 'Аккаунт успешно создан.',
-        statusNeedEmail: 'Сначала введите почту.',
-        statusNeedLoginData: 'Введите почту и пароль.',
-        statusResetOk: 'Запрос на сброс пароля сохранён.',
-        statusProfileOk: 'Профиль успешно сохранён.',
-        statusDocOk: 'Документ успешно добавлен.',
-        statusLogout: 'Вы вышли из аккаунта.',
-        plan1: '1 месяц',
-        plan6: '6 месяцев',
-        plan12: '1 год'
+        brand: "AMAROSE Seller App",
+        loginTitle: "Вход продавца",
+        emailLabel: "Почта",
+        passwordLabel: "Пароль",
+        emailPlaceholder: "seller@amarose.com",
+        passwordPlaceholder: "Введите пароль",
+        loginBtn: "Войти",
+        createBtn: "Создать аккаунт",
+        resetBtn: "Сбросить пароль",
+        demoTitle: "Демо доступ",
+        demoText: "Можно войти с любой почтой и любым паролем. Данные сохраняются в браузере.",
+        welcomeTitle: "Добро пожаловать",
+        welcomeText: "Вы вошли в аккаунт.",
+        logoutBtn: "Выйти",
+        statusLoaded: "Стабильная версия загружена.",
+        statusNeedEmailPassword: "Введите почту и пароль.",
+        statusNeedEmail: "Сначала введите почту.",
+        statusLogin: "Вход выполнен успешно.",
+        statusCreate: "Аккаунт успешно создан.",
+        statusReset: "Запрос на сброс пароля сохранён.",
+        statusLogout: "Вы вышли из аккаунта."
       }
     };
 
     let state = {
-      language: 'en',
+      language: "en",
       loggedIn: false,
-      email: '',
-      currentTab: 'profile',
-      profile: {
-        fullName: '',
-        companyName: '',
-        sellerType: 'Individual',
-        phone: '',
-        country: '',
-        city: '',
-        currency: 'EUR'
-      },
-      tariff: {
-        plan: 'Basic',
-        period: '1',
-        price: '20 €'
-      },
-      documents: []
+      email: ""
     };
 
     function saveState() {
-      localStorage.setItem(KEY, JSON.stringify(state));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     }
 
     function loadState() {
-      const raw = localStorage.getItem(KEY);
-      if (!raw) return;
       try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
         const parsed = JSON.parse(raw);
-        state = Object.assign({}, state, parsed);
+        if (parsed && typeof parsed === "object") {
+          state = { ...state, ...parsed };
+        }
       } catch (e) {}
     }
 
     function tr(key) {
-      const lang = texts[state.language] ? state.language : 'en';
-      return (texts[lang] && texts[lang][key]) || texts.en[key] || key;
+      const lang = state.language === "ru" ? "ru" : "en";
+      return T[lang][key] || key;
     }
 
     function setStatus(text) {
-      document.getElementById('statusBox').innerText = text;
+      document.getElementById("status").innerText = text;
     }
 
     function applyLanguage() {
       document.documentElement.lang = state.language;
 
-      const ids = [
-        'brandTitle','loginTitle','labelEmail','labelPassword','loginBtn','createBtn','resetBtn',
-        'demoTitle','demoText','tabProfileBtn','tabDocumentsBtn','tabTariffsBtn','tabStatsBtn',
-        'overviewTitle','ovEmail','ovRole','ovStatus','ovVerification','profileTitle',
-        'labelFullName','labelCompanyName','labelSellerType','labelPhone','labelCountry','labelCity','labelCurrency',
-        'saveProfileBtn','logoutBtn','uploadTitle','labelDocType','labelDocNote','addDocBtn',
-        'docsListTitle','currentTariffTitle','currentPlanLabel','currentPeriodLabel','currentPriceLabel',
-        'statsTitle','ratingLabel','reviewsLabel','activityLabel','ordersLabel'
-      ];
+      document.getElementById("brand").innerText = tr("brand");
+      document.getElementById("loginTitle").innerText = tr("loginTitle");
+      document.getElementById("emailLabel").innerText = tr("emailLabel");
+      document.getElementById("passwordLabel").innerText = tr("passwordLabel");
+      document.getElementById("loginBtn").innerText = tr("loginBtn");
+      document.getElementById("createBtn").innerText = tr("createBtn");
+      document.getElementById("resetBtn").innerText = tr("resetBtn");
+      document.getElementById("demoTitle").innerText = tr("demoTitle");
+      document.getElementById("demoText").innerText = tr("demoText");
+      document.getElementById("welcomeTitle").innerText = tr("welcomeTitle");
+      document.getElementById("welcomeText").innerText = tr("welcomeText");
+      document.getElementById("logoutBtn").innerText = tr("logoutBtn");
 
-      ids.forEach(function(id) {
-        const el = document.getElementById(id);
-        if (el) el.innerText = tr(id);
-      });
-
-      document.getElementById('topLanguage').value = state.language;
-
-      document.getElementById('basicPlan').options[0].text = tr('plan1');
-      document.getElementById('basicPlan').options[1].text = tr('plan6');
-      document.getElementById('basicPlan').options[2].text = tr('plan12');
-
-      document.getElementById('proPlan').options[0].text = tr('plan1');
-      document.getElementById('proPlan').options[1].text = tr('plan6');
-      document.getElementById('proPlan').options[2].text = tr('plan12');
-
-      document.getElementById('currentPeriodView').innerText =
-        state.tariff.period === '12' ? tr('plan12') :
-        state.tariff.period === '6' ? tr('plan6') :
-        tr('plan1');
+      document.getElementById("email").placeholder = tr("emailPlaceholder");
+      document.getElementById("password").placeholder = tr("passwordPlaceholder");
+      document.getElementById("langSelect").value = state.language;
     }
 
-    function renderAuth() {
-      document.getElementById('email').value = state.email || '';
+    function render() {
+      applyLanguage();
+      document.getElementById("email").value = state.email || "";
+
+      if (state.loggedIn) {
+        document.getElementById("authView").classList.add("hidden");
+        document.getElementById("appView").classList.remove("hidden");
+        setStatus(tr("statusLogin"));
+      } else {
+        document.getElementById("authView").classList.remove("hidden");
+        document.getElementById("appView").classList.add("hidden");
+        setStatus(tr("statusLoaded"));
+      }
     }
 
-    function renderProfile() {
-      document.getElementById('viewEmail').innerText = state.email || '-';
-      document.getElementById('fullName').value = state.profile.fullName || '';
-      document.getElementById('companyName').value = state.profile.companyName || '';
-      document.getElementById('sellerType').value = state.profile.sellerType || 'Individual';
-      document.getElementById('phone').value = state.profile.phone || '';
-      document.getElementById('country').value = state.profile.country || '';
-      document.getElementById('city').value = state.profile.city || '';
-      document.getElementById('currency').value = state.profile.currency || 'EUR';
-      document.getElementById('currentPlanView').innerText = state.tariff.plan;
-      document.getElementById('currentPriceView').innerText = state.tariff.price;
-    }
+    function loginNow() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
 
-    function renderDocuments() {
-      const list = document.getElementById('docsList');
-      if (!state.documents.length) {
-        list.innerHTML = '<div class="small">No documents</div>';
+      if (!email || !password) {
+        setStatus(tr("statusNeedEmailPassword"));
         return;
       }
-      list.innerHTML = '';
-      state.documents.forEach(function(doc) {
-        const div = document.createElement('div');
-        div.className = 'doc';
-        div.innerHTML = '<strong>' + doc.type + '</strong><br><span class="small">' + (doc.note || '') + '</span><br><span class="small">pending</span>';
-        list.appendChild(div);
-      });
+
+      state.loggedIn = true;
+      state.email = email;
+      saveState();
+      render();
     }
 
-    function showAuth() {
-      document.getElementById('authView').classList.remove('hidden');
-      document.getElementById('appView').classList.add('hidden');
+    function createAccountNow() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      if (!email || !password) {
+        setStatus(tr("statusNeedEmailPassword"));
+        return;
+      }
+
+      state.loggedIn = true;
+      state.email = email;
+      saveState();
+      render();
+      setStatus(tr("statusCreate"));
     }
 
-    function showApp() {
-      document.getElementById('authView').classList.add('hidden');
-      document.getElementById('appView').
+    function resetPasswordNow() {
+      const email = document.getElementById("email").value.trim();
+
+      if (!email) {
+        setStatus(tr("statusNeedEmail"));
+        return;
+      }
+
+      setStatus(tr("statusReset"));
+    }
+
+    function logoutNow() {
+      state.loggedIn = false;
+      saveState();
+      render();
+      setStatus(tr("statusLogout"));
+    }
+
+    function onLanguageChange(value) {
+      state.language = value === "ru" ? "ru" : "en";
+      saveState();
+      applyLanguage();
+      if (!state.loggedIn) {
+        setStatus(tr("statusLoaded"));
+      } else {
+        setStatus(tr("statusLogin"));
+      }
+    }
+
+    loadState();
+
+    document.getElementById("langSelect").addEventListener("change", function(e) {
+      onLanguageChange(e.target.value);
+    });
+
+    document.getElementById("loginBtn").addEventListener("click", loginNow);
+    document.getElementById("createBtn").addEventListener("click", createAccountNow);
+    document.getElementById("resetBtn").addEventListener("click", resetPasswordNow);
+    document.getElementById("logoutBtn").addEventListener("click", logoutNow);
+
+    render();
+  </script>
+</body>
+  </html>
