@@ -3,68 +3,628 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AMAROSE NEW TEST</title>
+  <title>AMAROSE Seller App</title>
   <style>
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background: #f5f7fb;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      color: #101828;
+    }
+    .app {
+      max-width: 480px;
+      margin: 0 auto;
       min-height: 100vh;
+      background: #fff;
+    }
+    .topbar {
+      background: #175cd3;
+      color: white;
+      padding: 22px 18px 18px;
+    }
+    .brand {
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+    .sub {
+      margin-top: 4px;
+      font-size: 14px;
+      opacity: 0.92;
+    }
+    .content {
+      padding: 16px;
     }
     .card {
       background: white;
       border: 1px solid #d0d5dd;
-      border-radius: 16px;
-      padding: 24px;
-      width: 90%;
-      max-width: 420px;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 6px 18px rgba(16,24,40,0.06);
     }
-    h1 {
-      margin: 0 0 12px;
-      font-size: 28px;
-      color: #175cd3;
+    .title {
+      font-size: 30px;
+      font-weight: 800;
+      margin: 0 0 16px;
     }
-    p {
-      margin: 0 0 18px;
-      color: #475467;
+    .section-title {
+      font-size: 20px;
+      font-weight: 800;
+      margin: 0 0 14px;
+    }
+    .label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: #344054;
+      margin-bottom: 6px;
+    }
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid #d0d5dd;
+      border-radius: 14px;
+      padding: 14px;
       font-size: 16px;
+      margin-bottom: 12px;
+      background: white;
+      color: #101828;
+    }
+    textarea {
+      min-height: 100px;
+      resize: vertical;
     }
     button {
+      width: 100%;
       border: none;
+      border-radius: 14px;
+      padding: 15px 16px;
+      font-size: 17px;
+      font-weight: 800;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    .btn-primary {
       background: #175cd3;
       color: white;
-      padding: 14px 18px;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
-      width: 100%;
     }
-    #status {
-      margin-top: 16px;
+    .btn-secondary {
+      background: #e8eefc;
+      color: #175cd3;
+    }
+    .btn-danger {
+      background: #fee4e2;
+      color: #b42318;
+    }
+    .btn-dark {
+      background: #101828;
+      color: white;
+    }
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .tab {
+      background: #f2f4f7;
+      color: #344054;
+      border-radius: 12px;
+      padding: 12px 8px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 800;
+      border: none;
+      margin: 0;
+    }
+    .tab.active {
+      background: #175cd3;
+      color: white;
+    }
+    .hidden {
+      display: none !important;
+    }
+    .sysbox {
+      margin: 16px;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid #d0d5dd;
+      font-size: 14px;
+      white-space: pre-wrap;
+    }
+    .ok {
+      background: #ecfdf3;
+      border-color: #abefc6;
+      color: #067647;
+    }
+    .warn {
+      background: #fffaeb;
+      border-color: #fedf89;
+      color: #b54708;
+    }
+    .err {
+      background: #fef3f2;
+      border-color: #fecdca;
+      color: #b42318;
+    }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+      font-size: 14px;
+      border-bottom: 1px solid #eaecf0;
+      padding-bottom: 10px;
+    }
+    .row strong {
+      color: #344054;
+    }
+    .value {
+      text-align: right;
       font-weight: 700;
-      color: #027a48;
+      color: #101828;
+    }
+    .pill {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .pill.pending { background: #fffaeb; color: #b54708; }
+    .pill.approved { background: #ecfdf3; color: #067647; }
+    .pill.rejected { background: #fef3f2; color: #b42318; }
+    .pill.manual { background: #eff8ff; color: #175cd3; }
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .stat {
+      border: 1px solid #d0d5dd;
+      border-radius: 14px;
+      padding: 14px;
+      background: #fafafa;
+    }
+    .stat-label {
+      font-size: 13px;
+      color: #667085;
+      margin-bottom: 6px;
+    }
+    .stat-value {
+      font-size: 24px;
+      font-weight: 800;
+      color: #175cd3;
+    }
+    .doc-item {
+      border: 1px solid #d0d5dd;
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 10px;
+      background: #fff;
+    }
+    .doc-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .doc-title {
+      font-weight: 800;
+      font-size: 15px;
+    }
+    .doc-meta {
+      font-size: 13px;
+      color: #667085;
+      line-height: 1.5;
+    }
+    .tariff-card {
+      border: 1px solid #d0d5dd;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .tariff-name {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+    .tariff-price {
+      font-size: 28px;
+      font-weight: 800;
+      color: #175cd3;
+      margin-bottom: 12px;
+    }
+    .small {
+      font-size: 13px;
+      color: #667085;
     }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>AMAROSE</h1>
-    <p>New test page is working</p>
-    <button id="btn" type="button">Press me</button>
-    <div id="status">Loaded</div>
+  <div class="app">
+    <div class="topbar">
+      <div class="brand">AMAROSE</div>
+      <div class="sub">Seller App</div>
+    </div>
+
+    <div id="systemBox" class="sysbox warn">Demo mode loaded. This version works in one HTML file without backend.</div>
+
+    <div id="authView" class="content">
+      <h1 class="title">Seller Login</h1>
+
+      <div class="card">
+        <label class="label">Email</label>
+        <input id="email" type="email" placeholder="seller@amarose.com">
+
+        <label class="label">Password</label>
+        <input id="password" type="password" placeholder="Enter password">
+
+        <button id="loginBtn" class="btn-primary" type="button">Login</button>
+        <button id="signupBtn" class="btn-secondary" type="button">Create account</button>
+        <button id="resetBtn" class="btn-secondary" type="button">Reset password</button>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Demo access</div>
+        <div class="small">You can login with any email and any password in this one-file demo.</div>
+      </div>
+    </div>
+
+    <div id="appView" class="content hidden">
+      <div class="tabs">
+        <button id="tabProfile" class="tab active" type="button">Profile</button>
+        <button id="tabDocuments" class="tab" type="button">Documents</button>
+        <button id="tabTariffs" class="tab" type="button">Tariffs</button>
+        <button id="tabDashboard" class="tab" type="button">Stats</button>
+      </div>
+
+      <div id="profileTab">
+        <div class="card">
+          <div class="section-title">Account Overview</div>
+
+          <div class="row"><strong>Email</strong><div id="accountEmail" class="value">-</div></div>
+          <div class="row"><strong>Role</strong><div id="accountRole" class="value">seller</div></div>
+          <div class="row"><strong>Account status</strong><div id="accountStatus" class="value">active</div></div>
+          <div class="row"><strong>Verification</strong><div id="verificationStatus" class="value"><span class="pill pending">pending</span></div></div>
+          <div class="row"><strong>Current tariff</strong><div id="currentTariff" class="value">Basic - 1 month</div></div>
+          <div class="row"><strong>Currency</strong><div id="currentCurrency" class="value">EUR</div></div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">Seller Profile</div>
+
+          <label class="label">Full name</label>
+          <input id="fullName" type="text" placeholder="Full name">
+
+          <label class="label">Company name</label>
+          <input id="companyName" type="text" placeholder="Company name">
+
+          <label class="label">Seller type</label>
+          <select id="sellerType">
+            <option value="Individual">Individual</option>
+            <option value="Company">Company</option>
+            <option value="Brand">Brand</option>
+            <option value="Store">Store</option>
+          </select>
+
+          <label class="label">Phone</label>
+          <input id="phone" type="text" placeholder="+374 / +7 / +31">
+
+          <label class="label">Country</label>
+          <input id="country" type="text" placeholder="Country">
+
+          <label class="label">City</label>
+          <input id="city" type="text" placeholder="City">
+
+          <label class="label">Language</label>
+          <select id="language">
+            <option value="English">English</option>
+            <option value="Russian">Russian</option>
+            <option value="Armenian">Armenian</option>
+          </select>
+
+          <label class="label">Currency</label>
+          <select id="currency">
+            <option value="EUR">EUR</option>
+            <option value="USD">USD</option>
+            <option value="AMD">AMD</option>
+            <option value="RUB">RUB</option>
+          </select>
+
+          <button id="saveProfileBtn" class="btn-primary" type="button">Save profile</button>
+        </div>
+
+        <div class="card">
+          <button id="logoutBtn" class="btn-danger" type="button">Logout</button>
+        </div>
+      </div>
+
+      <div id="documentsTab" class="hidden">
+        <div class="card">
+          <div class="section-title">Upload Document</div>
+
+          <label class="label">Document type</label>
+          <select id="documentType">
+            <option value="Passport">Passport</option>
+            <option value="ID Card">ID Card</option>
+            <option value="Business License">Business License</option>
+            <option value="Tax Certificate">Tax Certificate</option>
+            <option value="Address Proof">Address Proof</option>
+          </select>
+
+          <label class="label">Document note</label>
+          <textarea id="documentNote" placeholder="Add note for verification team"></textarea>
+
+          <button id="uploadDocBtn" class="btn-primary" type="button">Add document</button>
+        </div>
+
+        <div class="card">
+          <div class="section-title">Documents List</div>
+          <div id="documentsList"></div>
+        </div>
+      </div>
+
+      <div id="tariffsTab" class="hidden">
+        <div class="card">
+          <div class="section-title">Tariff Pricing</div>
+          <div class="small">Long-term plans are cheaper than monthly billing.</div>
+        </div>
+
+        <div class="tariff-card">
+          <div class="tariff-name">Basic</div>
+          <div class="tariff-price" id="basicPriceView">20 €/month</div>
+
+          <label class="label">Choose period</label>
+          <select id="basicPeriod">
+            <option value="1">1 month — 20 €</option>
+            <option value="6">6 months — 108 €</option>
+            <option value="12">1 year — 192 €</option>
+          </select>
+
+          <button class="btn-primary" type="button" onclick="buyTariff('Basic', document.getElementById('basicPeriod').value)">Buy Basic</button>
+        </div>
+
+        <div class="tariff-card">
+          <div class="tariff-name">Pro</div>
+          <div class="tariff-price">40 €/month</div>
+
+          <label class="label">Choose period</label>
+          <select id="proPeriod">
+            <option value="1">1 month — 40 €</option>
+            <option value="6">6 months — 216 €</option>
+            <option value="12">1 year — 384 €</option>
+          </select>
+
+          <button class="btn-primary" type="button" onclick="buyTariff('Pro', document.getElementById('proPeriod').value)">Buy Pro</button>
+        </div>
+
+        <div class="card">
+          <div class="section-title">Current subscription</div>
+          <div class="row"><strong>Plan</strong><div id="subPlan" class="value">Basic</div></div>
+          <div class="row"><strong>Billing period</strong><div id="subPeriod" class="value">1 month</div></div>
+          <div class="row"><strong>Discount</strong><div id="subDiscount" class="value">0%</div></div>
+          <div class="row"><strong>Final price</strong><div id="subPrice" class="value">20 €</div></div>
+        </div>
+      </div>
+
+      <div id="dashboardTab" class="hidden">
+        <div class="card">
+          <div class="section-title">Seller Statistics</div>
+          <div class="stat-grid">
+            <div class="stat">
+              <div class="stat-label">Rating average</div>
+              <div id="ratingAvg" class="stat-value">4.8</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">Reviews count</div>
+              <div id="ratingCount" class="stat-value">26</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">Activity score</div>
+              <div id="activityScore" class="stat-value">82</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">Orders</div>
+              <div id="ordersCount" class="stat-value">14</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">Status summary</div>
+          <div class="small">Seller sees real indicators in demo mode. Next step is connecting Supabase for live data storage, auth, and document statuses.</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
-    document.getElementById('btn').onclick = function () {
-      document.getElementById('status').textContent = 'Button works';
-      alert('Button works');
+    const els = {
+      systemBox: document.getElementById('systemBox'),
+      authView: document.getElementById('authView'),
+      appView: document.getElementById('appView'),
+
+      email: document.getElementById('email'),
+      password: document.getElementById('password'),
+      loginBtn: document.getElementById('loginBtn'),
+      signupBtn: document.getElementById('signupBtn'),
+      resetBtn: document.getElementById('resetBtn'),
+      logoutBtn: document.getElementById('logoutBtn'),
+
+      tabProfile: document.getElementById('tabProfile'),
+      tabDocuments: document.getElementById('tabDocuments'),
+      tabTariffs: document.getElementById('tabTariffs'),
+      tabDashboard: document.getElementById('tabDashboard'),
+
+      profileTab: document.getElementById('profileTab'),
+      documentsTab: document.getElementById('documentsTab'),
+      tariffsTab: document.getElementById('tariffsTab'),
+      dashboardTab: document.getElementById('dashboardTab'),
+
+      accountEmail: document.getElementById('accountEmail'),
+      accountRole: document.getElementById('accountRole'),
+      accountStatus: document.getElementById('accountStatus'),
+      verificationStatus: document.getElementById('verificationStatus'),
+      currentTariff: document.getElementById('currentTariff'),
+      currentCurrency: document.getElementById('currentCurrency'),
+
+      fullName: document.getElementById('fullName'),
+      companyName: document.getElementById('companyName'),
+      sellerType: document.getElementById('sellerType'),
+      phone: document.getElementById('phone'),
+      country: document.getElementById('country'),
+      city: document.getElementById('city'),
+      language: document.getElementById('language'),
+      currency: document.getElementById('currency'),
+      saveProfileBtn: document.getElementById('saveProfileBtn'),
+
+      documentType: document.getElementById('documentType'),
+      documentNote: document.getElementById('documentNote'),
+      uploadDocBtn: document.getElementById('uploadDocBtn'),
+      documentsList: document.getElementById('documentsList'),
+
+      subPlan: document.getElementById('subPlan'),
+      subPeriod: document.getElementById('subPeriod'),
+      subDiscount: document.getElementById('subDiscount'),
+      subPrice: document.getElementById('subPrice'),
+
+      ratingAvg: document.getElementById('ratingAvg'),
+      ratingCount: document.getElementById('ratingCount'),
+      activityScore: document.getElementById('activityScore'),
+      ordersCount: document.getElementById('ordersCount')
     };
-  </script>
-</body>
-</html>
+
+    const defaults = {
+      loggedIn: false,
+      email: '',
+      profile: {
+        fullName: 'Vardan',
+        companyName: 'AMAROSE Seller',
+        sellerType: 'Company',
+        phone: '',
+        country: '',
+        city: '',
+        language: 'English',
+        currency: 'EUR',
+        role: 'seller',
+        accountStatus: 'active',
+        verificationStatus: 'pending'
+      },
+      documents: [
+        {
+          id: 1,
+          type: 'Passport',
+          note: 'Main identity document',
+          status: 'pending',
+          createdAt: new Date().toLocaleString()
+        }
+      ],
+      subscription: {
+        plan: 'Basic',
+        period: 1,
+        discount: 0,
+        price: 20
+      },
+      stats: {
+        ratingAvg: 4.8,
+        ratingCount: 26,
+        activityScore: 82,
+        ordersCount: 14
+      }
+    };
+
+    let state = loadState();
+
+    function loadState() {
+      const raw = localStorage.getItem('amaroseSellerAppDemo');
+      if (!raw) return JSON.parse(JSON.stringify(defaults));
+      try {
+        return JSON.parse(raw);
+      } catch {
+        return JSON.parse(JSON.stringify(defaults));
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem('amaroseSellerAppDemo', JSON.stringify(state));
+    }
+
+    function setStatus(text, kind) {
+      els.systemBox.textContent = text;
+      els.systemBox.className = 'sysbox ' + (kind || 'warn');
+    }
+
+    function showAuth() {
+      els.authView.classList.remove('hidden');
+      els.appView.classList.add('hidden');
+    }
+
+    function showApp() {
+      els.authView.classList.add('hidden');
+      els.appView.classList.remove('hidden');
+    }
+
+    function openTab(name) {
+      els.profileTab.classList.add('hidden');
+      els.documentsTab.classList.add('hidden');
+      els.tariffsTab.classList.add('hidden');
+      els.dashboardTab.classList.add('hidden');
+
+      els.tabProfile.classList.remove('active');
+      els.tabDocuments.classList.remove('active');
+      els.tabTariffs.classList.remove('active');
+      els.tabDashboard.classList.remove('active');
+
+      if (name === 'profile') {
+        els.profileTab.classList.remove('hidden');
+        els.tabProfile.classList.add('active');
+      }
+      if (name === 'documents') {
+        els.documentsTab.classList.remove('hidden');
+        els.tabDocuments.classList.add('active');
+      }
+      if (name === 'tariffs') {
+        els.tariffsTab.classList.remove('hidden');
+        els.tabTariffs.classList.add('active');
+      }
+      if (name === 'dashboard') {
+        els.dashboardTab.classList.remove('hidden');
+        els.tabDashboard.classList.add('active');
+      }
+    }
+
+    function renderProfile() {
+      els.accountEmail.textContent = state.email || '-';
+      els.accountRole.textContent = state.profile.role;
+      els.accountStatus.textContent = state.profile.accountStatus;
+      els.currentCurrency.textContent = state.profile.currency;
+      els.currentTariff.textContent = state.subscription.plan + ' - ' + periodLabel(state.subscription.period);
+      els.verificationStatus.innerHTML = verificationPill(state.profile.verificationStatus);
+
+      els.fullName.value = state.profile.fullName || '';
+      els.companyName.value = state.profile.companyName || '';
+      els.sellerType.value = state.profile.sellerType || 'Company';
+      els.phone.value = state.profile.phone || '';
+      els.country.value = state.profile.country || '';
+      els.city.value = state.profile.city || '';
+      els.language.value = state.profile.language || 'English';
+      els.currency.value = state.profile.currency || 'EUR';
+    }
+
+    function verificationPill(status) {
+      if (status === 'approved') return '<span class="pill approved">approved</span>';
+      if (status === 'rejected') return '<span class="pill rejected">rejected</span>';
+      if (status === 'manual review') return '<span class="pill manual">manual review</span>';
+      return '<span class="pill pending">pending</span>';
+    }
+
+    function renderDocuments() {
+      if (!state.documents.length) {
+        els.documentsList.innerHTML = '<div class="small">No documents yet.</div>';
+        return;
+      }
+
+      els.documentsList.innerHTML = 
