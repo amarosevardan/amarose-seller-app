@@ -3,357 +3,103 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>AMAROSE Seller App</title>
+  <title>AMAROSE Button Test</title>
   <style>
-    * { box-sizing: border-box; }
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
       background: #f5f7fb;
-      color: #101828;
-    }
-    .app {
-      max-width: 480px;
-      margin: 0 auto;
-      min-height: 100vh;
-      background: #f5f7fb;
-    }
-    .topbar {
-      background: #175cd3;
-      color: #fff;
-      padding: 18px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-    .brand {
-      font-size: 17px;
-      font-weight: 800;
-    }
-    .lang {
-      width: 150px;
-      border: none;
-      border-radius: 12px;
-      padding: 10px 12px;
-      font-size: 14px;
-      background: #fff;
-      color: #101828;
-    }
-    .status {
-      margin: 16px;
-      padding: 14px;
-      border-radius: 14px;
-      border: 1px solid #fedf89;
-      background: #fffaeb;
-      color: #b54708;
-      min-height: 48px;
-      font-size: 14px;
-    }
-    .content {
-      padding: 16px;
-    }
-    .box {
-      background: #fff;
-      border: 1px solid #d0d5dd;
-      border-radius: 20px;
-      padding: 16px;
-      margin-bottom: 16px;
+      margin: 0;
+      padding: 20px;
     }
     h1 {
-      font-size: 32px;
-      font-weight: 800;
-      margin: 0 0 20px;
+      font-size: 42px;
+      margin-bottom: 20px;
     }
-    h2 {
-      margin: 0 0 16px;
-      font-size: 24px;
-      font-weight: 800;
-    }
-    .label {
-      display: block;
-      font-size: 13px;
-      font-weight: 700;
-      color: #344054;
-      margin-bottom: 6px;
-    }
-    input {
+    select, input, button {
       width: 100%;
-      padding: 14px;
-      border: 1px solid #d0d5dd;
+      font-size: 22px;
+      padding: 16px;
+      margin-bottom: 16px;
       border-radius: 14px;
-      font-size: 16px;
-      margin-bottom: 12px;
-      background: #fff;
-      color: #101828;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
     }
     button {
-      width: 100%;
-      padding: 15px;
+      background: #175cd3;
+      color: white;
+      font-weight: bold;
       border: none;
+    }
+    #status {
+      margin-top: 20px;
+      padding: 16px;
+      background: #fff;
+      border: 1px solid #ccc;
       border-radius: 14px;
-      font-size: 16px;
-      font-weight: 800;
-      margin-bottom: 10px;
-      cursor: pointer;
-    }
-    .primary { background: #175cd3; color: #fff; }
-    .secondary { background: #e8eefc; color: #175cd3; }
-    .danger { background: #fee4e2; color: #b42318; }
-    .hidden { display: none !important; }
-    .row {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 12px 0;
-      border-bottom: 1px solid #eaecf0;
-      font-size: 14px;
-    }
-    .row:last-child { border-bottom: none; }
-    .pill {
-      display: inline-block;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 800;
-      background: #fffaeb;
-      color: #b54708;
-    }
-    .small {
-      color: #667085;
-      font-size: 14px;
-      line-height: 1.5;
+      font-size: 24px;
+      min-height: 60px;
     }
   </style>
 </head>
 <body>
-  <div class="app">
-    <div class="topbar">
-      <div class="brand" id="brand">AMAROSE Seller App</div>
-      <select id="langSelect" class="lang" onchange="changeLanguage(this.value)">
-        <option value="en">English</option>
-        <option value="ru">Русский</option>
-      </select>
-    </div>
+  <h1 id="title">HELLO</h1>
 
-    <div id="status" class="status"></div>
+  <select id="lang" onchange="
+    localStorage.setItem('simple_lang_final', this.value);
+    document.getElementById('title').innerText = this.value === 'ru' ? 'ПРИВЕТ' : 'HELLO';
+    document.getElementById('loginBtn').innerText = this.value === 'ru' ? 'ВОЙТИ' : 'LOGIN';
+    document.getElementById('createBtn').innerText = this.value === 'ru' ? 'СОЗДАТЬ АККАУНТ' : 'CREATE ACCOUNT';
+    document.getElementById('resetBtn').innerText = this.value === 'ru' ? 'СБРОСИТЬ ПАРОЛЬ' : 'RESET PASSWORD';
+    document.getElementById('status').innerText = this.value === 'ru' ? 'Язык переключён' : 'Language changed';
+  ">
+    <option value="en">English</option>
+    <option value="ru">Русский</option>
+  </select>
 
-    <div id="authView" class="content">
-      <h1 id="loginTitle">Seller Login</h1>
+  <input id="email" type="text" placeholder="Email">
+  <input id="password" type="password" placeholder="Password">
 
-      <div class="box">
-        <label class="label" id="emailLabel">Email</label>
-        <input id="email" type="email" placeholder="seller@amarose.com">
+  <button id="loginBtn" type="button" onclick="
+    document.getElementById('status').innerText =
+      document.getElementById('lang').value === 'ru'
+      ? 'Кнопка ВОЙТИ работает'
+      : 'LOGIN button works';
+  ">LOGIN</button>
 
-        <label class="label" id="passwordLabel">Password</label>
-        <input id="password" type="password" placeholder="Enter password">
+  <button id="createBtn" type="button" onclick="
+    document.getElementById('status').innerText =
+      document.getElementById('lang').value === 'ru'
+      ? 'Кнопка СОЗДАТЬ АККАУНТ работает'
+      : 'CREATE ACCOUNT button works';
+  ">CREATE ACCOUNT</button>
 
-        <button id="loginBtn" class="primary" type="button" onclick="loginNow()">Login</button>
-        <button id="createBtn" class="secondary" type="button" onclick="createAccountNow()">Create account</button>
-        <button id="resetBtn" class="secondary" type="button" onclick="resetPasswordNow()">Reset password</button>
-      </div>
+  <button id="resetBtn" type="button" onclick="
+    document.getElementById('status').innerText =
+      document.getElementById('lang').value === 'ru'
+      ? 'Кнопка СБРОСИТЬ ПАРОЛЬ работает'
+      : 'RESET PASSWORD button works';
+  ">RESET PASSWORD</button>
 
-      <div class="box">
-        <h2 id="demoTitle">Demo access</h2>
-        <div id="demoText" class="small">You can login with any email and any password. Data is saved in this browser.</div>
-      </div>
-    </div>
-
-    <div id="appView" class="content hidden">
-      <div class="box">
-        <h2 id="overviewTitle">Account Overview</h2>
-        <div class="row"><strong id="ovEmail">Email</strong><span id="viewEmail">-</span></div>
-        <div class="row"><strong id="ovRole">Role</strong><span id="viewRole">seller</span></div>
-        <div class="row"><strong id="ovStatus">Status</strong><span id="viewStatus">active</span></div>
-        <div class="row"><strong id="ovVerification">Verification</strong><span class="pill" id="viewVerification">pending</span></div>
-      </div>
-
-      <div class="box">
-        <button id="logoutBtn" class="danger" type="button" onclick="logoutNow()">Logout</button>
-      </div>
-    </div>
-  </div>
+  <div id="status">Waiting...</div>
 
   <script>
-    const KEY = 'amarose_seller_v1';
+    const saved = localStorage.getItem('simple_lang_final') || 'en';
+    const lang = document.getElementById('lang');
+    lang.value = saved;
 
-    const T = {
-      en: {
-        brand: 'AMAROSE Seller App',
-        loginTitle: 'Seller Login',
-        emailLabel: 'Email',
-        passwordLabel: 'Password',
-        emailPlaceholder: 'seller@amarose.com',
-        passwordPlaceholder: 'Enter password',
-        loginBtn: 'Login',
-        createBtn: 'Create account',
-        resetBtn: 'Reset password',
-        demoTitle: 'Demo access',
-        demoText: 'You can login with any email and any password. Data is saved in this browser.',
-        overviewTitle: 'Account Overview',
-        ovEmail: 'Email',
-        ovRole: 'Role',
-        ovStatus: 'Status',
-        ovVerification: 'Verification',
-        logoutBtn: 'Logout',
-        statusLoaded: 'Application loaded successfully.',
-        statusNeedEmail: 'Enter email first.',
-        statusNeedEmailPassword: 'Enter email and password.',
-        statusLogin: 'Logged in successfully.',
-        statusCreate: 'Account created successfully.',
-        statusReset: 'Password reset request created.',
-        statusLogout: 'Logged out successfully.'
-      },
-      ru: {
-        brand: 'AMAROSE Seller App',
-        loginTitle: 'Вход продавца',
-        emailLabel: 'Почта',
-        passwordLabel: 'Пароль',
-        emailPlaceholder: 'seller@amarose.com',
-        passwordPlaceholder: 'Введите пароль',
-        loginBtn: 'Войти',
-        createBtn: 'Создать аккаунт',
-        resetBtn: 'Сбросить пароль',
-        demoTitle: 'Демо доступ',
-        demoText: 'Можно войти с любой почтой и любым паролем. Данные сохраняются в браузере.',
-        overviewTitle: 'Обзор аккаунта',
-        ovEmail: 'Почта',
-        ovRole: 'Роль',
-        ovStatus: 'Статус',
-        ovVerification: 'Проверка',
-        logoutBtn: 'Выйти',
-        statusLoaded: 'Приложение загружено.',
-        statusNeedEmail: 'Сначала введите почту.',
-        statusNeedEmailPassword: 'Введите почту и пароль.',
-        statusLogin: 'Вход выполнен успешно.',
-        statusCreate: 'Аккаунт успешно создан.',
-        statusReset: 'Запрос на сброс пароля создан.',
-        statusLogout: 'Вы вышли из аккаунта.'
-      }
-    };
-
-    let state = {
-      language: 'en',
-      loggedIn: false,
-      email: ''
-    };
-
-    function saveState() {
-      localStorage.setItem(KEY, JSON.stringify(state));
+    if (saved === 'ru') {
+      document.getElementById('title').innerText = 'ПРИВЕТ';
+      document.getElementById('loginBtn').innerText = 'ВОЙТИ';
+      document.getElementById('createBtn').innerText = 'СОЗДАТЬ АККАУНТ';
+      document.getElementById('resetBtn').innerText = 'СБРОСИТЬ ПАРОЛЬ';
+      document.getElementById('status').innerText = 'Русский загружен';
+    } else {
+      document.getElementById('title').innerText = 'HELLO';
+      document.getElementById('loginBtn').innerText = 'LOGIN';
+      document.getElementById('createBtn').innerText = 'CREATE ACCOUNT';
+      document.getElementById('resetBtn').innerText = 'RESET PASSWORD';
+      document.getElementById('status').innerText = 'English loaded';
     }
-
-    function loadState() {
-      try {
-        const raw = localStorage.getItem(KEY);
-        if (!raw) return;
-        const parsed = JSON.parse(raw);
-        if (parsed) state = parsed;
-      } catch (e) {}
-    }
-
-    function tr(key) {
-      const lang = state.language === 'ru' ? 'ru' : 'en';
-      return T[lang][key] || key;
-    }
-
-    function setStatus(text) {
-      document.getElementById('status').innerText = text;
-    }
-
-    function applyLanguage() {
-      document.getElementById('brand').innerText = tr('brand');
-      document.getElementById('loginTitle').innerText = tr('loginTitle');
-      document.getElementById('emailLabel').innerText = tr('emailLabel');
-      document.getElementById('passwordLabel').innerText = tr('passwordLabel');
-      document.getElementById('loginBtn').innerText = tr('loginBtn');
-      document.getElementById('createBtn').innerText = tr('createBtn');
-      document.getElementById('resetBtn').innerText = tr('resetBtn');
-      document.getElementById('demoTitle').innerText = tr('demoTitle');
-      document.getElementById('demoText').innerText = tr('demoText');
-      document.getElementById('overviewTitle').innerText = tr('overviewTitle');
-      document.getElementById('ovEmail').innerText = tr('ovEmail');
-      document.getElementById('ovRole').innerText = tr('ovRole');
-      document.getElementById('ovStatus').innerText = tr('ovStatus');
-      document.getElementById('ovVerification').innerText = tr('ovVerification');
-      document.getElementById('logoutBtn').innerText = tr('logoutBtn');
-
-      document.getElementById('email').placeholder = tr('emailPlaceholder');
-      document.getElementById('password').placeholder = tr('passwordPlaceholder');
-      document.getElementById('langSelect').value = state.language;
-    }
-
-    function render() {
-      applyLanguage();
-      document.getElementById('viewEmail').innerText = state.email || '-';
-
-      if (state.loggedIn) {
-        document.getElementById('authView').classList.add('hidden');
-        document.getElementById('appView').classList.remove('hidden');
-        setStatus(tr('statusLogin'));
-      } else {
-        document.getElementById('authView').classList.remove('hidden');
-        document.getElementById('appView').classList.add('hidden');
-        setStatus(tr('statusLoaded'));
-      }
-    }
-
-    function changeLanguage(lang) {
-      state.language = lang === 'ru' ? 'ru' : 'en';
-      saveState();
-      render();
-    }
-
-    function loginNow() {
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value.trim();
-
-      if (!email || !password) {
-        setStatus(tr('statusNeedEmailPassword'));
-        return;
-      }
-
-      state.loggedIn = true;
-      state.email = email;
-      saveState();
-      render();
-    }
-
-    function createAccountNow() {
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value.trim();
-
-      if (!email || !password) {
-        setStatus(tr('statusNeedEmailPassword'));
-        return;
-      }
-
-      state.loggedIn = true;
-      state.email = email;
-      saveState();
-      render();
-      setStatus(tr('statusCreate'));
-    }
-
-    function resetPasswordNow() {
-      const email = document.getElementById('email').value.trim();
-
-      if (!email) {
-        setStatus(tr('statusNeedEmail'));
-        return;
-      }
-
-      setStatus(tr('statusReset'));
-    }
-
-    function logoutNow() {
-      state.loggedIn = false;
-      saveState();
-      render();
-      setStatus(tr('statusLogout'));
-    }
-
-    loadState();
-    render();
   </script>
 </body>
-          </html>
+</html>
