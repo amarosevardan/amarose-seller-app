@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>AMAROSE Seller App Mini V1</title>
+  <title>AMAROSE Seller App Mini V2</title>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -38,6 +38,7 @@
       padding: 10px 12px;
       font-size: 14px;
       background: #fff;
+      color: #101828;
     }
     .status {
       margin: 16px;
@@ -123,6 +124,15 @@
       font-size: 14px;
       line-height: 1.5;
     }
+    .successbox {
+      background: #ecfdf3;
+      border: 1px solid #abefc6;
+      color: #067647;
+      border-radius: 16px;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 700;
+    }
   </style>
 </head>
 <body>
@@ -152,6 +162,11 @@
         <button id="resetBtn" class="secondary" type="button" onclick="resetPasswordNow()">Reset password</button>
       </div>
 
+      <div id="resetResult" class="box hidden">
+        <h2 id="resetTitle">Password reset</h2>
+        <div id="resetMessage" class="successbox">Reset request created.</div>
+      </div>
+
       <div class="box">
         <h2 id="demoTitle">Demo access</h2>
         <div id="demoText" class="small">You can login with any email and any password. Data is saved in this browser.</div>
@@ -174,7 +189,7 @@
   </div>
 
   <script>
-    const KEY = 'amarose_seller_mini_v1';
+    const KEY = 'amarose_seller_mini_v2';
 
     const T = {
       en: {
@@ -195,6 +210,8 @@
         ovStatus: 'Status',
         ovVerification: 'Verification',
         logoutBtn: 'Logout',
+        resetTitle: 'Password reset',
+        resetMessage: 'Reset request created successfully.',
         statusLoaded: 'Application loaded successfully.',
         statusNeedEmail: 'Enter email first.',
         statusNeedEmailPassword: 'Enter email and password.',
@@ -221,6 +238,8 @@
         ovStatus: 'Статус',
         ovVerification: 'Проверка',
         logoutBtn: 'Выйти',
+        resetTitle: 'Сброс пароля',
+        resetMessage: 'Запрос на сброс пароля успешно создан.',
         statusLoaded: 'Приложение загружено.',
         statusNeedEmail: 'Сначала введите почту.',
         statusNeedEmailPassword: 'Введите почту и пароль.',
@@ -234,7 +253,8 @@
     let state = {
       language: 'en',
       loggedIn: false,
-      email: ''
+      email: '',
+      resetShown: false
     };
 
     function saveState() {
@@ -275,6 +295,9 @@
       document.getElementById('ovStatus').innerText = tr('ovStatus');
       document.getElementById('ovVerification').innerText = tr('ovVerification');
       document.getElementById('logoutBtn').innerText = tr('logoutBtn');
+      document.getElementById('resetTitle').innerText = tr('resetTitle');
+      document.getElementById('resetMessage').innerText = tr('resetMessage');
+
       document.getElementById('email').placeholder = tr('emailPlaceholder');
       document.getElementById('password').placeholder = tr('passwordPlaceholder');
       document.getElementById('langSelect').value = state.language;
@@ -290,16 +313,30 @@
       document.getElementById('appView').classList.remove('hidden');
     }
 
+    function renderResetBox() {
+      const box = document.getElementById('resetResult');
+      if (state.resetShown && !state.loggedIn) {
+        box.classList.remove('hidden');
+      } else {
+        box.classList.add('hidden');
+      }
+    }
+
     function render() {
       applyLanguage();
       document.getElementById('viewEmail').innerText = state.email || '-';
+      renderResetBox();
 
       if (state.loggedIn) {
         showApp();
         setStatus(tr('statusLogin'));
       } else {
         showAuth();
-        setStatus(tr('statusLoaded'));
+        if (state.resetShown) {
+          setStatus(tr('statusReset'));
+        } else {
+          setStatus(tr('statusLoaded'));
+        }
       }
     }
 
@@ -320,6 +357,7 @@
 
       state.loggedIn = true;
       state.email = email;
+      state.resetShown = false;
       saveState();
       showApp();
       applyLanguage();
@@ -338,6 +376,7 @@
 
       state.loggedIn = true;
       state.email = email;
+      state.resetShown = false;
       saveState();
       showApp();
       applyLanguage();
@@ -353,13 +392,21 @@
         return;
       }
 
+      state.loggedIn = false;
+      state.resetShown = true;
+      state.email = email;
+      saveState();
+      showAuth();
+      renderResetBox();
       setStatus(tr('statusReset'));
     }
 
     function logoutNow() {
       state.loggedIn = false;
+      state.resetShown = false;
       saveState();
       showAuth();
+      renderResetBox();
       applyLanguage();
       setStatus(tr('statusLogout'));
     }
