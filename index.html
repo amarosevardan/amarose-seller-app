@@ -20,86 +20,83 @@
     }
     .topbar {
       background: #175cd3;
-      color: white;
-      padding: 22px 18px 18px;
+      color: #fff;
+      padding: 20px 16px;
     }
     .brand {
-      font-size: 34px;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-    }
-    .sub {
-      margin-top: 4px;
-      font-size: 14px;
-      opacity: 0.92;
+      font-size: 18px;
+      font-weight: 700;
     }
     .content {
       padding: 16px;
     }
-    .card {
-      background: white;
+    .box {
+      background: #fff;
       border: 1px solid #d0d5dd;
       border-radius: 18px;
       padding: 16px;
-      margin-bottom: 14px;
-      box-shadow: 0 6px 18px rgba(16,24,40,0.06);
+      margin-bottom: 16px;
     }
     .title {
       font-size: 30px;
       font-weight: 800;
-      margin: 0 0 16px;
-    }
-    .section-title {
-      font-size: 20px;
-      font-weight: 800;
-      margin: 0 0 14px;
+      margin: 0 0 20px;
     }
     .label {
       display: block;
       font-size: 13px;
       font-weight: 700;
-      color: #344054;
       margin-bottom: 6px;
+      color: #344054;
     }
     input, select, textarea {
       width: 100%;
+      padding: 14px;
       border: 1px solid #d0d5dd;
       border-radius: 14px;
-      padding: 14px;
       font-size: 16px;
       margin-bottom: 12px;
-      background: white;
+      background: #fff;
       color: #101828;
     }
     textarea {
-      min-height: 100px;
+      min-height: 90px;
       resize: vertical;
     }
     button {
       width: 100%;
+      padding: 15px;
       border: none;
       border-radius: 14px;
-      padding: 15px 16px;
-      font-size: 17px;
-      font-weight: 800;
-      cursor: pointer;
+      font-size: 16px;
+      font-weight: 700;
       margin-bottom: 10px;
+      cursor: pointer;
     }
-    .btn-primary {
+    .primary {
       background: #175cd3;
-      color: white;
+      color: #fff;
     }
-    .btn-secondary {
+    .secondary {
       background: #e8eefc;
       color: #175cd3;
     }
-    .btn-danger {
+    .danger {
       background: #fee4e2;
       color: #b42318;
     }
-    .btn-dark {
-      background: #101828;
-      color: white;
+    .status {
+      margin: 16px;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid #fedf89;
+      background: #fffaeb;
+      color: #b54708;
+      font-size: 14px;
+      white-space: pre-wrap;
+    }
+    .hidden {
+      display: none;
     }
     .tabs {
       display: grid;
@@ -107,194 +104,115 @@
       gap: 8px;
       margin-bottom: 16px;
     }
-    .tab {
+    .tabbtn {
+      margin: 0;
+      padding: 12px 8px;
+      border-radius: 12px;
       background: #f2f4f7;
       color: #344054;
-      border-radius: 12px;
-      padding: 12px 8px;
-      text-align: center;
-      font-size: 13px;
-      font-weight: 800;
-      border: none;
-      margin: 0;
+      font-size: 12px;
+      font-weight: 700;
     }
-    .tab.active {
+    .active {
       background: #175cd3;
-      color: white;
-    }
-    .hidden {
-      display: none !important;
-    }
-    .sysbox {
-      margin: 16px;
-      padding: 14px;
-      border-radius: 14px;
-      border: 1px solid #d0d5dd;
-      font-size: 14px;
-      white-space: pre-wrap;
-    }
-    .ok {
-      background: #ecfdf3;
-      border-color: #abefc6;
-      color: #067647;
-    }
-    .warn {
-      background: #fffaeb;
-      border-color: #fedf89;
-      color: #b54708;
-    }
-    .err {
-      background: #fef3f2;
-      border-color: #fecdca;
-      color: #b42318;
+      color: #fff;
     }
     .row {
       display: flex;
       justify-content: space-between;
       gap: 12px;
-      margin-bottom: 10px;
-      font-size: 14px;
+      padding: 10px 0;
       border-bottom: 1px solid #eaecf0;
-      padding-bottom: 10px;
-    }
-    .row strong {
-      color: #344054;
-    }
-    .value {
-      text-align: right;
-      font-weight: 700;
-      color: #101828;
+      font-size: 14px;
     }
     .pill {
       display: inline-block;
       padding: 6px 10px;
       border-radius: 999px;
       font-size: 12px;
-      font-weight: 800;
+      font-weight: 700;
     }
-    .pill.pending { background: #fffaeb; color: #b54708; }
-    .pill.approved { background: #ecfdf3; color: #067647; }
-    .pill.rejected { background: #fef3f2; color: #b42318; }
-    .pill.manual { background: #eff8ff; color: #175cd3; }
-    .stat-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+    .pending {
+      background: #fffaeb;
+      color: #b54708;
+    }
+    .approved {
+      background: #ecfdf3;
+      color: #067647;
     }
     .stat {
       border: 1px solid #d0d5dd;
       border-radius: 14px;
-      padding: 14px;
+      padding: 12px;
+      margin-bottom: 10px;
       background: #fafafa;
-    }
-    .stat-label {
-      font-size: 13px;
-      color: #667085;
-      margin-bottom: 6px;
     }
     .stat-value {
       font-size: 24px;
       font-weight: 800;
       color: #175cd3;
+      margin-top: 6px;
     }
-    .doc-item {
+    .doc {
       border: 1px solid #d0d5dd;
       border-radius: 14px;
-      padding: 14px;
+      padding: 12px;
       margin-bottom: 10px;
-      background: #fff;
-    }
-    .doc-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-    .doc-title {
-      font-weight: 800;
-      font-size: 15px;
-    }
-    .doc-meta {
-      font-size: 13px;
-      color: #667085;
-      line-height: 1.5;
-    }
-    .tariff-card {
-      border: 1px solid #d0d5dd;
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 12px;
-    }
-    .tariff-name {
-      font-size: 20px;
-      font-weight: 800;
-      margin-bottom: 6px;
-    }
-    .tariff-price {
-      font-size: 28px;
-      font-weight: 800;
-      color: #175cd3;
-      margin-bottom: 12px;
     }
     .small {
-      font-size: 13px;
       color: #667085;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
   <div class="app">
     <div class="topbar">
-      <div class="brand">AMAROSE</div>
-      <div class="sub">Seller App</div>
+      <div class="brand">AMAROSE Seller App</div>
     </div>
 
-    <div id="systemBox" class="sysbox warn">Demo mode loaded. This version works in one HTML file without backend.</div>
+    <div id="statusBox" class="status">Demo mode loaded. Buttons in this version use simple inline actions.</div>
 
     <div id="authView" class="content">
       <h1 class="title">Seller Login</h1>
 
-      <div class="card">
+      <div class="box">
         <label class="label">Email</label>
         <input id="email" type="email" placeholder="seller@amarose.com">
 
         <label class="label">Password</label>
         <input id="password" type="password" placeholder="Enter password">
 
-        <button id="loginBtn" class="btn-primary" type="button">Login</button>
-        <button id="signupBtn" class="btn-secondary" type="button">Create account</button>
-        <button id="resetBtn" class="btn-secondary" type="button">Reset password</button>
+        <button class="primary" onclick="loginNow()">Login</button>
+        <button class="secondary" onclick="createAccountNow()">Create account</button>
+        <button class="secondary" onclick="resetPasswordNow()">Reset password</button>
       </div>
 
-      <div class="card">
-        <div class="section-title">Demo access</div>
-        <div class="small">You can login with any email and any password in this one-file demo.</div>
+      <div class="box">
+        <h2 style="margin-top:0;">Demo access</h2>
+        <div class="small">You can login with any email and any password.</div>
       </div>
     </div>
 
     <div id="appView" class="content hidden">
       <div class="tabs">
-        <button id="tabProfile" class="tab active" type="button">Profile</button>
-        <button id="tabDocuments" class="tab" type="button">Documents</button>
-        <button id="tabTariffs" class="tab" type="button">Tariffs</button>
-        <button id="tabDashboard" class="tab" type="button">Stats</button>
+        <button id="tab1" class="tabbtn active" onclick="openTab('profile')">Profile</button>
+        <button id="tab2" class="tabbtn" onclick="openTab('documents')">Documents</button>
+        <button id="tab3" class="tabbtn" onclick="openTab('tariffs')">Tariffs</button>
+        <button id="tab4" class="tabbtn" onclick="openTab('stats')">Stats</button>
       </div>
 
       <div id="profileTab">
-        <div class="card">
-          <div class="section-title">Account Overview</div>
-
-          <div class="row"><strong>Email</strong><div id="accountEmail" class="value">-</div></div>
-          <div class="row"><strong>Role</strong><div id="accountRole" class="value">seller</div></div>
-          <div class="row"><strong>Account status</strong><div id="accountStatus" class="value">active</div></div>
-          <div class="row"><strong>Verification</strong><div id="verificationStatus" class="value"><span class="pill pending">pending</span></div></div>
-          <div class="row"><strong>Current tariff</strong><div id="currentTariff" class="value">Basic - 1 month</div></div>
-          <div class="row"><strong>Currency</strong><div id="currentCurrency" class="value">EUR</div></div>
+        <div class="box">
+          <h2 style="margin-top:0;">Account Overview</h2>
+          <div class="row"><strong>Email</strong><span id="viewEmail">-</span></div>
+          <div class="row"><strong>Role</strong><span>seller</span></div>
+          <div class="row"><strong>Status</strong><span>active</span></div>
+          <div class="row"><strong>Verification</strong><span class="pill pending">pending</span></div>
         </div>
 
-        <div class="card">
-          <div class="section-title">Seller Profile</div>
+        <div class="box">
+          <h2 style="margin-top:0;">Seller Profile</h2>
 
           <label class="label">Full name</label>
           <input id="fullName" type="text" placeholder="Full name">
@@ -304,10 +222,10 @@
 
           <label class="label">Seller type</label>
           <select id="sellerType">
-            <option value="Individual">Individual</option>
-            <option value="Company">Company</option>
-            <option value="Brand">Brand</option>
-            <option value="Store">Store</option>
+            <option>Individual</option>
+            <option>Company</option>
+            <option>Brand</option>
+            <option>Store</option>
           </select>
 
           <label class="label">Phone</label>
@@ -321,310 +239,250 @@
 
           <label class="label">Language</label>
           <select id="language">
-            <option value="English">English</option>
-            <option value="Russian">Russian</option>
-            <option value="Armenian">Armenian</option>
+            <option>English</option>
+            <option>Russian</option>
+            <option>Armenian</option>
           </select>
 
           <label class="label">Currency</label>
-          <select id="currency">
-            <option value="EUR">EUR</option>
-            <option value="USD">USD</option>
-            <option value="AMD">AMD</option>
-            <option value="RUB">RUB</option>
+          <select id="currency" onchange="updateCurrencyView()">
+            <option>EUR</option>
+            <option>USD</option>
+            <option>AMD</option>
+            <option>RUB</option>
           </select>
 
-          <button id="saveProfileBtn" class="btn-primary" type="button">Save profile</button>
+          <button class="primary" onclick="saveProfileNow()">Save profile</button>
         </div>
 
-        <div class="card">
-          <button id="logoutBtn" class="btn-danger" type="button">Logout</button>
+        <div class="box">
+          <button class="danger" onclick="logoutNow()">Logout</button>
         </div>
       </div>
 
       <div id="documentsTab" class="hidden">
-        <div class="card">
-          <div class="section-title">Upload Document</div>
+        <div class="box">
+          <h2 style="margin-top:0;">Upload Document</h2>
 
           <label class="label">Document type</label>
-          <select id="documentType">
-            <option value="Passport">Passport</option>
-            <option value="ID Card">ID Card</option>
-            <option value="Business License">Business License</option>
-            <option value="Tax Certificate">Tax Certificate</option>
-            <option value="Address Proof">Address Proof</option>
+          <select id="docType">
+            <option>Passport</option>
+            <option>ID Card</option>
+            <option>Business License</option>
+            <option>Tax Certificate</option>
+            <option>Address Proof</option>
           </select>
 
-          <label class="label">Document note</label>
-          <textarea id="documentNote" placeholder="Add note for verification team"></textarea>
+          <label class="label">Note</label>
+          <textarea id="docNote" placeholder="Add note"></textarea>
 
-          <button id="uploadDocBtn" class="btn-primary" type="button">Add document</button>
+          <button class="primary" onclick="addDocumentNow()">Add document</button>
         </div>
 
-        <div class="card">
-          <div class="section-title">Documents List</div>
-          <div id="documentsList"></div>
+        <div class="box">
+          <h2 style="margin-top:0;">Documents List</h2>
+          <div id="docsList">
+            <div class="doc">
+              <strong>Passport</strong><br>
+              <span class="small">Status: pending</span>
+            </div>
+          </div>
         </div>
       </div>
 
       <div id="tariffsTab" class="hidden">
-        <div class="card">
-          <div class="section-title">Tariff Pricing</div>
-          <div class="small">Long-term plans are cheaper than monthly billing.</div>
-        </div>
-
-        <div class="tariff-card">
-          <div class="tariff-name">Basic</div>
-          <div class="tariff-price" id="basicPriceView">20 €/month</div>
-
-          <label class="label">Choose period</label>
-          <select id="basicPeriod">
-            <option value="1">1 month — 20 €</option>
-            <option value="6">6 months — 108 €</option>
-            <option value="12">1 year — 192 €</option>
+        <div class="box">
+          <h2 style="margin-top:0;">Basic</h2>
+          <div class="small">1 month — 20 €</div>
+          <div class="small">6 months — 108 €</div>
+          <div class="small">1 year — 192 €</div>
+          <br>
+          <select id="basicPlan">
+            <option value="1 month">1 month</option>
+            <option value="6 months">6 months</option>
+            <option value="1 year">1 year</option>
           </select>
-
-          <button class="btn-primary" type="button" onclick="buyTariff('Basic', document.getElementById('basicPeriod').value)">Buy Basic</button>
+          <button class="primary" onclick="buyBasicNow()">Buy Basic</button>
         </div>
 
-        <div class="tariff-card">
-          <div class="tariff-name">Pro</div>
-          <div class="tariff-price">40 €/month</div>
-
-          <label class="label">Choose period</label>
-          <select id="proPeriod">
-            <option value="1">1 month — 40 €</option>
-            <option value="6">6 months — 216 €</option>
-            <option value="12">1 year — 384 €</option>
+        <div class="box">
+          <h2 style="margin-top:0;">Pro</h2>
+          <div class="small">1 month — 40 €</div>
+          <div class="small">6 months — 216 €</div>
+          <div class="small">1 year — 384 €</div>
+          <br>
+          <select id="proPlan">
+            <option value="1 month">1 month</option>
+            <option value="6 months">6 months</option>
+            <option value="1 year">1 year</option>
           </select>
-
-          <button class="btn-primary" type="button" onclick="buyTariff('Pro', document.getElementById('proPeriod').value)">Buy Pro</button>
+          <button class="primary" onclick="buyProNow()">Buy Pro</button>
         </div>
 
-        <div class="card">
-          <div class="section-title">Current subscription</div>
-          <div class="row"><strong>Plan</strong><div id="subPlan" class="value">Basic</div></div>
-          <div class="row"><strong>Billing period</strong><div id="subPeriod" class="value">1 month</div></div>
-          <div class="row"><strong>Discount</strong><div id="subDiscount" class="value">0%</div></div>
-          <div class="row"><strong>Final price</strong><div id="subPrice" class="value">20 €</div></div>
+        <div class="box">
+          <h2 style="margin-top:0;">Current Tariff</h2>
+          <div class="row"><strong>Plan</strong><span id="currentPlan">Basic</span></div>
+          <div class="row"><strong>Period</strong><span id="currentPeriod">1 month</span></div>
         </div>
       </div>
 
-      <div id="dashboardTab" class="hidden">
-        <div class="card">
-          <div class="section-title">Seller Statistics</div>
-          <div class="stat-grid">
-            <div class="stat">
-              <div class="stat-label">Rating average</div>
-              <div id="ratingAvg" class="stat-value">4.8</div>
-            </div>
-            <div class="stat">
-              <div class="stat-label">Reviews count</div>
-              <div id="ratingCount" class="stat-value">26</div>
-            </div>
-            <div class="stat">
-              <div class="stat-label">Activity score</div>
-              <div id="activityScore" class="stat-value">82</div>
-            </div>
-            <div class="stat">
-              <div class="stat-label">Orders</div>
-              <div id="ordersCount" class="stat-value">14</div>
-            </div>
-          </div>
-        </div>
+      <div id="statsTab" class="hidden">
+        <div class="box">
+          <h2 style="margin-top:0;">Seller Stats</h2>
 
-        <div class="card">
-          <div class="section-title">Status summary</div>
-          <div class="small">Seller sees real indicators in demo mode. Next step is connecting Supabase for live data storage, auth, and document statuses.</div>
+          <div class="stat">
+            Rating average
+            <div class="stat-value">4.8</div>
+          </div>
+
+          <div class="stat">
+            Reviews count
+            <div class="stat-value">26</div>
+          </div>
+
+          <div class="stat">
+            Activity score
+            <div class="stat-value">82</div>
+          </div>
+
+          <div class="stat">
+            Orders
+            <div class="stat-value">14</div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
   <script>
-    const els = {
-      systemBox: document.getElementById('systemBox'),
-      authView: document.getElementById('authView'),
-      appView: document.getElementById('appView'),
-
-      email: document.getElementById('email'),
-      password: document.getElementById('password'),
-      loginBtn: document.getElementById('loginBtn'),
-      signupBtn: document.getElementById('signupBtn'),
-      resetBtn: document.getElementById('resetBtn'),
-      logoutBtn: document.getElementById('logoutBtn'),
-
-      tabProfile: document.getElementById('tabProfile'),
-      tabDocuments: document.getElementById('tabDocuments'),
-      tabTariffs: document.getElementById('tabTariffs'),
-      tabDashboard: document.getElementById('tabDashboard'),
-
-      profileTab: document.getElementById('profileTab'),
-      documentsTab: document.getElementById('documentsTab'),
-      tariffsTab: document.getElementById('tariffsTab'),
-      dashboardTab: document.getElementById('dashboardTab'),
-
-      accountEmail: document.getElementById('accountEmail'),
-      accountRole: document.getElementById('accountRole'),
-      accountStatus: document.getElementById('accountStatus'),
-      verificationStatus: document.getElementById('verificationStatus'),
-      currentTariff: document.getElementById('currentTariff'),
-      currentCurrency: document.getElementById('currentCurrency'),
-
-      fullName: document.getElementById('fullName'),
-      companyName: document.getElementById('companyName'),
-      sellerType: document.getElementById('sellerType'),
-      phone: document.getElementById('phone'),
-      country: document.getElementById('country'),
-      city: document.getElementById('city'),
-      language: document.getElementById('language'),
-      currency: document.getElementById('currency'),
-      saveProfileBtn: document.getElementById('saveProfileBtn'),
-
-      documentType: document.getElementById('documentType'),
-      documentNote: document.getElementById('documentNote'),
-      uploadDocBtn: document.getElementById('uploadDocBtn'),
-      documentsList: document.getElementById('documentsList'),
-
-      subPlan: document.getElementById('subPlan'),
-      subPeriod: document.getElementById('subPeriod'),
-      subDiscount: document.getElementById('subDiscount'),
-      subPrice: document.getElementById('subPrice'),
-
-      ratingAvg: document.getElementById('ratingAvg'),
-      ratingCount: document.getElementById('ratingCount'),
-      activityScore: document.getElementById('activityScore'),
-      ordersCount: document.getElementById('ordersCount')
-    };
-
-    const defaults = {
-      loggedIn: false,
-      email: '',
-      profile: {
-        fullName: 'Vardan',
-        companyName: 'AMAROSE Seller',
-        sellerType: 'Company',
-        phone: '',
-        country: '',
-        city: '',
-        language: 'English',
-        currency: 'EUR',
-        role: 'seller',
-        accountStatus: 'active',
-        verificationStatus: 'pending'
-      },
-      documents: [
-        {
-          id: 1,
-          type: 'Passport',
-          note: 'Main identity document',
-          status: 'pending',
-          createdAt: new Date().toLocaleString()
-        }
-      ],
-      subscription: {
-        plan: 'Basic',
-        period: 1,
-        discount: 0,
-        price: 20
-      },
-      stats: {
-        ratingAvg: 4.8,
-        ratingCount: 26,
-        activityScore: 82,
-        ordersCount: 14
-      }
-    };
-
-    let state = loadState();
-
-    function loadState() {
-      const raw = localStorage.getItem('amaroseSellerAppDemo');
-      if (!raw) return JSON.parse(JSON.stringify(defaults));
-      try {
-        return JSON.parse(raw);
-      } catch {
-        return JSON.parse(JSON.stringify(defaults));
-      }
+    function setStatus(text) {
+      document.getElementById('statusBox').innerText = text;
     }
 
-    function saveState() {
-      localStorage.setItem('amaroseSellerAppDemo', JSON.stringify(state));
-    }
+    function loginNow() {
+      var email = document.getElementById('email').value;
+      var password = document.getElementById('password').value;
 
-    function setStatus(text, kind) {
-      els.systemBox.textContent = text;
-      els.systemBox.className = 'sysbox ' + (kind || 'warn');
-    }
-
-    function showAuth() {
-      els.authView.classList.remove('hidden');
-      els.appView.classList.add('hidden');
-    }
-
-    function showApp() {
-      els.authView.classList.add('hidden');
-      els.appView.classList.remove('hidden');
-    }
-
-    function openTab(name) {
-      els.profileTab.classList.add('hidden');
-      els.documentsTab.classList.add('hidden');
-      els.tariffsTab.classList.add('hidden');
-      els.dashboardTab.classList.add('hidden');
-
-      els.tabProfile.classList.remove('active');
-      els.tabDocuments.classList.remove('active');
-      els.tabTariffs.classList.remove('active');
-      els.tabDashboard.classList.remove('active');
-
-      if (name === 'profile') {
-        els.profileTab.classList.remove('hidden');
-        els.tabProfile.classList.add('active');
-      }
-      if (name === 'documents') {
-        els.documentsTab.classList.remove('hidden');
-        els.tabDocuments.classList.add('active');
-      }
-      if (name === 'tariffs') {
-        els.tariffsTab.classList.remove('hidden');
-        els.tabTariffs.classList.add('active');
-      }
-      if (name === 'dashboard') {
-        els.dashboardTab.classList.remove('hidden');
-        els.tabDashboard.classList.add('active');
-      }
-    }
-
-    function renderProfile() {
-      els.accountEmail.textContent = state.email || '-';
-      els.accountRole.textContent = state.profile.role;
-      els.accountStatus.textContent = state.profile.accountStatus;
-      els.currentCurrency.textContent = state.profile.currency;
-      els.currentTariff.textContent = state.subscription.plan + ' - ' + periodLabel(state.subscription.period);
-      els.verificationStatus.innerHTML = verificationPill(state.profile.verificationStatus);
-
-      els.fullName.value = state.profile.fullName || '';
-      els.companyName.value = state.profile.companyName || '';
-      els.sellerType.value = state.profile.sellerType || 'Company';
-      els.phone.value = state.profile.phone || '';
-      els.country.value = state.profile.country || '';
-      els.city.value = state.profile.city || '';
-      els.language.value = state.profile.language || 'English';
-      els.currency.value = state.profile.currency || 'EUR';
-    }
-
-    function verificationPill(status) {
-      if (status === 'approved') return '<span class="pill approved">approved</span>';
-      if (status === 'rejected') return '<span class="pill rejected">rejected</span>';
-      if (status === 'manual review') return '<span class="pill manual">manual review</span>';
-      return '<span class="pill pending">pending</span>';
-    }
-
-    function renderDocuments() {
-      if (!state.documents.length) {
-        els.documentsList.innerHTML = '<div class="small">No documents yet.</div>';
+      if (!email || !password) {
+        setStatus('Enter email and password.');
+        alert('Enter email and password');
         return;
       }
 
-      els.documentsList.innerHTML = 
+      document.getElementById('viewEmail').innerText = email;
+      document.getElementById('authView').classList.add('hidden');
+      document.getElementById('appView').classList.remove('hidden');
+      setStatus('Logged in successfully.');
+      alert('Login works');
+    }
+
+    function createAccountNow() {
+      var email = document.getElementById('email').value;
+      var password = document.getElementById('password').value;
+
+      if (!email || !password) {
+        setStatus('Enter email and password to create account.');
+        alert('Enter email and password');
+        return;
+      }
+
+      document.getElementById('viewEmail').innerText = email;
+      document.getElementById('authView').classList.add('hidden');
+      document.getElementById('appView').classList.remove('hidden');
+      setStatus('Account created successfully.');
+      alert('Create account works');
+    }
+
+    function resetPasswordNow() {
+      var email = document.getElementById('email').value;
+
+      if (!email) {
+        setStatus('Enter email first.');
+        alert('Enter email first');
+        return;
+      }
+
+      setStatus('Reset password request sent to ' + email);
+      alert('Reset password works');
+    }
+
+    function logoutNow() {
+      document.getElementById('authView').classList.remove('hidden');
+      document.getElementById('appView').classList.add('hidden');
+      setStatus('Logged out.');
+      alert('Logout works');
+    }
+
+    function saveProfileNow() {
+      var name = document.getElementById('fullName').value;
+      setStatus('Profile saved successfully for ' + (name || 'seller'));
+      alert('Save profile works');
+    }
+
+    function addDocumentNow() {
+      var type = document.getElementById('docType').value;
+      var note = document.getElementById('docNote').value;
+      var list = document.getElementById('docsList');
+
+      var div = document.createElement('div');
+      div.className = 'doc';
+      div.innerHTML = '<strong>' + type + '</strong><br><span class="small">Status: pending</span><br><span class="small">' + (note || '') + '</span>';
+
+      list.insertBefore(div, list.firstChild);
+      document.getElementById('docNote').value = '';
+      setStatus('Document added: ' + type);
+      alert('Document added');
+    }
+
+    function buyBasicNow() {
+      var period = document.getElementById('basicPlan').value;
+      document.getElementById('currentPlan').innerText = 'Basic';
+      document.getElementById('currentPeriod').innerText = period;
+      setStatus('Basic tariff selected: ' + period);
+      alert('Basic tariff selected');
+    }
+
+    function buyProNow() {
+      var period = document.getElementById('proPlan').value;
+      document.getElementById('currentPlan').innerText = 'Pro';
+      document.getElementById('currentPeriod').innerText = period;
+      setStatus('Pro tariff selected: ' + period);
+      alert('Pro tariff selected');
+    }
+
+    function updateCurrencyView() {
+      var cur = document.getElementById('currency').value;
+      setStatus('Currency selected: ' + cur);
+    }
+
+    function openTab(name) {
+      document.getElementById('profileTab').classList.add('hidden');
+      document.getElementById('documentsTab').classList.add('hidden');
+      document.getElementById('tariffsTab').classList.add('hidden');
+      document.getElementById('statsTab').classList.add('hidden');
+
+      document.getElementById('tab1').classList.remove('active');
+      document.getElementById('tab2').classList.remove('active');
+      document.getElementById('tab3').classList.remove('active');
+      document.getElementById('tab4').classList.remove('active');
+
+      if (name === 'profile') {
+        document.getElementById('profileTab').classList.remove('hidden');
+        document.getElementById('tab1').classList.add('active');
+      }
+      if (name === 'documents') {
+        document.getElementById('documentsTab').classList.remove('hidden');
+        document.getElementById('tab2').classList.add('active');
+      }
+      if (name === 'tariffs') {
+        document.getElementById('tariffsTab').classList.remove('hidden');
+        document.getElementById('tab3').classList.add('active');
+      }
+      if (name === 'stats') {
+        document.getElementById('statsTab').classList.remove('hidden');
+        document.getElementById('tab4').classList.add('active');
+      }
+    }
+  </script>
+</body>
+          </html>
