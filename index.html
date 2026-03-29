@@ -16,31 +16,28 @@
       max-width: 480px;
       margin: 0 auto;
       min-height: 100vh;
-      background: #ffffff;
+      background: #fff;
     }
     .topbar {
       background: #175cd3;
-      color: #ffffff;
-      padding: 20px 16px;
-      position: sticky;
-      top: 0;
-      z-index: 10;
+      color: #fff;
+      padding: 18px 16px;
     }
     .topbar-row {
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       gap: 12px;
     }
     .brand {
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 800;
     }
-    .lang-select-top {
-      width: 145px;
+    .lang {
+      width: 150px;
       margin: 0;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 10px 12px;
       font-size: 14px;
     }
@@ -52,29 +49,27 @@
       background: #fffaeb;
       color: #b54708;
       font-size: 14px;
-      white-space: pre-wrap;
+      min-height: 52px;
     }
     .content {
       padding: 16px;
     }
     .box {
-      background: #ffffff;
+      background: #fff;
       border: 1px solid #d0d5dd;
-      border-radius: 18px;
+      border-radius: 20px;
       padding: 16px;
       margin-bottom: 16px;
-      box-shadow: 0 6px 18px rgba(16, 24, 40, 0.04);
     }
     .title {
       font-size: 32px;
-      line-height: 1.1;
       font-weight: 800;
       margin: 0 0 20px;
     }
     h2 {
       margin: 0 0 16px;
-      font-size: 26px;
-      line-height: 1.15;
+      font-size: 24px;
+      font-weight: 800;
     }
     .label {
       display: block;
@@ -90,7 +85,7 @@
       border-radius: 14px;
       font-size: 16px;
       margin-bottom: 12px;
-      background: #ffffff;
+      background: #fff;
       color: #101828;
     }
     textarea {
@@ -109,7 +104,7 @@
     }
     .primary {
       background: #175cd3;
-      color: #ffffff;
+      color: #fff;
     }
     .secondary {
       background: #e8eefc;
@@ -119,9 +114,6 @@
       background: #fee4e2;
       color: #b42318;
     }
-    .hidden {
-      display: none !important;
-    }
     .tabs {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -129,22 +121,24 @@
       margin-bottom: 16px;
     }
     .tabbtn {
-      margin: 0;
-      padding: 12px 8px;
-      border-radius: 12px;
       background: #f2f4f7;
       color: #344054;
+      border-radius: 12px;
+      padding: 12px 8px;
       font-size: 12px;
       font-weight: 800;
+      margin: 0;
     }
     .tabbtn.active {
       background: #175cd3;
-      color: #ffffff;
+      color: #fff;
+    }
+    .hidden {
+      display: none !important;
     }
     .row {
       display: flex;
       justify-content: space-between;
-      align-items: center;
       gap: 12px;
       padding: 12px 0;
       border-bottom: 1px solid #eaecf0;
@@ -153,33 +147,14 @@
     .row:last-child {
       border-bottom: none;
     }
-    .value {
-      text-align: right;
-      font-weight: 700;
-      color: #101828;
-    }
     .pill {
       display: inline-block;
       padding: 6px 10px;
       border-radius: 999px;
       font-size: 12px;
       font-weight: 800;
-    }
-    .pending {
       background: #fffaeb;
       color: #b54708;
-    }
-    .approved {
-      background: #ecfdf3;
-      color: #067647;
-    }
-    .rejected {
-      background: #fef3f2;
-      color: #b42318;
-    }
-    .manual {
-      background: #eff8ff;
-      color: #175cd3;
     }
     .small {
       color: #667085;
@@ -192,10 +167,6 @@
       padding: 12px;
       margin-bottom: 10px;
     }
-    .doc-title {
-      font-weight: 800;
-      margin-bottom: 6px;
-    }
     .stat {
       border: 1px solid #d0d5dd;
       border-radius: 14px;
@@ -203,32 +174,11 @@
       margin-bottom: 10px;
       background: #fafafa;
     }
-    .stat-label {
-      font-size: 13px;
-      color: #667085;
-    }
     .stat-value {
       font-size: 24px;
       font-weight: 800;
       color: #175cd3;
       margin-top: 6px;
-    }
-    .tariff {
-      border: 1px solid #d0d5dd;
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 12px;
-    }
-    .tariff-name {
-      font-size: 22px;
-      font-weight: 800;
-      margin-bottom: 8px;
-    }
-    .tariff-price {
-      font-size: 28px;
-      font-weight: 800;
-      color: #175cd3;
-      margin-bottom: 12px;
     }
   </style>
 </head>
@@ -237,7 +187,7 @@
     <div class="topbar">
       <div class="topbar-row">
         <div class="brand" id="brandTitle">AMAROSE Seller App</div>
-        <select id="topLanguage" class="lang-select-top">
+        <select id="topLanguage" class="lang" onchange="changeLanguage(this.value)">
           <option value="en">English</option>
           <option value="ru">Русский</option>
           <option value="hy">Հայերեն</option>
@@ -251,55 +201,53 @@
     <div id="statusBox" class="status"></div>
 
     <div id="authView" class="content">
-      <h1 class="title" id="loginTitle">Seller Login</h1>
+      <h1 id="loginTitle" class="title">Seller Login</h1>
 
       <div class="box">
-        <label class="label" id="labelEmail">Email</label>
+        <label id="labelEmail" class="label">Email</label>
         <input id="email" type="email" placeholder="seller@amarose.com">
 
-        <label class="label" id="labelPassword">Password</label>
+        <label id="labelPassword" class="label">Password</label>
         <input id="password" type="password" placeholder="Enter password">
 
-        <button class="primary" id="loginBtn" type="button">Login</button>
-        <button class="secondary" id="createBtn" type="button">Create account</button>
-        <button class="secondary" id="resetBtn" type="button">Reset password</button>
+        <button id="loginBtn" class="primary" onclick="loginNow()">Login</button>
+        <button id="createBtn" class="secondary" onclick="createAccountNow()">Create account</button>
+        <button id="resetBtn" class="secondary" onclick="resetPasswordNow()">Reset password</button>
       </div>
 
       <div class="box">
-        <h2 id="demoAccessTitle">Demo access</h2>
-        <div class="small" id="demoAccessText">You can login with any email and any password. Data is saved in this browser.</div>
+        <h2 id="demoTitle">Demo access</h2>
+        <div id="demoText" class="small">You can login with any email and any password. Data is saved in this browser.</div>
       </div>
     </div>
 
     <div id="appView" class="content hidden">
       <div class="tabs">
-        <button id="tabProfileBtn" class="tabbtn active" type="button">Profile</button>
-        <button id="tabDocumentsBtn" class="tabbtn" type="button">Documents</button>
-        <button id="tabTariffsBtn" class="tabbtn" type="button">Tariffs</button>
-        <button id="tabStatsBtn" class="tabbtn" type="button">Stats</button>
+        <button id="tabProfileBtn" class="tabbtn active" onclick="openTab('profile')">Profile</button>
+        <button id="tabDocumentsBtn" class="tabbtn" onclick="openTab('documents')">Documents</button>
+        <button id="tabTariffsBtn" class="tabbtn" onclick="openTab('tariffs')">Tariffs</button>
+        <button id="tabStatsBtn" class="tabbtn" onclick="openTab('stats')">Stats</button>
       </div>
 
       <div id="profileTab">
         <div class="box">
-          <h2 id="accountOverviewTitle">Account Overview</h2>
-          <div class="row"><strong id="ovEmailLabel">Email</strong><span id="viewEmail" class="value">-</span></div>
-          <div class="row"><strong id="ovRoleLabel">Role</strong><span id="viewRole" class="value">seller</span></div>
-          <div class="row"><strong id="ovStatusLabel">Status</strong><span id="viewStatus" class="value">active</span></div>
-          <div class="row"><strong id="ovVerificationLabel">Verification</strong><span id="verificationWrap" class="value"></span></div>
-          <div class="row"><strong id="ovTariffLabel">Tariff</strong><span id="currentTariffText" class="value"></span></div>
-          <div class="row"><strong id="ovCurrencyLabel">Currency</strong><span id="currentCurrencyText" class="value"></span></div>
+          <h2 id="overviewTitle">Account Overview</h2>
+          <div class="row"><strong id="ovEmail">Email</strong><span id="viewEmail">-</span></div>
+          <div class="row"><strong id="ovRole">Role</strong><span id="viewRole">seller</span></div>
+          <div class="row"><strong id="ovStatus">Status</strong><span id="viewStatus">active</span></div>
+          <div class="row"><strong id="ovVerification">Verification</strong><span class="pill" id="viewVerification">pending</span></div>
         </div>
 
         <div class="box">
-          <h2 id="sellerProfileTitle">Seller Profile</h2>
+          <h2 id="profileTitle">Seller Profile</h2>
 
-          <label class="label" id="labelFullName">Full name</label>
+          <label id="labelFullName" class="label">Full name</label>
           <input id="fullName" type="text" placeholder="Full name">
 
-          <label class="label" id="labelCompanyName">Company name</label>
+          <label id="labelCompanyName" class="label">Company name</label>
           <input id="companyName" type="text" placeholder="Company name">
 
-          <label class="label" id="labelSellerType">Seller type</label>
+          <label id="labelSellerType" class="label">Seller type</label>
           <select id="sellerType">
             <option value="Individual">Individual</option>
             <option value="Company">Company</option>
@@ -307,26 +255,16 @@
             <option value="Store">Store</option>
           </select>
 
-          <label class="label" id="labelPhone">Phone</label>
+          <label id="labelPhone" class="label">Phone</label>
           <input id="phone" type="text" placeholder="+374 / +7 / +31">
 
-          <label class="label" id="labelCountry">Country</label>
+          <label id="labelCountry" class="label">Country</label>
           <input id="country" type="text" placeholder="Country">
 
-          <label class="label" id="labelCity">City</label>
+          <label id="labelCity" class="label">City</label>
           <input id="city" type="text" placeholder="City">
 
-          <label class="label" id="labelLanguage">Language</label>
-          <select id="profileLanguage">
-            <option value="en">English</option>
-            <option value="ru">Русский</option>
-            <option value="hy">Հայերեն</option>
-            <option value="fr">Français</option>
-            <option value="de">Deutsch</option>
-            <option value="es">Español</option>
-          </select>
-
-          <label class="label" id="labelCurrency">Currency</label>
+          <label id="labelCurrency" class="label">Currency</label>
           <select id="currency">
             <option value="EUR">EUR</option>
             <option value="USD">USD</option>
@@ -334,19 +272,19 @@
             <option value="RUB">RUB</option>
           </select>
 
-          <button class="primary" id="saveProfileBtn" type="button">Save profile</button>
+          <button id="saveProfileBtn" class="primary" onclick="saveProfileNow()">Save profile</button>
         </div>
 
         <div class="box">
-          <button class="danger" id="logoutBtn" type="button">Logout</button>
+          <button id="logoutBtn" class="danger" onclick="logoutNow()">Logout</button>
         </div>
       </div>
 
       <div id="documentsTab" class="hidden">
         <div class="box">
-          <h2 id="uploadDocumentTitle">Upload Document</h2>
+          <h2 id="uploadTitle">Upload Document</h2>
 
-          <label class="label" id="labelDocType">Document type</label>
+          <label id="labelDocType" class="label">Document type</label>
           <select id="docType">
             <option value="Passport">Passport</option>
             <option value="ID Card">ID Card</option>
@@ -355,80 +293,73 @@
             <option value="Address Proof">Address Proof</option>
           </select>
 
-          <label class="label" id="labelDocNote">Document note</label>
+          <label id="labelDocNote" class="label">Document note</label>
           <textarea id="docNote" placeholder="Add note"></textarea>
 
-          <button class="primary" id="addDocBtn" type="button">Add document</button>
+          <button id="addDocBtn" class="primary" onclick="addDocumentNow()">Add document</button>
         </div>
 
         <div class="box">
-          <h2 id="documentsListTitle">Documents List</h2>
+          <h2 id="docsListTitle">Documents List</h2>
           <div id="docsList"></div>
         </div>
       </div>
 
       <div id="tariffsTab" class="hidden">
-        <div class="tariff">
-          <div class="tariff-name" id="basicName">Basic</div>
-          <div class="tariff-price" id="basicPriceTop">20 € / month</div>
-          <div class="small" id="basicPriceList1">1 month — 20 €</div>
-          <div class="small" id="basicPriceList2">6 months — 108 €</div>
-          <div class="small" id="basicPriceList3">1 year — 192 €</div>
+        <div class="box">
+          <h2>Basic</h2>
+          <div class="small">1 month — 20 €</div>
+          <div class="small">6 months — 108 €</div>
+          <div class="small">1 year — 192 €</div>
           <br>
           <select id="basicPlan">
             <option value="1">1 month</option>
             <option value="6">6 months</option>
             <option value="12">1 year</option>
           </select>
-          <button class="primary" id="buyBasicBtn" type="button">Buy Basic</button>
+          <button id="buyBasicBtn" class="primary" onclick="buyBasicNow()">Buy Basic</button>
         </div>
 
-        <div class="tariff">
-          <div class="tariff-name" id="proName">Pro</div>
-          <div class="tariff-price" id="proPriceTop">40 € / month</div>
-          <div class="small" id="proPriceList1">1 month — 40 €</div>
-          <div class="small" id="proPriceList2">6 months — 216 €</div>
-          <div class="small" id="proPriceList3">1 year — 384 €</div>
+        <div class="box">
+          <h2>Pro</h2>
+          <div class="small">1 month — 40 €</div>
+          <div class="small">6 months — 216 €</div>
+          <div class="small">1 year — 384 €</div>
           <br>
           <select id="proPlan">
             <option value="1">1 month</option>
             <option value="6">6 months</option>
             <option value="12">1 year</option>
           </select>
-          <button class="primary" id="buyProBtn" type="button">Buy Pro</button>
+          <button id="buyProBtn" class="primary" onclick="buyProNow()">Buy Pro</button>
         </div>
 
         <div class="box">
           <h2 id="currentTariffTitle">Current Tariff</h2>
-          <div class="row"><strong id="currentPlanLabel">Plan</strong><span id="currentPlanView" class="value"></span></div>
-          <div class="row"><strong id="currentPeriodLabel">Period</strong><span id="currentPeriodView" class="value"></span></div>
-          <div class="row"><strong id="currentDiscountLabel">Discount</strong><span id="currentDiscountView" class="value"></span></div>
-          <div class="row"><strong id="currentPriceLabel">Final price</strong><span id="currentPriceView" class="value"></span></div>
+          <div class="row"><strong id="currentPlanLabel">Plan</strong><span id="currentPlanView">Basic</span></div>
+          <div class="row"><strong id="currentPeriodLabel">Period</strong><span id="currentPeriodView">1 month</span></div>
+          <div class="row"><strong id="currentPriceLabel">Final price</strong><span id="currentPriceView">20 €</span></div>
         </div>
       </div>
 
       <div id="statsTab" class="hidden">
         <div class="box">
           <h2 id="statsTitle">Seller Stats</h2>
-
           <div class="stat">
-            <div class="stat-label" id="statRatingLabel">Rating average</div>
-            <div class="stat-value" id="statRatingValue">4.8</div>
+            <div id="ratingLabel">Rating average</div>
+            <div class="stat-value">4.8</div>
           </div>
-
           <div class="stat">
-            <div class="stat-label" id="statReviewsLabel">Reviews count</div>
-            <div class="stat-value" id="statReviewsValue">26</div>
+            <div id="reviewsLabel">Reviews count</div>
+            <div class="stat-value">26</div>
           </div>
-
           <div class="stat">
-            <div class="stat-label" id="statActivityLabel">Activity score</div>
-            <div class="stat-value" id="statActivityValue">82</div>
+            <div id="activityLabel">Activity score</div>
+            <div class="stat-value">82</div>
           </div>
-
           <div class="stat">
-            <div class="stat-label" id="statOrdersLabel">Orders</div>
-            <div class="stat-value" id="statOrdersValue">14</div>
+            <div id="ordersLabel">Orders</div>
+            <div class="stat-value">14</div>
           </div>
         </div>
       </div>
@@ -436,9 +367,9 @@
   </div>
 
   <script>
-    const STORAGE_KEY = 'amaroseSellerPrototypeV2';
+    const KEY = 'amarose_seller_final_v1';
 
-    const i18n = {
+    const texts = {
       en: {
         brandTitle: 'AMAROSE Seller App',
         loginTitle: 'Seller Login',
@@ -447,157 +378,227 @@
         loginBtn: 'Login',
         createBtn: 'Create account',
         resetBtn: 'Reset password',
-        demoAccessTitle: 'Demo access',
-        demoAccessText: 'You can login with any email and any password. Data is saved in this browser.',
+        demoTitle: 'Demo access',
+        demoText: 'You can login with any email and any password. Data is saved in this browser.',
         tabProfileBtn: 'Profile',
         tabDocumentsBtn: 'Documents',
         tabTariffsBtn: 'Tariffs',
         tabStatsBtn: 'Stats',
-        accountOverviewTitle: 'Account Overview',
-        ovEmailLabel: 'Email',
-        ovRoleLabel: 'Role',
-        ovStatusLabel: 'Status',
-        ovVerificationLabel: 'Verification',
-        ovTariffLabel: 'Tariff',
-        ovCurrencyLabel: 'Currency',
-        sellerProfileTitle: 'Seller Profile',
+        overviewTitle: 'Account Overview',
+        ovEmail: 'Email',
+        ovRole: 'Role',
+        ovStatus: 'Status',
+        ovVerification: 'Verification',
+        profileTitle: 'Seller Profile',
         labelFullName: 'Full name',
         labelCompanyName: 'Company name',
         labelSellerType: 'Seller type',
         labelPhone: 'Phone',
         labelCountry: 'Country',
         labelCity: 'City',
-        labelLanguage: 'Language',
         labelCurrency: 'Currency',
         saveProfileBtn: 'Save profile',
         logoutBtn: 'Logout',
-        uploadDocumentTitle: 'Upload Document',
+        uploadTitle: 'Upload Document',
         labelDocType: 'Document type',
         labelDocNote: 'Document note',
         addDocBtn: 'Add document',
-        documentsListTitle: 'Documents List',
-        basicName: 'Basic',
-        proName: 'Pro',
-        basicPriceTop: '20 € / month',
-        proPriceTop: '40 € / month',
-        basicPriceList1: '1 month — 20 €',
-        basicPriceList2: '6 months — 108 €',
-        basicPriceList3: '1 year — 192 €',
-        proPriceList1: '1 month — 40 €',
-        proPriceList2: '6 months — 216 €',
-        proPriceList3: '1 year — 384 €',
-        buyBasicBtn: 'Buy Basic',
-        buyProBtn: 'Buy Pro',
+        docsListTitle: 'Documents List',
         currentTariffTitle: 'Current Tariff',
         currentPlanLabel: 'Plan',
         currentPeriodLabel: 'Period',
-        currentDiscountLabel: 'Discount',
         currentPriceLabel: 'Final price',
         statsTitle: 'Seller Stats',
-        statRatingLabel: 'Rating average',
-        statReviewsLabel: 'Reviews count',
-        statActivityLabel: 'Activity score',
-        statOrdersLabel: 'Orders',
-        statusLoggedOut: 'You are logged out.',
-        statusNeedEmailPassword: 'Enter email and password.',
-        statusLoggedIn: 'Logged in successfully.',
-        statusAccountCreated: 'Account created successfully.',
-        statusNeedEmailForReset: 'Enter email first.',
-        statusResetSent: 'Password reset request saved for',
-        statusProfileSaved: 'Profile saved successfully.',
-        statusDocumentAdded: 'Document added successfully.',
-        statusTariffUpdated: 'Tariff updated successfully.',
-        statusDemoLoaded: 'Stable prototype loaded. Language, profile, documents and tariff are saved after refresh.',
-        roleSeller: 'seller',
-        accountActive: 'active',
-        verificationPending: 'pending',
-        verificationApproved: 'approved',
-        verificationRejected: 'rejected',
-        verificationManual: 'manual review',
-        sellerTypeIndividual: 'Individual',
-        sellerTypeCompany: 'Company',
-        sellerTypeBrand: 'Brand',
-        sellerTypeStore: 'Store',
-        docPassport: 'Passport',
-        docIdCard: 'ID Card',
-        docBusinessLicense: 'Business License',
-        docTaxCertificate: 'Tax Certificate',
-        docAddressProof: 'Address Proof',
+        ratingLabel: 'Rating average',
+        reviewsLabel: 'Reviews count',
+        activityLabel: 'Activity score',
+        ordersLabel: 'Orders',
+        statusLoaded: 'Stable version loaded.',
+        statusLoginOk: 'Logged in successfully.',
+        statusCreateOk: 'Account created successfully.',
+        statusNeedEmail: 'Enter email first.',
+        statusNeedLoginData: 'Enter email and password.',
+        statusResetOk: 'Password reset request saved.',
+        statusProfileOk: 'Profile saved successfully.',
+        statusDocOk: 'Document added successfully.',
+        statusLogout: 'You are logged out.',
         plan1: '1 month',
         plan6: '6 months',
-        plan12: '1 year',
-        discount0: '0%',
-        discount10: '10%',
-        discount20: '20%',
-        finalPrice: 'Final price',
-        placeholderFullName: 'Full name',
-        placeholderCompanyName: 'Company name',
-        placeholderPhone: '+374 / +7 / +31',
-        placeholderCountry: 'Country',
-        placeholderCity: 'City',
-        placeholderDocNote: 'Add note'
+        plan12: '1 year'
       },
       ru: {
         brandTitle: 'AMAROSE Seller App',
         loginTitle: 'Вход продавца',
-        labelEmail: 'Эл. почта',
+        labelEmail: 'Почта',
         labelPassword: 'Пароль',
         loginBtn: 'Войти',
         createBtn: 'Создать аккаунт',
         resetBtn: 'Сбросить пароль',
-        demoAccessTitle: 'Демо доступ',
-        demoAccessText: 'Можно войти с любой почтой и любым паролем. Данные сохраняются в браузере.',
+        demoTitle: 'Демо доступ',
+        demoText: 'Можно войти с любой почтой и любым паролем. Данные сохраняются в браузере.',
         tabProfileBtn: 'Профиль',
         tabDocumentsBtn: 'Документы',
         tabTariffsBtn: 'Тарифы',
         tabStatsBtn: 'Статистика',
-        accountOverviewTitle: 'Обзор аккаунта',
-        ovEmailLabel: 'Почта',
-        ovRoleLabel: 'Роль',
-        ovStatusLabel: 'Статус',
-        ovVerificationLabel: 'Проверка',
-        ovTariffLabel: 'Тариф',
-        ovCurrencyLabel: 'Валюта',
-        sellerProfileTitle: 'Профиль продавца',
+        overviewTitle: 'Обзор аккаунта',
+        ovEmail: 'Почта',
+        ovRole: 'Роль',
+        ovStatus: 'Статус',
+        ovVerification: 'Проверка',
+        profileTitle: 'Профиль продавца',
         labelFullName: 'Полное имя',
         labelCompanyName: 'Название компании',
         labelSellerType: 'Тип продавца',
         labelPhone: 'Телефон',
         labelCountry: 'Страна',
         labelCity: 'Город',
-        labelLanguage: 'Язык',
         labelCurrency: 'Валюта',
         saveProfileBtn: 'Сохранить профиль',
         logoutBtn: 'Выйти',
-        uploadDocumentTitle: 'Загрузка документа',
+        uploadTitle: 'Загрузка документа',
         labelDocType: 'Тип документа',
         labelDocNote: 'Заметка к документу',
         addDocBtn: 'Добавить документ',
-        documentsListTitle: 'Список документов',
-        basicName: 'Basic',
-        proName: 'Pro',
-        basicPriceTop: '20 € / месяц',
-        proPriceTop: '40 € / месяц',
-        basicPriceList1: '1 месяц — 20 €',
-        basicPriceList2: '6 месяцев — 108 €',
-        basicPriceList3: '1 год — 192 €',
-        proPriceList1: '1 месяц — 40 €',
-        proPriceList2: '6 месяцев — 216 €',
-        proPriceList3: '1 год — 384 €',
-        buyBasicBtn: 'Купить Basic',
-        buyProBtn: 'Купить Pro',
+        docsListTitle: 'Список документов',
         currentTariffTitle: 'Текущий тариф',
         currentPlanLabel: 'План',
         currentPeriodLabel: 'Период',
-        currentDiscountLabel: 'Скидка',
         currentPriceLabel: 'Итоговая цена',
         statsTitle: 'Статистика продавца',
-        statRatingLabel: 'Средний рейтинг',
-        statReviewsLabel: 'Количество отзывов',
-        statActivityLabel: 'Показатель активности',
-        statOrdersLabel: 'Заказы',
-        statusLoggedOut: 'Вы вышли из аккаунта.',
-        statusNeedEmailPassword: 'Введите почту и пароль.',
-        statusLoggedIn: 'Вход выполнен успешно.',
-        statusAccountCreated: 'Аккаунт успешно создан.',
-        statusNeedEmailForReset: 'Сначала введите по
+        ratingLabel: 'Средний рейтинг',
+        reviewsLabel: 'Количество отзывов',
+        activityLabel: 'Показатель активности',
+        ordersLabel: 'Заказы',
+        statusLoaded: 'Стабильная версия загружена.',
+        statusLoginOk: 'Вход выполнен успешно.',
+        statusCreateOk: 'Аккаунт успешно создан.',
+        statusNeedEmail: 'Сначала введите почту.',
+        statusNeedLoginData: 'Введите почту и пароль.',
+        statusResetOk: 'Запрос на сброс пароля сохранён.',
+        statusProfileOk: 'Профиль успешно сохранён.',
+        statusDocOk: 'Документ успешно добавлен.',
+        statusLogout: 'Вы вышли из аккаунта.',
+        plan1: '1 месяц',
+        plan6: '6 месяцев',
+        plan12: '1 год'
+      }
+    };
+
+    let state = {
+      language: 'en',
+      loggedIn: false,
+      email: '',
+      currentTab: 'profile',
+      profile: {
+        fullName: '',
+        companyName: '',
+        sellerType: 'Individual',
+        phone: '',
+        country: '',
+        city: '',
+        currency: 'EUR'
+      },
+      tariff: {
+        plan: 'Basic',
+        period: '1',
+        price: '20 €'
+      },
+      documents: []
+    };
+
+    function saveState() {
+      localStorage.setItem(KEY, JSON.stringify(state));
+    }
+
+    function loadState() {
+      const raw = localStorage.getItem(KEY);
+      if (!raw) return;
+      try {
+        const parsed = JSON.parse(raw);
+        state = Object.assign({}, state, parsed);
+      } catch (e) {}
+    }
+
+    function tr(key) {
+      const lang = texts[state.language] ? state.language : 'en';
+      return (texts[lang] && texts[lang][key]) || texts.en[key] || key;
+    }
+
+    function setStatus(text) {
+      document.getElementById('statusBox').innerText = text;
+    }
+
+    function applyLanguage() {
+      document.documentElement.lang = state.language;
+
+      const ids = [
+        'brandTitle','loginTitle','labelEmail','labelPassword','loginBtn','createBtn','resetBtn',
+        'demoTitle','demoText','tabProfileBtn','tabDocumentsBtn','tabTariffsBtn','tabStatsBtn',
+        'overviewTitle','ovEmail','ovRole','ovStatus','ovVerification','profileTitle',
+        'labelFullName','labelCompanyName','labelSellerType','labelPhone','labelCountry','labelCity','labelCurrency',
+        'saveProfileBtn','logoutBtn','uploadTitle','labelDocType','labelDocNote','addDocBtn',
+        'docsListTitle','currentTariffTitle','currentPlanLabel','currentPeriodLabel','currentPriceLabel',
+        'statsTitle','ratingLabel','reviewsLabel','activityLabel','ordersLabel'
+      ];
+
+      ids.forEach(function(id) {
+        const el = document.getElementById(id);
+        if (el) el.innerText = tr(id);
+      });
+
+      document.getElementById('topLanguage').value = state.language;
+
+      document.getElementById('basicPlan').options[0].text = tr('plan1');
+      document.getElementById('basicPlan').options[1].text = tr('plan6');
+      document.getElementById('basicPlan').options[2].text = tr('plan12');
+
+      document.getElementById('proPlan').options[0].text = tr('plan1');
+      document.getElementById('proPlan').options[1].text = tr('plan6');
+      document.getElementById('proPlan').options[2].text = tr('plan12');
+
+      document.getElementById('currentPeriodView').innerText =
+        state.tariff.period === '12' ? tr('plan12') :
+        state.tariff.period === '6' ? tr('plan6') :
+        tr('plan1');
+    }
+
+    function renderAuth() {
+      document.getElementById('email').value = state.email || '';
+    }
+
+    function renderProfile() {
+      document.getElementById('viewEmail').innerText = state.email || '-';
+      document.getElementById('fullName').value = state.profile.fullName || '';
+      document.getElementById('companyName').value = state.profile.companyName || '';
+      document.getElementById('sellerType').value = state.profile.sellerType || 'Individual';
+      document.getElementById('phone').value = state.profile.phone || '';
+      document.getElementById('country').value = state.profile.country || '';
+      document.getElementById('city').value = state.profile.city || '';
+      document.getElementById('currency').value = state.profile.currency || 'EUR';
+      document.getElementById('currentPlanView').innerText = state.tariff.plan;
+      document.getElementById('currentPriceView').innerText = state.tariff.price;
+    }
+
+    function renderDocuments() {
+      const list = document.getElementById('docsList');
+      if (!state.documents.length) {
+        list.innerHTML = '<div class="small">No documents</div>';
+        return;
+      }
+      list.innerHTML = '';
+      state.documents.forEach(function(doc) {
+        const div = document.createElement('div');
+        div.className = 'doc';
+        div.innerHTML = '<strong>' + doc.type + '</strong><br><span class="small">' + (doc.note || '') + '</span><br><span class="small">pending</span>';
+        list.appendChild(div);
+      });
+    }
+
+    function showAuth() {
+      document.getElementById('authView').classList.remove('hidden');
+      document.getElementById('appView').classList.add('hidden');
+    }
+
+    function showApp() {
+      document.getElementById('authView').classList.add('hidden');
+      document.getElementById('appView').
