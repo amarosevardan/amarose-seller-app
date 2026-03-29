@@ -1,9 +1,8 @@
-
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>AMAROSE Seller App</title>
   <style>
     * { box-sizing: border-box; }
@@ -17,7 +16,7 @@
       max-width: 480px;
       margin: 0 auto;
       min-height: 100vh;
-      background: #fff;
+      background: #f5f7fb;
     }
     .topbar {
       background: #175cd3;
@@ -38,6 +37,7 @@
       border-radius: 12px;
       padding: 10px 12px;
       font-size: 14px;
+      background: #fff;
     }
     .status {
       margin: 16px;
@@ -76,7 +76,7 @@
       color: #344054;
       margin-bottom: 6px;
     }
-    input, select, textarea {
+    input, select {
       width: 100%;
       padding: 14px;
       border: 1px solid #d0d5dd;
@@ -98,16 +98,83 @@
     }
     .primary { background: #175cd3; color: #fff; }
     .secondary { background: #e8eefc; color: #175cd3; }
+    .danger { background: #fee4e2; color: #b42318; }
     .hidden { display: none !important; }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .tabbtn {
+      background: #f2f4f7;
+      color: #344054;
+      border-radius: 12px;
+      padding: 12px 8px;
+      font-size: 12px;
+      font-weight: 800;
+      margin: 0;
+    }
+    .tabbtn.active {
+      background: #175cd3;
+      color: #fff;
+    }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #eaecf0;
+      font-size: 14px;
+    }
+    .row:last-child { border-bottom: none; }
+    .pill {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      background: #fffaeb;
+      color: #b54708;
+    }
+    .small {
+      color: #667085;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .doc {
+      border: 1px solid #d0d5dd;
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+    .stat {
+      border: 1px solid #d0d5dd;
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 10px;
+      background: #fafafa;
+    }
+    .stat-value {
+      font-size: 24px;
+      font-weight: 800;
+      color: #175cd3;
+      margin-top: 6px;
+    }
   </style>
 </head>
 <body>
   <div class="app">
     <div class="topbar">
       <div class="brand" id="brand">AMAROSE Seller App</div>
-      <select id="langSelect" class="lang">
+      <select id="langSelect" class="lang" onchange="changeLanguage(this.value)">
         <option value="en">English</option>
         <option value="ru">Русский</option>
+        <option value="hy">Հայերեն</option>
+        <option value="fr">Français</option>
+        <option value="de">Deutsch</option>
+        <option value="es">Español</option>
       </select>
     </div>
 
@@ -123,219 +190,388 @@
         <label class="label" id="passwordLabel">Password</label>
         <input id="password" type="password" placeholder="Enter password">
 
-        <button id="loginBtn" class="primary">Login</button>
-        <button id="createBtn" class="secondary">Create account</button>
-        <button id="resetBtn" class="secondary">Reset password</button>
+        <button id="loginBtn" class="primary" type="button" onclick="loginNow()">Login</button>
+        <button id="createBtn" class="secondary" type="button" onclick="createAccountNow()">Create account</button>
+        <button id="resetBtn" class="secondary" type="button" onclick="resetPasswordNow()">Reset password</button>
       </div>
 
       <div class="box">
         <h2 id="demoTitle">Demo access</h2>
-        <div id="demoText">You can login with any email and any password. Data is saved in this browser.</div>
+        <div id="demoText" class="small">You can login with any email and any password. Data is saved in this browser.</div>
       </div>
     </div>
 
     <div id="appView" class="content hidden">
-      <div class="box">
-        <h2 id="welcomeTitle">Welcome</h2>
-        <div id="welcomeText"></div>
+      <div class="tabs">
+        <button id="tabProfileBtn" class="tabbtn active" type="button" onclick="openTab('profile')">Profile</button>
+        <button id="tabDocumentsBtn" class="tabbtn" type="button" onclick="openTab('documents')">Documents</button>
+        <button id="tabTariffsBtn" class="tabbtn" type="button" onclick="openTab('tariffs')">Tariffs</button>
+        <button id="tabStatsBtn" class="tabbtn" type="button" onclick="openTab('stats')">Stats</button>
       </div>
 
-      <div class="box">
-        <button id="logoutBtn" class="secondary">Logout</button>
+      <div id="profileTab">
+        <div class="box">
+          <h2 id="overviewTitle">Account Overview</h2>
+          <div class="row"><strong id="ovEmail">Email</strong><span id="viewEmail">-</span></div>
+          <div class="row"><strong id="ovRole">Role</strong><span id="viewRole">seller</span></div>
+          <div class="row"><strong id="ovStatus">Status</strong><span id="viewStatus">active</span></div>
+          <div class="row"><strong id="ovVerification">Verification</strong><span class="pill" id="viewVerification">pending</span></div>
+        </div>
+
+        <div class="box">
+          <h2 id="profileTitle">Seller Profile</h2>
+
+          <label class="label" id="labelFullName">Full name</label>
+          <input id="fullName" type="text" placeholder="Full name">
+
+          <label class="label" id="labelCompanyName">Company name</label>
+          <input id="companyName" type="text" placeholder="Company name">
+
+          <label class="label" id="labelSellerType">Seller type</label>
+          <select id="sellerType">
+            <option value="Individual">Individual</option>
+            <option value="Company">Company</option>
+            <option value="Brand">Brand</option>
+            <option value="Store">Store</option>
+          </select>
+
+          <label class="label" id="labelPhone">Phone</label>
+          <input id="phone" type="text" placeholder="+374 / +7 / +31">
+
+          <label class="label" id="labelCountry">Country</label>
+          <input id="country" type="text" placeholder="Country">
+
+          <label class="label" id="labelCity">City</label>
+          <input id="city" type="text" placeholder="City">
+
+          <label class="label" id="labelCurrency">Currency</label>
+          <select id="currency">
+            <option value="EUR">EUR</option>
+            <option value="USD">USD</option>
+            <option value="AMD">AMD</option>
+            <option value="RUB">RUB</option>
+          </select>
+
+          <button id="saveProfileBtn" class="primary" type="button" onclick="saveProfileNow()">Save profile</button>
+        </div>
+
+        <div class="box">
+          <button id="logoutBtn" class="danger" type="button" onclick="logoutNow()">Logout</button>
+        </div>
+      </div>
+
+      <div id="documentsTab" class="hidden">
+        <div class="box">
+          <h2 id="uploadTitle">Upload document</h2>
+
+          <label class="label" id="labelDocType">Document type</label>
+          <select id="docType">
+            <option value="Passport">Passport</option>
+            <option value="ID Card">ID Card</option>
+            <option value="Business License">Business License</option>
+            <option value="Tax Certificate">Tax Certificate</option>
+            <option value="Address Proof">Address Proof</option>
+          </select>
+
+          <label class="label" id="labelDocNote">Document note</label>
+          <input id="docNote" type="text" placeholder="Add note">
+
+          <button id="addDocBtn" class="primary" type="button" onclick="addDocumentNow()">Add document</button>
+        </div>
+
+        <div class="box">
+          <h2 id="docsListTitle">Documents list</h2>
+          <div id="docsList"></div>
+        </div>
+      </div>
+
+      <div id="tariffsTab" class="hidden">
+        <div class="box">
+          <h2>Basic</h2>
+          <div class="small">1 month — 20 €</div>
+          <div class="small">6 months — 108 €</div>
+          <div class="small">1 year — 192 €</div>
+          <br>
+          <select id="basicPlan">
+            <option value="1">1 month</option>
+            <option value="6">6 months</option>
+            <option value="12">1 year</option>
+          </select>
+          <button class="primary" type="button" onclick="buyBasicNow()">Buy Basic</button>
+        </div>
+
+        <div class="box">
+          <h2>Pro</h2>
+          <div class="small">1 month — 40 €</div>
+          <div class="small">6 months — 216 €</div>
+          <div class="small">1 year — 384 €</div>
+          <br>
+          <select id="proPlan">
+            <option value="1">1 month</option>
+            <option value="6">6 months</option>
+            <option value="12">1 year</option>
+          </select>
+          <button class="primary" type="button" onclick="buyProNow()">Buy Pro</button>
+        </div>
+
+        <div class="box">
+          <h2 id="currentTariffTitle">Current tariff</h2>
+          <div class="row"><strong id="currentPlanLabel">Plan</strong><span id="currentPlanView">Basic</span></div>
+          <div class="row"><strong id="currentPeriodLabel">Period</strong><span id="currentPeriodView">1 month</span></div>
+          <div class="row"><strong id="currentPriceLabel">Final price</strong><span id="currentPriceView">20 €</span></div>
+        </div>
+      </div>
+
+      <div id="statsTab" class="hidden">
+        <div class="box">
+          <h2 id="statsTitle">Seller stats</h2>
+          <div class="stat"><div id="ratingLabel">Rating average</div><div class="stat-value">4.8</div></div>
+          <div class="stat"><div id="reviewsLabel">Reviews count</div><div class="stat-value">26</div></div>
+          <div class="stat"><div id="activityLabel">Activity score</div><div class="stat-value">82</div></div>
+          <div class="stat"><div id="ordersLabel">Orders</div><div class="stat-value">14</div></div>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-    const STORAGE_KEY = "amarose_simple_lang_app_v1";
+    const KEY = 'amarose_seller_working_v2';
 
-    const T = {
+    const TEXTS = {
       en: {
-        brand: "AMAROSE Seller App",
-        loginTitle: "Seller Login",
-        emailLabel: "Email",
-        passwordLabel: "Password",
-        emailPlaceholder: "seller@amarose.com",
-        passwordPlaceholder: "Enter password",
-        loginBtn: "Login",
-        createBtn: "Create account",
-        resetBtn: "Reset password",
-        demoTitle: "Demo access",
-        demoText: "You can login with any email and any password. Data is saved in this browser.",
-        welcomeTitle: "Welcome",
-        welcomeText: "You are logged in.",
-        logoutBtn: "Logout",
-        statusLoaded: "Stable version loaded.",
-        statusNeedEmailPassword: "Enter email and password.",
-        statusNeedEmail: "Enter email first.",
-        statusLogin: "Logged in successfully.",
-        statusCreate: "Account created successfully.",
-        statusReset: "Password reset request saved.",
-        statusLogout: "You are logged out."
+        brand:'AMAROSE Seller App',
+        loginTitle:'Seller Login',
+        emailLabel:'Email',
+        passwordLabel:'Password',
+        emailPlaceholder:'seller@amarose.com',
+        passwordPlaceholder:'Enter password',
+        loginBtn:'Login',
+        createBtn:'Create account',
+        resetBtn:'Reset password',
+        demoTitle:'Demo access',
+        demoText:'You can login with any email and any password. Data is saved in this browser.',
+        tabProfileBtn:'Profile',
+        tabDocumentsBtn:'Documents',
+        tabTariffsBtn:'Tariffs',
+        tabStatsBtn:'Stats',
+        overviewTitle:'Account Overview',
+        ovEmail:'Email',
+        ovRole:'Role',
+        ovStatus:'Status',
+        ovVerification:'Verification',
+        profileTitle:'Seller Profile',
+        labelFullName:'Full name',
+        labelCompanyName:'Company name',
+        labelSellerType:'Seller type',
+        labelPhone:'Phone',
+        labelCountry:'Country',
+        labelCity:'City',
+        labelCurrency:'Currency',
+        saveProfileBtn:'Save profile',
+        logoutBtn:'Logout',
+        uploadTitle:'Upload document',
+        labelDocType:'Document type',
+        labelDocNote:'Document note',
+        addDocBtn:'Add document',
+        docsListTitle:'Documents list',
+        currentTariffTitle:'Current tariff',
+        currentPlanLabel:'Plan',
+        currentPeriodLabel:'Period',
+        currentPriceLabel:'Final price',
+        statsTitle:'Seller stats',
+        ratingLabel:'Rating average',
+        reviewsLabel:'Reviews count',
+        activityLabel:'Activity score',
+        ordersLabel:'Orders',
+        statusLoaded:'App loaded successfully.',
+        statusNeedEmail:'Enter email first.',
+        statusNeedEmailPassword:'Enter email and password.',
+        statusLogin:'Logged in successfully.',
+        statusCreate:'Account created successfully.',
+        statusReset:'Password reset request created.',
+        statusProfile:'Profile saved successfully.',
+        statusDoc:'Document added successfully.',
+        statusLogout:'Logged out successfully.',
+        plan1:'1 month',
+        plan6:'6 months',
+        plan12:'1 year'
       },
       ru: {
-        brand: "AMAROSE Seller App",
-        loginTitle: "Вход продавца",
-        emailLabel: "Почта",
-        passwordLabel: "Пароль",
-        emailPlaceholder: "seller@amarose.com",
-        passwordPlaceholder: "Введите пароль",
-        loginBtn: "Войти",
-        createBtn: "Создать аккаунт",
-        resetBtn: "Сбросить пароль",
-        demoTitle: "Демо доступ",
-        demoText: "Можно войти с любой почтой и любым паролем. Данные сохраняются в браузере.",
-        welcomeTitle: "Добро пожаловать",
-        welcomeText: "Вы вошли в аккаунт.",
-        logoutBtn: "Выйти",
-        statusLoaded: "Стабильная версия загружена.",
-        statusNeedEmailPassword: "Введите почту и пароль.",
-        statusNeedEmail: "Сначала введите почту.",
-        statusLogin: "Вход выполнен успешно.",
-        statusCreate: "Аккаунт успешно создан.",
-        statusReset: "Запрос на сброс пароля сохранён.",
-        statusLogout: "Вы вышли из аккаунта."
-      }
-    };
-
-    let state = {
-      language: "en",
-      loggedIn: false,
-      email: ""
-    };
-
-    function saveState() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    }
-
-    function loadState() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return;
-        const parsed = JSON.parse(raw);
-        if (parsed && typeof parsed === "object") {
-          state = { ...state, ...parsed };
-        }
-      } catch (e) {}
-    }
-
-    function tr(key) {
-      const lang = state.language === "ru" ? "ru" : "en";
-      return T[lang][key] || key;
-    }
-
-    function setStatus(text) {
-      document.getElementById("status").innerText = text;
-    }
-
-    function applyLanguage() {
-      document.documentElement.lang = state.language;
-
-      document.getElementById("brand").innerText = tr("brand");
-      document.getElementById("loginTitle").innerText = tr("loginTitle");
-      document.getElementById("emailLabel").innerText = tr("emailLabel");
-      document.getElementById("passwordLabel").innerText = tr("passwordLabel");
-      document.getElementById("loginBtn").innerText = tr("loginBtn");
-      document.getElementById("createBtn").innerText = tr("createBtn");
-      document.getElementById("resetBtn").innerText = tr("resetBtn");
-      document.getElementById("demoTitle").innerText = tr("demoTitle");
-      document.getElementById("demoText").innerText = tr("demoText");
-      document.getElementById("welcomeTitle").innerText = tr("welcomeTitle");
-      document.getElementById("welcomeText").innerText = tr("welcomeText");
-      document.getElementById("logoutBtn").innerText = tr("logoutBtn");
-
-      document.getElementById("email").placeholder = tr("emailPlaceholder");
-      document.getElementById("password").placeholder = tr("passwordPlaceholder");
-      document.getElementById("langSelect").value = state.language;
-    }
-
-    function render() {
-      applyLanguage();
-      document.getElementById("email").value = state.email || "";
-
-      if (state.loggedIn) {
-        document.getElementById("authView").classList.add("hidden");
-        document.getElementById("appView").classList.remove("hidden");
-        setStatus(tr("statusLogin"));
-      } else {
-        document.getElementById("authView").classList.remove("hidden");
-        document.getElementById("appView").classList.add("hidden");
-        setStatus(tr("statusLoaded"));
-      }
-    }
-
-    function loginNow() {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
-
-      if (!email || !password) {
-        setStatus(tr("statusNeedEmailPassword"));
-        return;
-      }
-
-      state.loggedIn = true;
-      state.email = email;
-      saveState();
-      render();
-    }
-
-    function createAccountNow() {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
-
-      if (!email || !password) {
-        setStatus(tr("statusNeedEmailPassword"));
-        return;
-      }
-
-      state.loggedIn = true;
-      state.email = email;
-      saveState();
-      render();
-      setStatus(tr("statusCreate"));
-    }
-
-    function resetPasswordNow() {
-      const email = document.getElementById("email").value.trim();
-
-      if (!email) {
-        setStatus(tr("statusNeedEmail"));
-        return;
-      }
-
-      setStatus(tr("statusReset"));
-    }
-
-    function logoutNow() {
-      state.loggedIn = false;
-      saveState();
-      render();
-      setStatus(tr("statusLogout"));
-    }
-
-    function onLanguageChange(value) {
-      state.language = value === "ru" ? "ru" : "en";
-      saveState();
-      applyLanguage();
-      if (!state.loggedIn) {
-        setStatus(tr("statusLoaded"));
-      } else {
-        setStatus(tr("statusLogin"));
-      }
-    }
-
-    loadState();
-
-    document.getElementById("langSelect").addEventListener("change", function(e) {
-      onLanguageChange(e.target.value);
-    });
-
-    document.getElementById("loginBtn").addEventListener("click", loginNow);
-    document.getElementById("createBtn").addEventListener("click", createAccountNow);
-    document.getElementById("resetBtn").addEventListener("click", resetPasswordNow);
-    document.getElementById("logoutBtn").addEventListener("click", logoutNow);
-
-    render();
-  </script>
-</body>
-  </html>
+        brand:'AMAROSE Seller App',
+        loginTitle:'Вход продавца',
+        emailLabel:'Почта',
+        passwordLabel:'Пароль',
+        emailPlaceholder:'seller@amarose.com',
+        passwordPlaceholder:'Введите пароль',
+        loginBtn:'Войти',
+        createBtn:'Создать аккаунт',
+        resetBtn:'Сбросить пароль',
+        demoTitle:'Демо доступ',
+        demoText:'Можно войти с любой почтой и любым паролем. Данные сохраняются в браузере.',
+        tabProfileBtn:'Профиль',
+        tabDocumentsBtn:'Документы',
+        tabTariffsBtn:'Тарифы',
+        tabStatsBtn:'Статистика',
+        overviewTitle:'Обзор аккаунта',
+        ovEmail:'Почта',
+        ovRole:'Роль',
+        ovStatus:'Статус',
+        ovVerification:'Проверка',
+        profileTitle:'Профиль продавца',
+        labelFullName:'Полное имя',
+        labelCompanyName:'Название компании',
+        labelSellerType:'Тип продавца',
+        labelPhone:'Телефон',
+        labelCountry:'Страна',
+        labelCity:'Город',
+        labelCurrency:'Валюта',
+        saveProfileBtn:'Сохранить профиль',
+        logoutBtn:'Выйти',
+        uploadTitle:'Загрузка документа',
+        labelDocType:'Тип документа',
+        labelDocNote:'Заметка к документу',
+        addDocBtn:'Добавить документ',
+        docsListTitle:'Список документов',
+        currentTariffTitle:'Текущий тариф',
+        currentPlanLabel:'План',
+        currentPeriodLabel:'Период',
+        currentPriceLabel:'Итоговая цена',
+        statsTitle:'Статистика продавца',
+        ratingLabel:'Средний рейтинг',
+        reviewsLabel:'Количество отзывов',
+        activityLabel:'Показатель активности',
+        ordersLabel:'Заказы',
+        statusLoaded:'Приложение загружено.',
+        statusNeedEmail:'Сначала введите почту.',
+        statusNeedEmailPassword:'Введите почту и пароль.',
+        statusLogin:'Вход выполнен успешно.',
+        statusCreate:'Аккаунт успешно создан.',
+        statusReset:'Запрос на сброс пароля создан.',
+        statusProfile:'Профиль успешно сохранён.',
+        statusDoc:'Документ успешно добавлен.',
+        statusLogout:'Вы вышли из аккаунта.',
+        plan1:'1 месяц',
+        plan6:'6 месяцев',
+        plan12:'1 год'
+      },
+      hy: {
+        brand:'AMAROSE Seller App',
+        loginTitle:'Վաճառողի մուտք',
+        emailLabel:'Էլ. հասցե',
+        passwordLabel:'Գաղտնաբառ',
+        emailPlaceholder:'seller@amarose.com',
+        passwordPlaceholder:'Մուտքագրեք գաղտնաբառը',
+        loginBtn:'Մուտք',
+        createBtn:'Ստեղծել հաշիվ',
+        resetBtn:'Վերականգնել գաղտնաբառը',
+        demoTitle:'Դեմո մուտք',
+        demoText:'Կարող եք մուտք գործել ցանկացած էլ. հասցեով և գաղտնաբառով։ Տվյալները պահպանվում են բրաուզերում։',
+        tabProfileBtn:'Պրոֆիլ',
+        tabDocumentsBtn:'Փաստաթղթեր',
+        tabTariffsBtn:'Սակագներ',
+        tabStatsBtn:'Վիճակագրություն',
+        overviewTitle:'Հաշվի տեսություն',
+        ovEmail:'Էլ. հասցե',
+        ovRole:'Դեր',
+        ovStatus:'Կարգավիճակ',
+        ovVerification:'Ստուգում',
+        profileTitle:'Վաճառողի պրոֆիլ',
+        labelFullName:'Ամբողջ անուն',
+        labelCompanyName:'Ընկերության անվանում',
+        labelSellerType:'Վաճառողի տեսակ',
+        labelPhone:'Հեռախոս',
+        labelCountry:'Երկիր',
+        labelCity:'Քաղաք',
+        labelCurrency:'Արժույթ',
+        saveProfileBtn:'Պահպանել պրոֆիլը',
+        logoutBtn:'Դուրս գալ',
+        uploadTitle:'Վերբեռնել փաստաթուղթ',
+        labelDocType:'Փաստաթղթի տեսակ',
+        labelDocNote:'Նշում',
+        addDocBtn:'Ավելացնել փաստաթուղթ',
+        docsListTitle:'Փաստաթղթերի ցանկ',
+        currentTariffTitle:'Ընթացիկ սակագին',
+        currentPlanLabel:'Պլան',
+        currentPeriodLabel:'Ժամկետ',
+        currentPriceLabel:'Գին',
+        statsTitle:'Վաճառողի վիճակագրություն',
+        ratingLabel:'Միջին վարկանիշ',
+        reviewsLabel:'Կարծիքների քանակ',
+        activityLabel:'Ակտիվության միավոր',
+        ordersLabel:'Պատվերներ',
+        statusLoaded:'Հավելվածը բեռնվել է։',
+        statusNeedEmail:'Նախ մուտքագրեք էլ. հասցեն։',
+        statusNeedEmailPassword:'Մուտքագրեք էլ. հասցեն և գաղտնաբառը։',
+        statusLogin:'Մուտքը հաջողվեց։',
+        statusCreate:'Հաշիվը ստեղծված է։',
+        statusReset:'Գաղտնաբառի վերականգնման հարցումը ստեղծված է։',
+        statusProfile:'Պրոֆիլը պահպանված է։',
+        statusDoc:'Փաստաթուղթը ավելացված է։',
+        statusLogout:'Դուք դուրս եկաք։',
+        plan1:'1 ամիս',
+        plan6:'6 ամիս',
+        plan12:'1 տարի'
+      },
+      fr: {
+        brand:'AMAROSE Seller App',
+        loginTitle:'Connexion vendeur',
+        emailLabel:'E-mail',
+        passwordLabel:'Mot de passe',
+        emailPlaceholder:'seller@amarose.com',
+        passwordPlaceholder:'Entrez le mot de passe',
+        loginBtn:'Se connecter',
+        createBtn:'Créer un compte',
+        resetBtn:'Réinitialiser le mot de passe',
+        demoTitle:'Accès démo',
+        demoText:'Vous pouvez vous connecter avec n’importe quel e-mail et mot de passe. Les données sont enregistrées dans ce navigateur.',
+        tabProfileBtn:'Profil',
+        tabDocumentsBtn:'Documents',
+        tabTariffsBtn:'Tarifs',
+        tabStatsBtn:'Stats',
+        overviewTitle:'Vue du compte',
+        ovEmail:'E-mail',
+        ovRole:'Rôle',
+        ovStatus:'Statut',
+        ovVerification:'Vérification',
+        profileTitle:'Profil vendeur',
+        labelFullName:'Nom complet',
+        labelCompanyName:'Nom de l’entreprise',
+        labelSellerType:'Type de vendeur',
+        labelPhone:'Téléphone',
+        labelCountry:'Pays',
+        labelCity:'Ville',
+        labelCurrency:'Devise',
+        saveProfileBtn:'Enregistrer le profil',
+        logoutBtn:'Se déconnecter',
+        uploadTitle:'Télécharger un document',
+        labelDocType:'Type de document',
+        labelDocNote:'Note du document',
+        addDocBtn:'Ajouter un document',
+        docsListTitle:'Liste des documents',
+        currentTariffTitle:'Tarif actuel',
+        currentPlanLabel:'Plan',
+        currentPeriodLabel:'Période',
+        currentPriceLabel:'Prix final',
+        statsTitle:'Statistiques vendeur',
+        ratingLabel:'Note moyenne',
+        reviewsLabel:'Nombre d’avis',
+        activityLabel:'Score d’activité',
+        ordersLabel:'Commandes',
+        statusLoaded:'Application chargée.',
+        statusNeedEmail:'Entrez d’abord l’e-mail.',
+        statusNeedEmailPassword:'Entrez l’e-mail et le mot de passe.',
+        statusLogin:'Connexion réussie.',
+        statusCreate:'Compte créé avec succès.',
+        statusReset:'Demande de réinitialisation créée.',
+        statusProfile:'Profil enregistré.',
+        statusDoc:'Document ajouté.',
+        statusLogout:'Déconnexion réussie.',
+        plan1:'1 mois',
+        plan6:'6 mois',
+        plan12:'1 an'
+      },
+      de: {
+        brand:'AMAROSE Seller App',
+        loginTitle:'Verkäufer-Login',
+        emailLabel:'E-Mail',
+        pa
