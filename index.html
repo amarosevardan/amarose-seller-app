@@ -47,10 +47,6 @@
       margin-bottom: 14px;
       background: #fff;
     }
-    .card h3 {
-      margin: 0 0 10px 0;
-      font-size: 17px;
-    }
     .title {
       font-size: 24px;
       font-weight: 800;
@@ -63,12 +59,13 @@
       border-radius: 12px;
       margin-bottom: 12px;
       font-size: 15px;
+      background: white;
     }
     button {
       width: 100%;
       border: none;
       border-radius: 12px;
-      padding: 12px 14px;
+      padding: 14px;
       font-size: 15px;
       font-weight: 700;
       cursor: pointer;
@@ -76,7 +73,7 @@
     }
     .btn-primary { background: #175cd3; color: white; }
     .btn-secondary { background: #e9effd; color: #175cd3; }
-    .btn-danger { background: #fee4e2; color: #b42318; }
+    .btn-danger { background: rgba(255,255,255,0.16); color: white; width: auto; margin: 0; padding: 10px 14px; }
     .tabs {
       display: flex;
       gap: 10px;
@@ -95,14 +92,8 @@
       background: #175cd3;
       color: white;
     }
-    .muted {
-      color: #667085;
-      font-size: 14px;
-    }
-    .row {
-      margin-bottom: 8px;
-      font-size: 14px;
-    }
+    .hidden { display: none; }
+    .row { margin-bottom: 8px; font-size: 14px; }
     .status {
       display: inline-block;
       padding: 6px 10px;
@@ -115,29 +106,18 @@
     .status.approved { background: #ecfdf3; color: #027a48; }
     .status.rejected { background: #fef3f2; color: #b42318; }
     .status.manual_review { background: #fff7ed; color: #b54708; }
-    .hidden { display: none; }
-    .center { text-align: center; }
-    .small { font-size: 12px; }
-    .logout-inline {
-      width: auto;
-      margin: 0;
-      background: rgba(255,255,255,0.16);
-      color: white;
-      padding: 10px 14px;
-    }
-    .file-input {
-      margin-bottom: 12px;
-      width: 100%;
-    }
-    .note {
-      background: #fffaeb;
-      color: #b54708;
-      border: 1px solid #fedf89;
-      padding: 10px 12px;
+    .sysbox {
+      margin: 16px;
+      padding: 12px;
       border-radius: 12px;
       font-size: 13px;
-      margin-bottom: 12px;
+      border: 1px solid #d0d5dd;
+      background: #f8fafc;
+      white-space: pre-wrap;
     }
+    .ok { background: #ecfdf3; border-color: #abefc6; color: #027a48; }
+    .err { background: #fef3f2; border-color: #fecdca; color: #b42318; }
+    .warn { background: #fffaeb; border-color: #fedf89; color: #b54708; }
   </style>
 </head>
 <body>
@@ -147,31 +127,32 @@
         <div class="brand">AMAROSE</div>
         <div class="sub">Seller App</div>
       </div>
-      <button id="logoutBtn" class="logout-inline hidden">Logout</button>
+      <button id="logoutBtn" class="btn-danger hidden" type="button">Logout</button>
     </div>
+
+    <div id="systemBox" class="sysbox warn">Loading...</div>
 
     <div id="authView" class="content">
       <h1 class="title">Seller Login</h1>
       <div class="card">
         <input id="email" type="email" placeholder="Email" />
         <input id="password" type="password" placeholder="Password" />
-        <button class="btn-primary" onclick="signIn()">Login</button>
-        <button class="btn-secondary" onclick="signUp()">Create account</button>
-        <button class="btn-secondary" onclick="resetPassword()">Reset password</button>
+        <button id="loginBtn" class="btn-primary" type="button">Login</button>
+        <button id="signupBtn" class="btn-secondary" type="button">Create account</button>
+        <button id="resetBtn" class="btn-secondary" type="button">Reset password</button>
       </div>
     </div>
 
     <div id="appView" class="hidden">
       <div class="tabs">
-        <button id="tabProfile" class="tab active" onclick="showTab('profile')">Profile</button>
-        <button id="tabDocuments" class="tab" onclick="showTab('documents')">Documents</button>
+        <button id="tabProfile" class="tab active" type="button">Profile</button>
+        <button id="tabDocuments" class="tab" type="button">Documents</button>
       </div>
 
       <div id="profileTab" class="content">
         <h1 class="title">Seller Profile</h1>
 
         <div class="card">
-          <h3>Account</h3>
           <div class="row"><strong>Email:</strong> <span id="accountEmail">-</span></div>
           <div class="row"><strong>Role:</strong> <span id="accountRole">seller</span></div>
           <div class="row"><strong>Account status:</strong> <span id="accountStatus">-</span></div>
@@ -182,7 +163,6 @@
         </div>
 
         <div class="card">
-          <h3>Edit profile</h3>
           <input id="full_name" placeholder="Full name" />
           <input id="company_name" placeholder="Company name" />
           <input id="seller_type" placeholder="Seller type" />
@@ -196,31 +176,25 @@
             <option value="AMD">AMD</option>
             <option value="RUB">RUB</option>
           </select>
-          <button class="btn-primary" onclick="saveProfile()">Save profile</button>
+          <button id="saveProfileBtn" class="btn-primary" type="button">Save profile</button>
         </div>
       </div>
 
       <div id="documentsTab" class="content hidden">
         <h1 class="title">Documents</h1>
 
-        <div class="note">
-          Сначала выбери тип документа, потом файл, потом нажми Upload.
-        </div>
-
         <div class="card">
-          <h3>Upload document</h3>
           <select id="documentType">
             <option value="passport">Passport</option>
             <option value="business_license">Business license</option>
             <option value="address_proof">Address proof</option>
           </select>
-          <input id="documentFile" class="file-input" type="file" />
-          <button class="btn-primary" onclick="uploadDocument()">Upload document</button>
+          <input id="documentFile" type="file" />
+          <button id="uploadBtn" class="btn-primary" type="button">Upload document</button>
         </div>
 
         <div class="card">
-          <h3>Your documents</h3>
-          <div id="documentsList" class="muted">No documents yet</div>
+          <div id="documentsList">No documents yet</div>
         </div>
       </div>
     </div>
@@ -230,309 +204,395 @@
     const SUPABASE_URL = 'YOUR_SUPABASE_URL';
     const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
+    let supabase = null;
     let currentUser = null;
-    let currentProfile = null;
 
-    const authView = document.getElementById('authView');
-    const appView = document.getElementById('appView');
-    const logoutBtn = document.getElementById('logoutBtn');
+    const els = {
+      systemBox: document.getElementById('systemBox'),
+      authView: document.getElementById('authView'),
+      appView: document.getElementById('appView'),
+      logoutBtn: document.getElementById('logoutBtn'),
+      loginBtn: document.getElementById('loginBtn'),
+      signupBtn: document.getElementById('signupBtn'),
+      resetBtn: document.getElementById('resetBtn'),
+      tabProfile: document.getElementById('tabProfile'),
+      tabDocuments: document.getElementById('tabDocuments'),
+      profileTab: document.getElementById('profileTab'),
+      documentsTab: document.getElementById('documentsTab'),
+      saveProfileBtn: document.getElementById('saveProfileBtn'),
+      uploadBtn: document.getElementById('uploadBtn'),
+      email: document.getElementById('email'),
+      password: document.getElementById('password'),
+      full_name: document.getElementById('full_name'),
+      company_name: document.getElementById('company_name'),
+      seller_type: document.getElementById('seller_type'),
+      phone: document.getElementById('phone'),
+      country: document.getElementById('country'),
+      city: document.getElementById('city'),
+      language: document.getElementById('language'),
+      currency: document.getElementById('currency'),
+      accountEmail: document.getElementById('accountEmail'),
+      accountRole: document.getElementById('accountRole'),
+      accountStatus: document.getElementById('accountStatus'),
+      verificationStatus: document.getElementById('verificationStatus'),
+      ratingAvg: document.getElementById('ratingAvg'),
+      ratingCount: document.getElementById('ratingCount'),
+      activityScore: document.getElementById('activityScore'),
+      documentType: document.getElementById('documentType'),
+      documentFile: document.getElementById('documentFile'),
+      documentsList: document.getElementById('documentsList'),
+    };
 
-    function showMessage(message) {
-      alert(message);
+    function setStatus(text, kind = 'warn') {
+      els.systemBox.textContent = text;
+      els.systemBox.className = 'sysbox ' + kind;
     }
 
-    function showTab(tab) {
-      const profileTab = document.getElementById('profileTab');
-      const documentsTab = document.getElementById('documentsTab');
-      const tabProfile = document.getElementById('tabProfile');
-      const tabDocuments = document.getElementById('tabDocuments');
-
-      if (tab === 'profile') {
-        profileTab.classList.remove('hidden');
-        documentsTab.classList.add('hidden');
-        tabProfile.classList.add('active');
-        tabDocuments.classList.remove('active');
-      } else {
-        documentsTab.classList.remove('hidden');
-        profileTab.classList.add('hidden');
-        tabDocuments.classList.add('active');
-        tabProfile.classList.remove('active');
-      }
+    function showAuth() {
+      els.authView.classList.remove('hidden');
+      els.appView.classList.add('hidden');
+      els.logoutBtn.classList.add('hidden');
     }
 
-    function renderAuth() {
-      authView.classList.remove('hidden');
-      appView.classList.add('hidden');
-      logoutBtn.classList.add('hidden');
+    function showApp() {
+      els.authView.classList.add('hidden');
+      els.appView.classList.remove('hidden');
+      els.logoutBtn.classList.remove('hidden');
     }
 
-    function renderApp() {
-      authView.classList.add('hidden');
-      appView.classList.remove('hidden');
-      logoutBtn.classList.remove('hidden');
+    function openProfile() {
+      els.profileTab.classList.remove('hidden');
+      els.documentsTab.classList.add('hidden');
+      els.tabProfile.classList.add('active');
+      els.tabDocuments.classList.remove('active');
+    }
+
+    function openDocuments() {
+      els.documentsTab.classList.remove('hidden');
+      els.profileTab.classList.add('hidden');
+      els.tabDocuments.classList.add('active');
+      els.tabProfile.classList.remove('active');
+    }
+
+    function alertMsg(msg) {
+      alert(msg);
+      setStatus(msg, 'warn');
     }
 
     async function signUp() {
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value.trim();
+      try {
+        const email = els.email.value.trim();
+        const password = els.password.value.trim();
 
-      if (!email || !password) {
-        showMessage('Enter email and password');
-        return;
+        if (!email || !password) {
+          alertMsg('Enter email and password');
+          return;
+        }
+
+        setStatus('Creating account...', 'warn');
+        const { error } = await supabase.auth.signUp({ email, password });
+
+        if (error) throw error;
+
+        setStatus('Account created. Now press Login.', 'ok');
+        alert('Account created. Now press Login.');
+      } catch (e) {
+        setStatus('Sign up failed: ' + e.message, 'err');
+        alert('Sign up failed: ' + e.message);
       }
-
-      const { error } = await supabase.auth.signUp({ email, password });
-
-      if (error) {
-        showMessage(error.message);
-        return;
-      }
-
-      showMessage('Account created');
     }
 
     async function signIn() {
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value.trim();
+      try {
+        const email = els.email.value.trim();
+        const password = els.password.value.trim();
 
-      if (!email || !password) {
-        showMessage('Enter email and password');
-        return;
+        if (!email || !password) {
+          alertMsg('Enter email and password');
+          return;
+        }
+
+        setStatus('Logging in...', 'warn');
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+        if (error) throw error;
+
+        await bootUser();
+        setStatus('Logged in successfully', 'ok');
+      } catch (e) {
+        setStatus('Login failed: ' + e.message, 'err');
+        alert('Login failed: ' + e.message);
       }
-
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-
-      if (error) {
-        showMessage(error.message);
-        return;
-      }
-
-      await bootUser();
-      showMessage('Logged in');
     }
 
     async function resetPassword() {
-      const email = document.getElementById('email').value.trim();
+      try {
+        const email = els.email.value.trim();
 
-      if (!email) {
-        showMessage('Enter email first');
-        return;
+        if (!email) {
+          alertMsg('Enter email first');
+          return;
+        }
+
+        setStatus('Sending reset email...', 'warn');
+        const { error } = await supabase.auth.resetPasswordForEmail(email);
+
+        if (error) throw error;
+
+        setStatus('Reset email sent', 'ok');
+        alert('Reset email sent');
+      } catch (e) {
+        setStatus('Reset failed: ' + e.message, 'err');
+        alert('Reset failed: ' + e.message);
       }
-
-      const { error } = await supabase.auth.resetPasswordForEmail(email);
-
-      if (error) {
-        showMessage(error.message);
-        return;
-      }
-
-      showMessage('Reset email sent');
     }
 
     async function logout() {
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        showMessage(error.message);
-        return;
+      try {
+        const { error } = await supabase.auth.signOut();
+        if (error) throw error;
+        currentUser = null;
+        showAuth();
+        setStatus('Logged out', 'ok');
+      } catch (e) {
+        setStatus('Logout failed: ' + e.message, 'err');
+        alert('Logout failed: ' + e.message);
       }
-
-      currentUser = null;
-      currentProfile = null;
-      renderAuth();
     }
 
-    logoutBtn.addEventListener('click', logout);
-
     async function bootUser() {
-      const { data: userData, error: userError } = await supabase.auth.getUser();
-
-      if (userError || !userData.user) {
-        renderAuth();
+      const { data, error } = await supabase.auth.getUser();
+      if (error || !data.user) {
+        currentUser = null;
+        showAuth();
+        setStatus('User session not found', 'warn');
         return;
       }
 
-      currentUser = userData.user;
-      renderApp();
-
+      currentUser = data.user;
+      showApp();
+      openProfile();
       await loadProfile();
       await loadDocuments();
     }
 
     async function loadProfile() {
-      if (!currentUser) return;
+      try {
+        if (!currentUser) return;
 
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', currentUser.id)
-        .single();
+        setStatus('Loading profile...', 'warn');
 
-      if (error) {
-        showMessage(error.message);
-        return;
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', currentUser.id)
+          .single();
+
+        if (error) throw error;
+
+        els.accountEmail.textContent = data.email || currentUser.email || '-';
+        els.accountRole.textContent = data.role || 'seller';
+        els.accountStatus.textContent = data.account_status || '-';
+        els.verificationStatus.textContent = data.verification_status || '-';
+        els.ratingAvg.textContent = data.rating_avg ?? 0;
+        els.ratingCount.textContent = data.rating_count ?? 0;
+        els.activityScore.textContent = data.activity_score ?? 0;
+
+        els.full_name.value = data.full_name || '';
+        els.company_name.value = data.company_name || '';
+        els.seller_type.value = data.seller_type || '';
+        els.phone.value = data.phone || '';
+        els.country.value = data.country || '';
+        els.city.value = data.city || '';
+        els.language.value = data.language || '';
+        els.currency.value = data.currency || 'EUR';
+
+        setStatus('Profile loaded', 'ok');
+      } catch (e) {
+        setStatus('Profile load failed: ' + e.message, 'err');
+        alert('Profile load failed: ' + e.message);
       }
-
-      currentProfile = data;
-
-      document.getElementById('accountEmail').textContent = data.email || currentUser.email || '-';
-      document.getElementById('accountRole').textContent = data.role || 'seller';
-      document.getElementById('accountStatus').textContent = data.account_status || '-';
-      document.getElementById('verificationStatus').textContent = data.verification_status || '-';
-      document.getElementById('ratingAvg').textContent = data.rating_avg ?? 0;
-      document.getElementById('ratingCount').textContent = data.rating_count ?? 0;
-      document.getElementById('activityScore').textContent = data.activity_score ?? 0;
-
-      document.getElementById('full_name').value = data.full_name || '';
-      document.getElementById('company_name').value = data.company_name || '';
-      document.getElementById('seller_type').value = data.seller_type || '';
-      document.getElementById('phone').value = data.phone || '';
-      document.getElementById('country').value = data.country || '';
-      document.getElementById('city').value = data.city || '';
-      document.getElementById('language').value = data.language || '';
-      document.getElementById('currency').value = data.currency || 'EUR';
     }
 
     async function saveProfile() {
-      if (!currentUser) return;
+      try {
+        if (!currentUser) return;
 
-      const payload = {
-        full_name: document.getElementById('full_name').value.trim() || null,
-        company_name: document.getElementById('company_name').value.trim() || null,
-        seller_type: document.getElementById('seller_type').value.trim() || null,
-        phone: document.getElementById('phone').value.trim() || null,
-        country: document.getElementById('country').value.trim() || null,
-        city: document.getElementById('city').value.trim() || null,
-        language: document.getElementById('language').value.trim() || null,
-        currency: document.getElementById('currency').value
-      };
+        setStatus('Saving profile...', 'warn');
 
-      const { error } = await supabase
-        .from('profiles')
-        .update(payload)
-        .eq('id', currentUser.id);
+        const payload = {
+          full_name: els.full_name.value.trim() || null,
+          company_name: els.company_name.value.trim() || null,
+          seller_type: els.seller_type.value.trim() || null,
+          phone: els.phone.value.trim() || null,
+          country: els.country.value.trim() || null,
+          city: els.city.value.trim() || null,
+          language: els.language.value.trim() || null,
+          currency: els.currency.value
+        };
 
-      if (error) {
-        showMessage(error.message);
-        return;
+        const { error } = await supabase
+          .from('profiles')
+          .update(payload)
+          .eq('id', currentUser.id);
+
+        if (error) throw error;
+
+        await loadProfile();
+        setStatus('Profile saved', 'ok');
+        alert('Profile saved');
+      } catch (e) {
+        setStatus('Profile save failed: ' + e.message, 'err');
+        alert('Profile save failed: ' + e.message);
       }
-
-      await loadProfile();
-      showMessage('Profile saved');
     }
 
     async function loadDocuments() {
-      if (!currentUser) return;
+      try {
+        if (!currentUser) return;
 
-      const { data, error } = await supabase
-        .from('seller_documents')
-        .select('*')
-        .eq('seller_id', currentUser.id)
-        .order('created_at', { ascending: false });
+        setStatus('Loading documents...', 'warn');
 
-      if (error) {
-        showMessage(error.message);
-        return;
+        const { data, error } = await supabase
+          .from('seller_documents')
+          .select('*')
+          .eq('seller_id', currentUser.id)
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+          els.documentsList.innerHTML = 'No documents yet';
+          setStatus('Documents loaded', 'ok');
+          return;
+        }
+
+        els.documentsList.innerHTML = data.map(item => `
+          <div class="card" style="margin-bottom:10px;">
+            <div class="row"><strong>Type:</strong> ${item.document_type}</div>
+            <div class="row"><strong>File:</strong> ${item.file_name}</div>
+            <div class="status ${item.status}">${item.status}</div>
+            ${item.review_note ? `<div class="row" style="margin-top:8px;"><strong>Note:</strong> ${item.review_note}</div>` : ''}
+            <div class="row" style="margin-top:8px;"><strong>Uploaded:</strong> ${new Date(item.created_at).toLocaleString()}</div>
+          </div>
+        `).join('');
+
+        setStatus('Documents loaded', 'ok');
+      } catch (e) {
+        setStatus('Documents load failed: ' + e.message, 'err');
+        alert('Documents load failed: ' + e.message);
       }
-
-      const box = document.getElementById('documentsList');
-
-      if (!data || data.length === 0) {
-        box.innerHTML = '<div class="muted">No documents yet</div>';
-        return;
-      }
-
-      box.innerHTML = data.map(item => `
-        <div class="card" style="margin-bottom:10px;">
-          <div class="row"><strong>Type:</strong> ${item.document_type}</div>
-          <div class="row"><strong>File:</strong> ${item.file_name}</div>
-          <div class="status ${item.status}">${item.status}</div>
-          ${item.review_note ? `<div class="row" style="margin-top:8px;"><strong>Note:</strong> ${item.review_note}</div>` : ''}
-          <div class="row" style="margin-top:8px;"><strong>Uploaded:</strong> ${new Date(item.created_at).toLocaleString()}</div>
-        </div>
-      `).join('');
     }
 
     async function uploadDocument() {
-      if (!currentUser) return;
+      try {
+        if (!currentUser) return;
 
-      const documentType = document.getElementById('documentType').value;
-      const fileInput = document.getElementById('documentFile');
-      const file = fileInput.files[0];
+        const documentType = els.documentType.value;
+        const file = els.documentFile.files[0];
 
-      if (!file) {
-        showMessage('Choose file first');
-        return;
+        if (!file) {
+          alertMsg('Choose file first');
+          return;
+        }
+
+        setStatus('Uploading document...', 'warn');
+
+        const safeName = file.name.replace(/[^\w.\-]/g, '_');
+        const path = `${currentUser.id}/${documentType}/${Date.now()}_${safeName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('seller-documents')
+          .upload(path, file, { cacheControl: '3600', upsert: false });
+
+        if (uploadError) throw uploadError;
+
+        const { error: dbError } = await supabase
+          .from('seller_documents')
+          .insert({
+            seller_id: currentUser.id,
+            document_type: documentType,
+            file_name: safeName,
+            file_path: path,
+            file_size: file.size,
+            mime_type: file.type || 'application/octet-stream',
+            status: 'pending'
+          });
+
+        if (dbError) throw dbError;
+
+        els.documentFile.value = '';
+        await loadDocuments();
+        setStatus('Document uploaded', 'ok');
+        alert('Document uploaded');
+      } catch (e) {
+        setStatus('Upload failed: ' + e.message, 'err');
+        alert('Upload failed: ' + e.message);
       }
-
-      const safeName = file.name.replace(/[^\w.\-]/g, '_');
-      const path = `${currentUser.id}/${documentType}/${Date.now()}_${safeName}`;
-
-      const { error: uploadError } = await supabase
-        .storage
-        .from('seller-documents')
-        .upload(path, file, {
-          cacheControl: '3600',
-          upsert: false
-        });
-
-      if (uploadError) {
-        showMessage(uploadError.message);
-        return;
-      }
-
-      const { error: dbError } = await supabase
-        .from('seller_documents')
-        .insert({
-          seller_id: currentUser.id,
-          document_type: documentType,
-          file_name: safeName,
-          file_path: path,
-          file_size: file.size,
-          mime_type: file.type || 'application/octet-stream',
-          status: 'pending'
-        });
-
-      if (dbError) {
-        showMessage(dbError.message);
-        return;
-      }
-
-      fileInput.value = '';
-      await loadDocuments();
-      showMessage('Document uploaded');
     }
 
-    supabase.auth.onAuthStateChange(async (_event, session) => {
-      if (session?.user) {
-        currentUser = session.user;
-        renderApp();
-        await loadProfile();
-        await loadDocuments();
-      } else {
-        currentUser = null;
-        renderAuth();
-      }
-    });
+    function bindEvents() {
+      els.loginBtn.addEventListener('click', signIn);
+      els.signupBtn.addEventListener('click', signUp);
+      els.resetBtn.addEventListener('click', resetPassword);
+      els.logoutBtn.addEventListener('click', logout);
+      els.tabProfile.addEventListener('click', openProfile);
+      els.tabDocuments.addEventListener('click', openDocuments);
+      els.saveProfileBtn.addEventListener('click', saveProfile);
+      els.uploadBtn.addEventListener('click', uploadDocument);
+      setStatus('Buttons connected', 'ok');
+    }
 
-    window.addEventListener('load', async () => {
-      if (SUPABASE_URL === 'YOUR_SUPABASE_URL' || SUPABASE_ANON_KEY === 'YOUR_SUPABASE_ANON_KEY') {
-        showMessage('Replace YOUR_SUPABASE_URL and YOUR_SUPABASE_ANON_KEY first');
-        return;
-      }
+    async function init() {
+      try {
+        if (SUPABASE_URL === 'YOUR_SUPABASE_URL' || SUPABASE_ANON_KEY === 'YOUR_SUPABASE_ANON_KEY') {
+          setStatus('Replace YOUR_SUPABASE_URL and YOUR_SUPABASE_ANON_KEY first', 'err');
+          return;
+        }
 
-      const { data } = await supabase.auth.getSession();
+        if (!window.supabase || !window.supabase.createClient) {
+          setStatus('Supabase library did not load from CDN', 'err');
+          return;
+        }
 
-      if (data.session?.user) {
-        currentUser = data.session.user;
-        renderApp();
-        await loadProfile();
-        await loadDocuments();
-      } else {
-        renderAuth();
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        bindEvents();
+
+        const { data } = await supabase.auth.getSession();
+
+        if (data.session && data.session.user) {
+          currentUser = data.session.user;
+          showApp();
+          openProfile();
+          await loadProfile();
+          await loadDocuments();
+          setStatus('Session restored', 'ok');
+        } else {
+          showAuth();
+          setStatus('Ready. Enter email and password.', 'ok');
+        }
+
+        supabase.auth.onAuthStateChange(async (_event, session) => {
+          if (session && session.user) {
+            currentUser = session.user;
+            showApp();
+            openProfile();
+            await loadProfile();
+            await loadDocuments();
+            setStatus('Authenticated', 'ok');
+          } else {
+            currentUser = null;
+            showAuth();
+            setStatus('Signed out', 'warn');
+          }
+        });
+      } catch (e) {
+        setStatus('Init failed: ' + e.message, 'err');
       }
-    });
+    }
+
+    window.addEventListener('load', init);
   </script>
 </body>
   </html>
