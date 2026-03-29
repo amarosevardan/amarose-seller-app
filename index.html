@@ -6,254 +6,429 @@
   <title>AMAROSE SELLER</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root{
+      --bg1:#eef5fc;
+      --bg2:#f8fbff;
+      --card:#ffffff;
+      --text:#1d3557;
+      --muted:#6f86a3;
+      --line:#d9e5f2;
+      --blue:#2f6fe4;
+      --blue-dark:#1f53b7;
+      --blue-soft:#e9f1ff;
+      --shadow:0 10px 30px rgba(31,83,183,0.08);
+      --radius:24px;
+    }
+
     body{
-      background:linear-gradient(to bottom,#eaf6ff,#f7fbff);
-      color:#24476d;
-      min-height:100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 100%);
+      color: var(--text);
+      min-height: 100vh;
     }
+
     .wrap{
-      max-width:480px;
-      margin:0 auto;
-      padding:16px 16px 96px;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 16px 16px 110px;
     }
-    .screen{display:none}
-    .screen.active{display:block}
+
+    .screen{ display:none; }
+    .screen.active{ display:block; }
 
     .topbar{
       display:flex;
-      justify-content:space-between;
+      gap:12px;
       align-items:center;
-      gap:10px;
-      margin-bottom:18px;
+      margin: 8px 0 18px;
     }
+
     .pill{
       flex:1;
-      background:#fff;
-      border:1px solid #d8ebff;
+      background: rgba(255,255,255,0.85);
+      border:1px solid var(--line);
+      color:#5b7697;
       border-radius:999px;
-      padding:14px;
+      padding:16px 18px;
       text-align:center;
       font-weight:700;
-      letter-spacing:3px;
-      color:#5d84a8;
-      font-size:12px;
+      letter-spacing:4px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
     }
+
     .lang-select{
-      width:122px;
-      padding:12px 10px;
-      border-radius:14px;
-      border:1px solid #cfe6ff;
-      background:#fff;
-      color:#4b78a3;
+      width:132px;
+      border:none;
+      outline:none;
+      background: rgba(255,255,255,0.9);
+      border:1px solid var(--line);
+      color:#5b7697;
+      border-radius:18px;
+      padding:16px 14px;
+      font-size:16px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero{
+      text-align:center;
+      margin: 8px 0 22px;
+      padding: 12px 10px 6px;
+    }
+
+    .brand-mark{
+      width:74px;
+      height:74px;
+      margin: 0 auto 14px;
+      border-radius:22px;
+      background: linear-gradient(135deg, var(--blue-dark), var(--blue));
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:34px;
       font-weight:700;
-      font-size:12px;
+      box-shadow: 0 14px 35px rgba(47,111,228,0.28);
     }
 
     h1{
-      text-align:center;
-      font-size:52px;
-      color:#4f8fca;
-      margin:10px 0 8px;
+      font-size:42px;
+      line-height:1.08;
+      margin-bottom:10px;
+      color:var(--blue);
+      letter-spacing: -1px;
+      font-weight:800;
     }
+
     .sub{
-      text-align:center;
-      color:#6d8eaf;
-      font-size:18px;
-      margin-bottom:18px;
+      color:var(--muted);
+      font-size:19px;
+      line-height:1.45;
+      max-width:380px;
+      margin:0 auto;
     }
 
     .card{
-      background:#fff;
-      border:1px solid #d8ebff;
-      border-radius:28px;
-      padding:18px;
+      background: rgba(255,255,255,0.95);
+      border:1px solid rgba(217,229,242,0.9);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
       margin-bottom:18px;
-      box-shadow:0 8px 24px rgba(90,150,210,.08);
     }
+
     .eyebrow{
-      font-size:12px;
+      color:#7da0c7;
       letter-spacing:4px;
-      color:#7ba8d2;
+      font-size:13px;
       font-weight:700;
       margin-bottom:12px;
-      text-transform:uppercase;
     }
+
     .title{
-      font-size:22px;
-      font-weight:800;
+      font-size:24px;
       line-height:1.2;
-      margin-bottom:10px;
+      font-weight:800;
+      margin-bottom:12px;
+      color:var(--text);
     }
+
     .text{
-      color:#5b7693;
-      line-height:1.55;
-      font-size:16px;
+      color:var(--muted);
+      font-size:18px;
+      line-height:1.6;
     }
 
     .btn{
       width:100%;
-      padding:16px;
       border:none;
-      border-radius:18px;
+      outline:none;
+      cursor:pointer;
+      border-radius:20px;
+      padding:18px 18px;
       font-size:18px;
       font-weight:800;
-      margin-top:14px;
-      cursor:pointer;
+      margin-top:16px;
     }
-    .primary{
-      background:linear-gradient(to right,#67b7ff,#3d93e6);
+
+    .btn.primary{
       color:#fff;
+      background: linear-gradient(135deg, #65aff8 0%, var(--blue) 100%);
+      box-shadow: 0 12px 30px rgba(47,111,228,0.25);
     }
-    .secondary{
+
+    .btn.secondary{
       background:#fff;
-      color:#4f8fca;
-      border:1px solid #cfe6ff;
+      color:#4e84c6;
+      border:1.5px solid #d6e4f5;
     }
 
     .section{
       display:flex;
-      justify-content:space-between;
       align-items:center;
-      margin:22px 0 14px;
-      gap:10px;
+      justify-content:space-between;
+      margin: 10px 2px 14px;
     }
-    .section h2{font-size:22px}
-    .section span{color:#7fa7cf}
+
+    .section h2{
+      font-size:28px;
+      line-height:1.15;
+      color:var(--text);
+    }
+
+    .section span{
+      color:#9ab2cc;
+      font-size:18px;
+    }
 
     .grid{
       display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:12px;
-    }
-    .box{
-      background:#fff;
-      border:1px solid #d8ebff;
-      border-radius:22px;
-      padding:18px 10px;
-      text-align:center;
-      cursor:pointer;
-    }
-    .box.active{
-      background:#dff0ff;
-      border-color:#8ec7ff;
-    }
-    .icon{
-      font-size:30px;
-      margin-bottom:8px;
-    }
-    .box-title{
-      font-weight:700;
-      color:#355c84;
-      font-size:14px;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      margin-bottom:18px;
     }
 
-    .field{margin-bottom:12px}
+    .box{
+      background: rgba(255,255,255,0.95);
+      border:1px solid var(--line);
+      border-radius:24px;
+      min-height:156px;
+      padding:18px 14px;
+      text-align:center;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      box-shadow: var(--shadow);
+      cursor:pointer;
+      transition: all .18s ease;
+    }
+
+    .box.active{
+      border:2px solid var(--blue);
+      box-shadow: 0 14px 30px rgba(47,111,228,0.18);
+      background: linear-gradient(180deg, #ffffff 0%, #f2f7ff 100%);
+    }
+
+    .icon{
+      font-size:34px;
+      margin-bottom:12px;
+    }
+
+    .box-title{
+      font-size:18px;
+      font-weight:700;
+      color:#315986;
+      line-height:1.35;
+    }
+
+    .benefit-list{
+      display:grid;
+      gap:12px;
+      margin-top:6px;
+    }
+
+    .benefit{
+      background: var(--blue-soft);
+      border:1px solid #d9e6ff;
+      border-radius:18px;
+      padding:14px 16px;
+      color:#355f94;
+      font-weight:700;
+      line-height:1.45;
+    }
+
+    .product-card, .order-card, .support-card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:16px;
+      box-shadow: var(--shadow);
+      margin-bottom:14px;
+    }
+
+    .row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .product-name, .order-id{
+      font-size:20px;
+      font-weight:800;
+      color:var(--text);
+      margin-bottom:6px;
+    }
+
+    .meta{
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.45;
+    }
+
+    .badge{
+      display:inline-block;
+      padding:8px 12px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:800;
+    }
+
+    .badge.blue{ background:#e7f0ff; color:#2d67d2; }
+    .badge.green{ background:#e7f7ee; color:#2d8c58; }
+    .badge.orange{ background:#fff1e4; color:#c67a22; }
+
+    .mini-btn{
+      border:none;
+      background:var(--blue-soft);
+      color:var(--blue-dark);
+      padding:10px 14px;
+      border-radius:14px;
+      font-weight:800;
+      margin-top:12px;
+    }
+
+    .field{
+      margin-bottom:16px;
+    }
+
     .field label{
       display:block;
-      margin-bottom:8px;
-      font-size:14px;
-      font-weight:700;
-      color:#51769a;
-    }
-    .field input,.field select,.field textarea{
-      width:100%;
-      padding:14px;
-      border-radius:16px;
-      border:1px solid #d1e7ff;
-      background:#fff;
       font-size:15px;
-      color:#27486e;
+      font-weight:700;
+      color:#4c6e95;
+      margin-bottom:8px;
     }
+
+    .field input,
+    .field select,
     .field textarea{
-      min-height:90px;
+      width:100%;
+      border:1.5px solid var(--line);
+      background:#fff;
+      border-radius:16px;
+      padding:14px 14px;
+      font-size:16px;
+      color:var(--text);
+      outline:none;
+    }
+
+    .field textarea{
+      min-height:96px;
       resize:vertical;
     }
-    .hidden{display:none}
 
     .two-col{
       display:grid;
-      grid-template-columns:120px 1fr;
+      grid-template-columns:110px 1fr;
       gap:10px;
     }
 
-    .list,.stat{
-      background:#fff;
-      border:1px solid #d8ebff;
-      border-radius:24px;
-      padding:16px;
-      margin-bottom:12px;
-    }
-    .plan-title,.item-title{
-      font-size:20px;
-      font-weight:800;
-      color:#24476d;
-    }
-    .item-sub,.muted{
-      color:#6383a3;
-      line-height:1.5;
-    }
-    .status{
+    .back-link{
       display:inline-block;
-      margin-top:10px;
-      padding:8px 12px;
-      border-radius:999px;
-      background:#e7f5ff;
-      color:#3d93e6;
+      color:#4d82c2;
+      text-decoration:none;
       font-weight:700;
-      font-size:13px;
+      margin-bottom:14px;
     }
-    .stats{
+
+    .plans{
       display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:12px;
+      gap:14px;
+    }
+
+    .plan{
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:18px;
+      background:#fff;
+      box-shadow: var(--shadow);
+    }
+
+    .plan.pro{
+      border:2px solid var(--blue);
+      background: linear-gradient(180deg, #ffffff 0%, #f2f7ff 100%);
+    }
+
+    .plan-name{
+      font-size:22px;
+      font-weight:800;
+      color:var(--text);
+      margin-bottom:6px;
+    }
+
+    .plan-price{
+      color:var(--blue);
+      font-size:28px;
+      font-weight:800;
+      margin-bottom:8px;
+    }
+
+    .plan-text{
+      color:var(--muted);
+      line-height:1.6;
+      font-size:16px;
     }
 
     .nav{
       position:fixed;
-      left:0;right:0;bottom:0;
-      background:#fff;
-      border-top:1px solid #d8ebff;
-      padding:10px 12px;
-    }
-    .navin{
+      left:50%;
+      transform:translateX(-50%);
+      bottom:0;
+      width:100%;
       max-width:480px;
-      margin:0 auto;
+      padding:12px 12px 18px;
+      background: rgba(244,249,255,0.92);
+      backdrop-filter: blur(10px);
+      border-top:1px solid rgba(214,228,245,0.95);
       display:grid;
       grid-template-columns:repeat(4,1fr);
-      gap:8px;
-    }
-    .navbtn{
-      background:#f7fbff;
-      border:1px solid #d8ebff;
-      border-radius:16px;
-      text-align:center;
-      color:#6e8eb0;
-      font-size:14px;
-      padding:10px 6px;
-      cursor:pointer;
-    }
-    .navbtn.active{
-      background:#e7f3ff;
-      color:#3d93e6;
-      font-weight:800;
-      border-color:#9fd0ff;
+      gap:10px;
     }
 
-    @media(max-width:430px){
-      .grid{grid-template-columns:repeat(2,1fr)}
-      h1{font-size:46px}
-      .two-col{grid-template-columns:110px 1fr}
+    .nav button{
+      border:none;
+      border-radius:18px;
+      padding:14px 8px;
+      background:#f8fbff;
+      border:1px solid #d6e4f5;
+      color:#7b94b1;
+      font-size:16px;
+      font-weight:700;
+    }
+
+    .nav button.active{
+      background:var(--blue-soft);
+      color:var(--blue);
+      border-color:#b7cff8;
+      box-shadow: inset 0 0 0 1px rgba(47,111,228,0.06);
+    }
+
+    .muted-top{
+      margin-bottom:12px;
+      color:var(--muted);
+      line-height:1.55;
+      font-size:17px;
+    }
+
+    @media (max-width:380px){
+      h1{ font-size:36px; }
+      .section h2{ font-size:24px; }
+      .grid{ grid-template-columns:1fr; }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
 
+    <!-- HOME -->
     <div class="screen active" id="home">
       <div class="topbar">
         <div class="pill">AMAROSE SELLER</div>
-        <select class="lang-select" id="langSelect" onchange="setLang(this.value)">
+        <select class="lang-select" id="langSelect">
           <option value="EN">English</option>
           <option value="RU">Русский</option>
           <option value="HY">Հայերեն</option>
@@ -263,13 +438,18 @@
         </select>
       </div>
 
-      <h1 id="tSeller">SELLER</h1>
-      <div class="sub" id="tSub">Grow with AMAROSE inside Telegram</div>
+      <div class="hero">
+        <div class="brand-mark">A</div>
+        <h1 id="tSeller">Sell with AMAROSE</h1>
+        <div class="sub" id="tSub">Grow your business with a premium marketplace experience</div>
+      </div>
 
       <div class="card">
         <div class="eyebrow" id="tWelcome">WELCOME</div>
-        <div class="title" id="tJoin">Join as a verified seller</div>
-        <div class="text" id="tHomeText">Apply, upload documents, choose your seller plan, and manage products and orders in one place.</div>
+        <div class="title" id="tJoin">Join AMAROSE Seller</div>
+        <div class="text" id="tHomeText">
+          Apply, upload your documents, choose your seller plan, and manage products, orders, and support in one elegant space.
+        </div>
         <button class="btn primary" id="tApplyBtn" onclick="showScreen('apply')">Apply as Seller</button>
         <button class="btn secondary" id="tPlansBtn" onclick="showScreen('plans')">View Plans</button>
       </div>
@@ -280,91 +460,81 @@
       </div>
 
       <div class="grid">
-        <div class="box" onclick="pickType('individual',this)">
+        <div class="box active" id="box-individual" onclick="pickType('individual')">
           <div class="icon">👤</div>
           <div class="box-title" id="tIndividual">Individual</div>
         </div>
-        <div class="box" onclick="pickType('ip',this)">
+        <div class="box" id="box-ip" onclick="pickType('ip')">
           <div class="icon">🧾</div>
           <div class="box-title" id="tIp">Sole Proprietor</div>
         </div>
-        <div class="box" onclick="pickType('company',this)">
+        <div class="box" id="box-company" onclick="pickType('company')">
           <div class="icon">🏢</div>
           <div class="box-title" id="tCompany">Company</div>
+        </div>
+        <div class="box">
+          <div class="icon">✨</div>
+          <div class="box-title" id="tPremiumBox">Premium brand<br/>presentation</div>
         </div>
       </div>
 
       <div class="section">
-        <h2 id="tWhy">Why sell with us</h2>
-        <span id="tLower">Lower fees</span>
+        <h2 id="tWhy">Why sell with AMAROSE</h2>
+        <span id="tLower">Premium seller experience</span>
       </div>
 
       <div class="card">
-        <div class="text" id="tWhyBody">AMAROSE gives sellers lower fees than large marketplaces, a soft luxury brand environment, and direct owner review before approval.</div>
+        <div class="text" id="tWhyBody">
+          AMAROSE gives sellers a premium brand environment, lower marketplace pressure, elegant presentation, and direct owner support during review and approval.
+        </div>
+        <div class="benefit-list" style="margin-top:16px;">
+          <div class="benefit" id="b1">Lower competitive pressure</div>
+          <div class="benefit" id="b2">Direct owner review</div>
+          <div class="benefit" id="b3">Premium storefront feeling</div>
+          <div class="benefit" id="b4">Simple seller management</div>
+        </div>
       </div>
     </div>
 
+    <!-- APPLY -->
     <div class="screen" id="apply">
+      <a href="javascript:void(0)" class="back-link" id="tBack1" onclick="showScreen('home')">← Back</a>
+
       <div class="card">
         <div class="eyebrow" id="tStep">STEP 1</div>
         <div class="title" id="tApplication">Seller application</div>
-        <div class="text" id="tApplicationText">Complete the form below. Your documents will be reviewed before approval.</div>
+        <div class="text" id="tApplicationText">
+          Complete the seller application to begin verification and access your AMAROSE Seller tools.
+        </div>
       </div>
 
       <div class="card">
         <div class="field">
-          <label id="lSellerType">Seller Type</label>
-          <select id="sellerType" onchange="toggleFields()">
+          <label id="lSellerType" for="sellerType">Seller Type</label>
+          <select id="sellerType">
             <option value="individual">Individual</option>
-            <option value="ip">Sole Proprietor / IP</option>
-            <option value="company">Company / LLC</option>
+            <option value="ip">Sole Proprietor</option>
+            <option value="company">Company</option>
           </select>
         </div>
 
         <div class="field">
-          <label id="lFirstName">First Name</label>
-          <input type="text" id="pFirstName" placeholder="Enter first name">
+          <label id="lFirstName" for="pFirstName">First Name</label>
+          <input id="pFirstName" type="text" placeholder="Enter first name" />
         </div>
 
         <div class="field">
-          <label id="lLastName">Last Name</label>
-          <input type="text" id="pLastName" placeholder="Enter last name">
+          <label id="lLastName" for="pLastName">Last Name</label>
+          <input id="pLastName" type="text" placeholder="Enter last name" />
         </div>
 
         <div class="field">
-          <label id="lMiddleName">Patronymic / Middle Name</label>
-          <input type="text" id="pMiddleName" placeholder="Enter patronymic or middle name">
-        </div>
-
-        <div id="companyFields" class="hidden">
-          <div class="field">
-            <label id="lCompanyName">Company Name</label>
-            <input type="text" id="pCompanyName" placeholder="Enter company name">
-          </div>
-          <div class="field">
-            <label id="lRegNumber">Registration Number</label>
-            <input type="text" id="pRegNumber" placeholder="Enter registration number">
-          </div>
-        </div>
-
-        <div id="ipFields" class="hidden">
-          <div class="field">
-            <label id="lBusinessName">Business / IP Name</label>
-            <input type="text" id="pBusinessName" placeholder="Enter IP name">
-          </div>
-          <div class="field">
-            <label id="lTaxNumber">Tax Number</label>
-            <input type="text" id="pTaxNumber" placeholder="Enter tax number">
-          </div>
+          <label id="lEmail" for="pEmail">Email</label>
+          <input id="pEmail" type="email" placeholder="Enter email address" />
         </div>
 
         <div class="field">
-          <label id="lEmail">Email</label>
-          <input type="email" id="pEmail" placeholder="Enter email">
-        </div>
-
-        <div class="field">
-          <label id="lPhone">Phone Number</label>
+          <label id="lPhone" for="pPhone">Phone Number</label>
           <div class="two-col">
             <select id="phoneCode">
               <option>+374</option>
@@ -377,359 +547,529 @@
               <option>+1</option>
               <option>+971</option>
             </select>
-            <input type="text" id="pPhone" placeholder="Enter phone number">
+            <input id="pPhone" type="text" placeholder="Enter phone number" />
           </div>
         </div>
 
         <div class="field">
-          <label id="lCountry">Country</label>
-          <input type="text" id="pCountry" placeholder="Enter country">
+          <label id="lCountry" for="pCountry">Country</label>
+          <input id="pCountry" type="text" placeholder="Enter country" />
         </div>
 
         <div class="field">
-          <label id="lCity">City</label>
-          <input type="text" id="pCity" placeholder="Enter city">
+          <label id="lCity" for="pCity">City</label>
+          <input id="pCity" type="text" placeholder="Enter city" />
         </div>
 
         <div class="field">
-          <label id="lTelegram">Telegram Username</label>
-          <input type="text" id="pTelegram" placeholder="@username">
+          <label id="lTelegram" for="pTelegram">Telegram username</label>
+          <input id="pTelegram" type="text" placeholder="@username" />
         </div>
 
         <div class="field">
-          <label id="lSellWhat">What do you want to sell?</label>
-          <textarea id="pSellWhat" placeholder="Beauty, fashion, gifts, home items..."></textarea>
+          <label id="lSellWhat" for="pSellWhat">What do you want to sell?</label>
+          <textarea id="pSellWhat" placeholder="Describe your products or services"></textarea>
         </div>
 
         <div class="field">
-          <label id="lIdDoc">Identity Document</label>
-          <input type="file">
-        </div>
-
-        <div class="field">
-          <label id="lBusinessDoc">Business Document</label>
-          <input type="file">
-        </div>
-
-        <div class="field">
-          <label id="lSelfieDoc">Selfie with Document</label>
-          <input type="file">
-        </div>
-
-        <div class="field">
-          <label id="lPayMethod">Payment Method</label>
-          <select id="paymentMethod">
+          <label id="lPayMethod" for="payMethod">Preferred payout method</label>
+          <select id="payMethod">
             <option id="oBank">Bank Transfer</option>
             <option id="oCard">Card</option>
-            <option id="oPaypal">PayPal</option>
+            <option id="oPayPal">PayPal</option>
             <option id="oCrypto">Crypto</option>
             <option id="oOther">Other</option>
           </select>
         </div>
 
         <div class="field">
-          <label id="lBeneficiary">Beneficiary Name</label>
-          <input type="text" id="pBeneficiary" placeholder="Enter beneficiary name">
+          <label id="lAccount" for="pAccount">Payout details</label>
+          <input id="pAccount" type="text" placeholder="Enter payout details" />
         </div>
 
         <div class="field">
-          <label id="lAccount">IBAN / Account Number</label>
-          <input type="text" id="pAccount" placeholder="Enter IBAN or account number">
+          <label id="lPayNotes" for="pPayNotes">Notes</label>
+          <textarea id="pPayNotes" placeholder="Add notes if needed"></textarea>
         </div>
 
-        <div class="field">
-          <label id="lProvider">Bank / Wallet / Provider</label>
-          <input type="text" id="pProvider" placeholder="Enter bank or wallet provider">
-        </div>
-
-        <div class="field">
-          <label id="lPayNotes">Payment Notes</label>
-          <textarea id="pPayNotes" placeholder="Optional payment details"></textarea>
-        </div>
-
-        <button class="btn primary" id="tSubmit" onclick="showScreen('review')">Submit Application</button>
-        <button class="btn secondary" id="tBack1" onclick="showScreen('home')">Back</button>
+        <button class="btn primary" id="tSubmit" onclick="submitApplication()">Submit application</button>
       </div>
     </div>
 
+    <!-- PLANS -->
     <div class="screen" id="plans">
-      <div class="section">
-        <h2 id="tPlansTitle">Seller plans</h2>
-        <span id="tPlansSub">Lower than Amazon</span>
+      <a href="javascript:void(0)" class="back-link" id="tBack2" onclick="showScreen('home')">← Back</a>
+
+      <div class="card">
+        <div class="title" id="tPlansTitle">Seller plans</div>
+        <div class="text" id="tPlansSub">Choose the plan that fits your current stage.</div>
       </div>
 
-      <div class="list">
-        <div class="plan-title" id="tBasic">Basic — 7%</div>
-        <div class="muted" id="tBasicText">Good for new sellers.</div>
-      </div>
+      <div class="plans">
+        <div class="plan">
+          <div class="plan-name" id="tBasic">Basic</div>
+          <div class="plan-price">$19</div>
+          <div class="plan-text" id="tBasicText">
+            Good for new sellers who want to start simply with core product and order management.
+          </div>
+        </div>
 
-      <div class="list">
-        <div class="plan-title" id="tPro">Pro — €19 + 5%</div>
-        <div class="muted" id="tProText">For active sellers.</div>
-      </div>
+        <div class="plan pro">
+          <div class="plan-name" id="tPro">Pro</div>
+          <div class="plan-price">$49</div>
+          <div class="plan-text" id="tProText">
+            Best for active sellers who want stronger visibility, premium support, and advanced growth.
+          </div>
+        </div>
 
-      <button class="btn primary" id="tApplyNow" onclick="showScreen('apply')">Apply Now</button>
-      <button class="btn secondary" id="tBack2" onclick="showScreen('home')">Back</button>
+        <button class="btn primary" id="tApplyNow" onclick="showScreen('apply')">Apply now</button>
+      </div>
     </div>
 
+    <!-- REVIEW -->
     <div class="screen" id="review">
+      <a href="javascript:void(0)" class="back-link" id="tBack3" onclick="showScreen('home')">← Back</a>
+
       <div class="card">
         <div class="eyebrow" id="tStatus">STATUS</div>
-        <div class="title" id="tReviewTitle">Under Review</div>
-        <div class="text" id="tReviewText">Your application is under review. Owner approval is required before full seller access.</div>
-        <div class="status" id="tReviewPill">Under Review</div>
-        <button class="btn secondary" id="tBack3" onclick="showScreen('home')">Back Home</button>
+        <div class="title" id="tReviewTitle">Application received</div>
+        <div class="text" id="tReviewText">
+          Your seller application has been saved. The owner will review your submission and contact you soon.
+        </div>
       </div>
     </div>
 
+    <!-- PRODUCTS -->
     <div class="screen" id="products">
-      <div class="list">
-        <div class="item-title" id="tProductsTitle">Products</div>
-        <div class="item-sub" style="margin-top:12px">Rose Glow Set</div>
-        <div class="item-sub" style="margin-top:12px">Pink Elegance Bag</div>
+      <div class="card">
+        <div class="row">
+          <div>
+            <div class="title" id="tProductsTitle" style="margin-bottom:4px;">Products</div>
+            <div class="muted-top" id="tProductsSub">Manage your listed products</div>
+          </div>
+          <button class="mini-btn" id="tAddProduct">Add product</button>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="row">
+          <div>
+            <div class="product-name">Rose Glow Set</div>
+            <div class="meta">Beauty / Gift Set</div>
+          </div>
+          <span class="badge blue">Active</span>
+        </div>
+        <button class="mini-btn" id="tEdit1">Edit</button>
+      </div>
+
+      <div class="product-card">
+        <div class="row">
+          <div>
+            <div class="product-name">Pink Elegance Bag</div>
+            <div class="meta">Accessories / Fashion</div>
+          </div>
+          <span class="badge orange">Draft</span>
+        </div>
+        <button class="mini-btn" id="tEdit2">Edit</button>
       </div>
     </div>
 
+    <!-- ORDERS -->
     <div class="screen" id="orders">
-      <div class="list">
-        <div class="item-title" id="tOrdersTitle">Orders</div>
-        <div class="item-sub" style="margin-top:12px">#1024 New</div>
-        <div class="item-sub" style="margin-top:12px">#1023 Processing</div>
+      <div class="card">
+        <div class="title" id="tOrdersTitle">Orders</div>
+        <div class="text" id="tOrdersSub">Track incoming and processed orders</div>
+      </div>
+
+      <div class="order-card">
+        <div class="row">
+          <div>
+            <div class="order-id">#1024</div>
+            <div class="meta">New customer order</div>
+          </div>
+          <span class="badge blue" id="stNew">New</span>
+        </div>
+      </div>
+
+      <div class="order-card">
+        <div class="row">
+          <div>
+            <div class="order-id">#1023</div>
+            <div class="meta">Paid and being prepared</div>
+          </div>
+          <span class="badge green" id="stProcessing">Processing</span>
+        </div>
       </div>
     </div>
 
+    <!-- SUPPORT -->
     <div class="screen" id="support">
-      <div class="list">
-        <div class="item-title" id="tSupportTitle">Support</div>
-        <button class="btn primary" id="tContactOwner" onclick="alert('Support connected')">Contact Owner</button>
+      <div class="card">
+        <div class="title" id="tSupportTitle">Support</div>
+        <div class="text" id="tSupportText">
+          Need help? Contact the AMAROSE owner support team for seller questions and approval guidance.
+        </div>
+        <button class="btn primary" id="tContactOwner">Contact Owner</button>
+        <button class="btn secondary" id="tFaq">Seller FAQ</button>
+      </div>
+
+      <div class="support-card">
+        <div class="product-name" id="tRulesTitle">Seller rules</div>
+        <div class="meta" id="tRulesText">
+          Keep your information accurate, upload valid documents, and list products that match AMAROSE quality expectations.
+        </div>
       </div>
     </div>
-
   </div>
 
   <div class="nav">
-    <div class="navin">
-      <div class="navbtn active" onclick="setNav(this);showScreen('home')" id="nHome">Home</div>
-      <div class="navbtn" onclick="setNav(this);showScreen('products')" id="nProducts">Products</div>
-      <div class="navbtn" onclick="setNav(this);showScreen('orders')" id="nOrders">Orders</div>
-      <div class="navbtn" onclick="setNav(this);showScreen('support')" id="nSupport">Support</div>
-    </div>
+    <button id="nHome" class="active" onclick="showScreen('home', this)">Home</button>
+    <button id="nProducts" onclick="showScreen('products', this)">Products</button>
+    <button id="nOrders" onclick="showScreen('orders', this)">Orders</button>
+    <button id="nSupport" onclick="showScreen('support', this)">Support</button>
   </div>
 
   <script>
-    if (window.Telegram && window.Telegram.WebApp) {
-      Telegram.WebApp.ready();
-      Telegram.WebApp.expand();
+    const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+    if (tg) {
+      tg.expand();
+      tg.ready();
     }
 
-    function showScreen(id){
+    let currentType = 'individual';
+
+    function showScreen(id, btn = null) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      const el = document.getElementById(id);
-      if (el) el.classList.add('active');
-      window.scrollTo(0,0);
+      const screen = document.getElementById(id);
+      if (screen) screen.classList.add('active');
+
+      const navIds = ['home', 'products', 'orders', 'support'];
+      document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+
+      if (navIds.includes(id)) {
+        const map = {
+          home: 'nHome',
+          products: 'nProducts',
+          orders: 'nOrders',
+          support: 'nSupport'
+        };
+        const navBtn = document.getElementById(map[id]);
+        if (navBtn) navBtn.classList.add('active');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function setNav(el){
-      document.querySelectorAll('.navbtn').forEach(n => n.classList.remove('active'));
-      el.classList.add('active');
-    }
-
-    function toggleFields(){
-      const type = document.getElementById('sellerType').value;
-      const company = document.getElementById('companyFields');
-      const ip = document.getElementById('ipFields');
-      company.classList.add('hidden');
-      ip.classList.add('hidden');
-      if(type === 'company') company.classList.remove('hidden');
-      if(type === 'ip') ip.classList.remove('hidden');
-    }
-
-    function pickType(type, el){
-      document.querySelectorAll('.box').forEach(b => b.classList.remove('active'));
-      el.classList.add('active');
+    function pickType(type) {
+      currentType = type;
       document.getElementById('sellerType').value = type;
-      toggleFields();
-      showScreen('apply');
+      document.querySelectorAll('.box').forEach(b => b.classList.remove('active'));
+      const selected = document.getElementById('box-' + type);
+      if (selected) selected.classList.add('active');
     }
 
-    const texts = {
+    function submitApplication() {
+      showScreen('review');
+    }
+
+    const translations = {
       EN: {
-        seller:"SELLER", sub:"Grow with AMAROSE inside Telegram", welcome:"WELCOME",
-        join:"Join as a verified seller", home:"Apply, upload documents, choose your seller plan, and manage products and orders in one place.",
-        applyBtn:"Apply as Seller", plansBtn:"View Plans", types:"Seller types", choose:"Choose one",
-        individual:"Individual", ip:"Sole Proprietor", company:"Company", why:"Why sell with us", lower:"Lower fees",
-        whyBody:"AMAROSE gives sellers lower fees than large marketplaces, a soft luxury brand environment, and direct owner review before approval.",
-        step:"STEP 1", application:"Seller application", applicationText:"Complete the form below. Your documents will be reviewed before approval.",
-        sellerType:"Seller Type", firstName:"First Name", lastName:"Last Name", middleName:"Patronymic / Middle Name",
-        companyName:"Company Name", regNumber:"Registration Number", businessName:"Business / IP Name", taxNumber:"Tax Number",
-        email:"Email", phone:"Phone Number", country:"Country", city:"City", telegram:"Telegram Username", sellWhat:"What do you want to sell?",
-        idDoc:"Identity Document", businessDoc:"Business Document", selfieDoc:"Selfie with Document", payMethod:"Payment Method",
-        beneficiary:"Beneficiary Name", account:"IBAN / Account Number", provider:"Bank / Wallet / Provider", payNotes:"Payment Notes",
-        submit:"Submit Application", back:"Back", plansTitle:"Seller plans", plansSub:"Lower than Amazon",
-        basic:"Basic — 7%", basicText:"Good for new sellers.", pro:"Pro — €19 + 5%", proText:"For active sellers.",
-        applyNow:"Apply Now", status:"STATUS", reviewTitle:"Under Review",
-        reviewText:"Your application is under review. Owner approval is required before full seller access.",
-        reviewPill:"Under Review", backHome:"Back Home",
-        productsTitle:"Products", ordersTitle:"Orders", supportTitle:"Support", contactOwner:"Contact Owner",
-        navHome:"Home", navProducts:"Products", navOrders:"Orders", navSupport:"Support",
-        pFirstName:"Enter first name", pLastName:"Enter last name", pMiddleName:"Enter patronymic or middle name",
-        pCompanyName:"Enter company name", pRegNumber:"Enter registration number", pBusinessName:"Enter IP name", pTaxNumber:"Enter tax number",
-        pEmail:"Enter email", pPhone:"Enter phone number", pCountry:"Enter country", pCity:"Enter city",
-        pTelegram:"@username", pSellWhat:"Beauty, fashion, gifts, home items...", pBeneficiary:"Enter beneficiary name",
-        pAccount:"Enter IBAN or account number", pProvider:"Enter bank or wallet provider", pPayNotes:"Optional payment details",
-        oBank:"Bank Transfer", oCard:"Card", oPaypal:"PayPal", oCrypto:"Crypto", oOther:"Other"
+        tSeller: 'Sell with AMAROSE',
+        tSub: 'Grow your business with a premium marketplace experience',
+        tWelcome: 'WELCOME',
+        tJoin: 'Join AMAROSE Seller',
+        tHomeText: 'Apply, upload your documents, choose your seller plan, and manage products, orders, and support in one elegant space.',
+        tApplyBtn: 'Apply as Seller',
+        tPlansBtn: 'View Plans',
+        tTypes: 'Seller types',
+        tChoose: 'Choose one',
+        tIndividual: 'Individual',
+        tIp: 'Sole Proprietor',
+        tCompany: 'Company',
+        tPremiumBox: 'Premium brand<br/>presentation',
+        tWhy: 'Why sell with AMAROSE',
+        tLower: 'Premium seller experience',
+        tWhyBody: 'AMAROSE gives sellers a premium brand environment, lower marketplace pressure, elegant presentation, and direct owner support during review and approval.',
+        b1: 'Lower competitive pressure',
+        b2: 'Direct owner review',
+        b3: 'Premium storefront feeling',
+        b4: 'Simple seller management',
+        tBack1: '← Back',
+        tStep: 'STEP 1',
+        tApplication: 'Seller application',
+        tApplicationText: 'Complete the seller application to begin verification and access your AMAROSE Seller tools.',
+        lSellerType: 'Seller Type',
+        lFirstName: 'First Name',
+        lLastName: 'Last Name',
+        lEmail: 'Email',
+        lPhone: 'Phone Number',
+        lCountry: 'Country',
+        lCity: 'City',
+        lTelegram: 'Telegram username',
+        lSellWhat: 'What do you want to sell?',
+        lPayMethod: 'Preferred payout method',
+        lAccount: 'Payout details',
+        lPayNotes: 'Notes',
+        tSubmit: 'Submit application',
+        tPlansTitle: 'Seller plans',
+        tPlansSub: 'Choose the plan that fits your current stage.',
+        tBasic: 'Basic',
+        tBasicText: 'Good for new sellers who want to start simply with core product and order management.',
+        tPro: 'Pro',
+        tProText: 'Best for active sellers who want stronger visibility, premium support, and advanced growth.',
+        tApplyNow: 'Apply now',
+        tStatus: 'STATUS',
+        tReviewTitle: 'Application received',
+        tReviewText: 'Your seller application has been saved. The owner will review your submission and contact you soon.',
+        tProductsTitle: 'Products',
+        tProductsSub: 'Manage your listed products',
+        tAddProduct: 'Add product',
+        tEdit1: 'Edit',
+        tEdit2: 'Edit',
+        tOrdersTitle: 'Orders',
+        tOrdersSub: 'Track incoming and processed orders',
+        stNew: 'New',
+        stProcessing: 'Processing',
+        tSupportTitle: 'Support',
+        tSupportText: 'Need help? Contact the AMAROSE owner support team for seller questions and approval guidance.',
+        tContactOwner: 'Contact Owner',
+        tFaq: 'Seller FAQ',
+        tRulesTitle: 'Seller rules',
+        tRulesText: 'Keep your information accurate, upload valid documents, and list products that match AMAROSE quality expectations.',
+        nHome: 'Home',
+        nProducts: 'Products',
+        nOrders: 'Orders',
+        nSupport: 'Support',
+        oBank: 'Bank Transfer',
+        oCard: 'Card',
+        oPayPal: 'PayPal',
+        oCrypto: 'Crypto',
+        oOther: 'Other'
       },
       RU: {
-        seller:"ПРОДАВЕЦ", sub:"Развивайтесь с AMAROSE внутри Telegram", welcome:"ДОБРО ПОЖАЛОВАТЬ",
-        join:"Станьте проверенным продавцом", home:"Подайте заявку, загрузите документы, выберите тариф продавца и управляйте товарами и заказами в одном месте.",
-        applyBtn:"Стать продавцом", plansBtn:"Тарифы", types:"Типы продавцов", choose:"Выберите один",
-        individual:"Частное лицо", ip:"ИП", company:"Компания", why:"Почему продавать у нас", lower:"Низкие комиссии",
-        whyBody:"AMAROSE даёт продавцам более низкие комиссии, чем крупные маркетплейсы, мягкий luxury-стиль и прямую проверку владельцем.",
-        step:"ШАГ 1", application:"Заявка продавца", applicationText:"Заполните форму ниже. Документы будут проверены до одобрения.",
-        sellerType:"Тип продавца", firstName:"Имя", lastName:"Фамилия", middleName:"Отчество",
-        companyName:"Название компании", regNumber:"Регистрационный номер", businessName:"Название ИП", taxNumber:"Налоговый номер",
-        email:"Email", phone:"Номер телефона", country:"Страна", city:"Город", telegram:"Telegram username", sellWhat:"Что вы хотите продавать?",
-        idDoc:"Документ личности", businessDoc:"Бизнес-документ", selfieDoc:"Селфи с документом", payMethod:"Способ оплаты",
-        beneficiary:"Имя получателя", account:"IBAN / Номер счёта", provider:"Банк / Кошелёк / Провайдер", payNotes:"Примечание по оплате",
-        submit:"Отправить заявку", back:"Назад", plansTitle:"Тарифы продавца", plansSub:"Ниже, чем Amazon",
-        basic:"Basic — 7%", basicText:"Для новых продавцов.", pro:"Pro — 19 € + 5%", proText:"Для активных продавцов.",
-        applyNow:"Подать заявку", status:"СТАТУС", reviewTitle:"На проверке",
-        reviewText:"Ваша заявка на проверке. Для полного доступа требуется одобрение владельца.",
-        reviewPill:"На проверке", backHome:"Назад домой",
-        productsTitle:"Товары", ordersTitle:"Заказы", supportTitle:"Поддержка", contactOwner:"Связаться с владельцем",
-        navHome:"Главная", navProducts:"Товары", navOrders:"Заказы", navSupport:"Поддержка",
-        pFirstName:"Введите имя", pLastName:"Введите фамилию", pMiddleName:"Введите отчество",
-        pCompanyName:"Введите название компании", pRegNumber:"Введите регистрационный номер", pBusinessName:"Введите название ИП", pTaxNumber:"Введите налоговый номер",
-        pEmail:"Введите email", pPhone:"Введите номер телефона", pCountry:"Введите страну", pCity:"Введите город",
-        pTelegram:"@username", pSellWhat:"Красота, мода, подарки, товары для дома...", pBeneficiary:"Введите имя получателя",
-        pAccount:"Введите IBAN или номер счёта", pProvider:"Введите банк или провайдера", pPayNotes:"Дополнительные платёжные данные",
-        oBank:"Банковский перевод", oCard:"Карта", oPaypal:"PayPal", oCrypto:"Крипто", oOther:"Другое"
+        tSeller: 'Продавайте с AMAROSE',
+        tSub: 'Развивайте свой бизнес в премиальном маркетплейсе',
+        tWelcome: 'ДОБРО ПОЖАЛОВАТЬ',
+        tJoin: 'Присоединяйтесь к AMAROSE Seller',
+        tHomeText: 'Подайте заявку, загрузите документы, выберите тариф продавца и управляйте товарами, заказами и поддержкой в одном красивом пространстве.',
+        tApplyBtn: 'Подать заявку',
+        tPlansBtn: 'Посмотреть тарифы',
+        tTypes: 'Типы продавцов',
+        tChoose: 'Выберите',
+        tIndividual: 'Физлицо',
+        tIp: 'ИП',
+        tCompany: 'Компания',
+        tPremiumBox: 'Премиальная<br/>подача бренда',
+        tWhy: 'Почему продавать с AMAROSE',
+        tLower: 'Премиальный опыт продавца',
+        tWhyBody: 'AMAROSE даёт продавцам премиальную среду бренда, меньше давления маркетплейса, красивую подачу и прямую поддержку владельца во время проверки и одобрения.',
+        b1: 'Меньше конкурентного давления',
+        b2: 'Прямая проверка владельцем',
+        b3: 'Премиальный вид витрины',
+        b4: 'Простое управление продавцом',
+        tBack1: '← Назад',
+        tStep: 'ШАГ 1',
+        tApplication: 'Заявка продавца',
+        tApplicationText: 'Заполните заявку продавца, чтобы начать проверку и получить доступ к инструментам AMAROSE Seller.',
+        lSellerType: 'Тип продавца',
+        lFirstName: 'Имя',
+        lLastName: 'Фамилия',
+        lEmail: 'Email',
+        lPhone: 'Номер телефона',
+        lCountry: 'Страна',
+        lCity: 'Город',
+        lTelegram: 'Имя в Telegram',
+        lSellWhat: 'Что вы хотите продавать?',
+        lPayMethod: 'Предпочитаемый способ выплат',
+        lAccount: 'Реквизиты для выплат',
+        lPayNotes: 'Примечания',
+        tSubmit: 'Отправить заявку',
+        tPlansTitle: 'Тарифы продавца',
+        tPlansSub: 'Выберите тариф под ваш этап развития.',
+        tBasic: 'Базовый',
+        tBasicText: 'Подходит новым продавцам, которым нужен простой старт с товарами и заказами.',
+        tPro: 'Премиум',
+        tProText: 'Лучший вариант для активных продавцов, которым нужна видимость, поддержка и рост.',
+        tApplyNow: 'Подать сейчас',
+        tStatus: 'СТАТУС',
+        tReviewTitle: 'Заявка получена',
+        tReviewText: 'Ваша заявка продавца сохранена. Владелец проверит её и свяжется с вами.',
+        tProductsTitle: 'Товары',
+        tProductsSub: 'Управляйте своими товарами',
+        tAddProduct: 'Добавить товар',
+        tEdit1: 'Изменить',
+        tEdit2: 'Изменить',
+        tOrdersTitle: 'Заказы',
+        tOrdersSub: 'Отслеживайте новые и обработанные заказы',
+        stNew: 'Новый',
+        stProcessing: 'В обработке',
+        tSupportTitle: 'Поддержка',
+        tSupportText: 'Нужна помощь? Свяжитесь с владельцем AMAROSE по вопросам продавцов и одобрения.',
+        tContactOwner: 'Связаться с владельцем',
+        tFaq: 'FAQ продавца',
+        tRulesTitle: 'Правила продавца',
+        tRulesText: 'Указывайте точные данные, загружайте действительные документы и публикуйте товары, соответствующие качеству AMAROSE.',
+        nHome: 'Главная',
+        nProducts: 'Товары',
+        nOrders: 'Заказы',
+        nSupport: 'Поддержка',
+        oBank: 'Банковский перевод',
+        oCard: 'Карта',
+        oPayPal: 'PayPal',
+        oCrypto: 'Крипто',
+        oOther: 'Другое'
       },
       HY: {
-        seller:"ՎԱՃԱՌՈՂ", sub:"Աճիր AMAROSE-ի հետ Telegram-ում", welcome:"ԲԱՐԻ ԳԱԼՈՒՍՏ",
-        join:"Դարձիր հաստատված վաճառող", home:"Լրացրու հայտը, վերբեռնիր փաստաթղթերը, ընտրիր սակագինը և կառավարիր ապրանքներն ու պատվերները մեկ տեղում։",
-        applyBtn:"Դառնալ վաճառող", plansBtn:"Սակագներ", types:"Վաճառողի տեսակներ", choose:"Ընտրիր մեկը",
-        individual:"Ֆիզիկական անձ", ip:"ԱՁ", company:"Ընկերություն", why:"Ինչու վաճառել մեզ մոտ", lower:"Ցածր տոկոսներ",
-        whyBody:"AMAROSE-ը վաճառողներին տալիս է ավելի ցածր տոկոսներ, քան մեծ marketplace-ները, նուրբ luxury միջավայր և ուղիղ ստուգում owner-ի կողմից։",
-        step:"ՔԱՅԼ 1", application:"Վաճառողի հայտ", applicationText:"Լրացրու ձևը։ Փաստաթղթերը կստուգվեն մինչև հաստատումը։",
-        sellerType:"Վաճառողի տեսակ", firstName:"Անուն", lastName:"Ազգանուն", middleName:"Հայրանուն",
-        companyName:"Ընկերության անուն", regNumber:"Գրանցման համար", businessName:"ԱՁ անուն", taxNumber:"Հարկային համար",
-        email:"Email", phone:"Հեռախոսի համար", country:"Երկիր", city:"Քաղաք", telegram:"Telegram username", sellWhat:"Ի՞նչ ես ուզում վաճառել",
-        idDoc:"Անձը հաստատող փաստաթուղթ", businessDoc:"Բիզնես փաստաթուղթ", selfieDoc:"Սելֆի փաստաթղթով", payMethod:"Վճարման եղանակ",
-        beneficiary:"Ստացողի անուն", account:"IBAN / Հաշվի համար", provider:"Բանկ / Դրամապանակ / Ծառայություն", payNotes:"Վճարման նշումներ",
-        submit:"Ուղարկել հայտը", back:"Հետ", plansTitle:"Վաճառողի սակագներ", plansSub:"Amazon-ից ցածր",
-        basic:"Basic — 7%", basicText:"Նոր վաճառողների համար։", pro:"Pro — 19 € + 5%", proText:"Ակտիվ վաճառողների համար։",
-        applyNow:"Դիմել հիմա", status:"ԿԱՐԳԱՎԻՃԱԿ", reviewTitle:"Ստուգման մեջ",
-        reviewText:"Քո հայտը ստուգման մեջ է։ Լիարժեք հասանելիության համար owner approval է պետք։",
-        reviewPill:"Ստուգման մեջ", backHome:"Վերադառնալ",
-        productsTitle:"Ապրանքներ", ordersTitle:"Պատվերներ", supportTitle:"Աջակցություն", contactOwner:"Կապ owner-ի հետ",
-        navHome:"Գլխավոր", navProducts:"Ապրանքներ", navOrders:"Պատվերներ", navSupport:"Աջակցություն",
-        pFirstName:"Մուտքագրիր անունը", pLastName:"Մուտքագրիր ազգանունը", pMiddleName:"Մուտքագրիր հայրանունը",
-        pCompanyName:"Մուտքագրիր ընկերության անունը", pRegNumber:"Մուտքագրիր գրանցման համարը", pBusinessName:"Մուտքագրիր ԱՁ անունը", pTaxNumber:"Մուտքագրիր հարկային համարը",
-        pEmail:"Մուտքագրիր email", pPhone:"Մուտքագրիր հեռախոսի համարը", pCountry:"Մուտքագրիր երկիրը", pCity:"Մուտքագրիր քաղաքը",
-        pTelegram:"@username", pSellWhat:"Գեղեցկություն, նորաձևություն, նվերներ, տնային ապրանքներ...", pBeneficiary:"Մուտքագրիր ստացողի անունը",
-        pAccount:"Մուտքագրիր IBAN կամ հաշվի համարը", pProvider:"Մուտքագրիր բանկը կամ ծառայությունը", pPayNotes:"Լրացուցիչ վճարման տվյալներ",
-        oBank:"Բանկային փոխանցում", oCard:"Քարտ", oPaypal:"PayPal", oCrypto:"Կրիպտո", oOther:"Այլ"
-      }
+        tSeller: 'Վաճառեք AMAROSE-ի հետ',
+        tSub: 'Զարգացրեք ձեր բիզնեսը պրեմիում մարքեթփլեյսում',
+        tWelcome: 'ԲԱՐԻ ԳԱԼՈՒՍՏ',
+        tJoin: 'Միացեք AMAROSE Seller-ին',
+        tHomeText: 'Լրացրեք հայտը, վերբեռնեք փաստաթղթերը, ընտրեք վաճառողի փաթեթը և կառավարեք ապրանքները, պատվերները և աջակցությունը մեկ գեղեցիկ միջավայրում։',
+        tApplyBtn: 'Դիմել որպես վաճառող',
+        tPlansBtn: 'Տեսնել փաթեթները',
+        tTypes: 'Վաճառողի տեսակներ',
+        tChoose: 'Ընտրեք մեկը',
+        tIndividual: 'Անհատ',
+        tIp: 'ԱՁ',
+        tCompany: 'Ընկերություն',
+        tPremiumBox: 'Պրեմիում<br/>բրենդի ներկայացում',
+        tWhy: 'Ինչու վաճառել AMAROSE-ում',
+        tLower: 'Պրեմիում վաճառողի փորձ',
+        tWhyBody: 'AMAROSE-ը վաճառողներին տալիս է պրեմիում բրենդային միջավայր, ավելի քիչ ճնշում, գեղեցիկ ներկայացում և ուղղակի աջակցություն հաստատման ընթացքում։',
+        b1: 'Ավելի քիչ մրցակցային ճնշում',
+        b2: 'Ուղղակի ստուգում սեփականատիրոջ կողմից',
+        b3: 'Պրեմիում խանութի զգացողություն',
+        b4: 'Պարզ կառավարում',
+        tBack1: '← Հետ',
+        tStep: 'ՔԱՅԼ 1',
+        tApplication: 'Վաճառողի հայտ',
+        tApplicationText: 'Լրացրեք վաճառողի հայտը՝ հաստատման գործընթացը սկսելու և AMAROSE Seller գործիքներին մուտք ստանալու համար։',
+        lSellerType: 'Վաճառողի տեսակ',
+        lFirstName: 'Անուն',
+        lLastName: 'Ազգանուն',
+        lEmail: 'Email',
+        lPhone: 'Հեռախոսահամար',
+        lCountry: 'Երկիր',
+        lCity: 'Քաղաք',
+        lTelegram: 'Telegram անուն',
+        lSellWhat: 'Ի՞նչ եք ուզում վաճառել',
+        lPayMethod: 'Վճարման նախընտրելի եղանակ',
+        lAccount: 'Վճարման տվյալներ',
+        lPayNotes: 'Նշումներ',
+        tSubmit: 'Ուղարկել հայտը',
+        tPlansTitle: 'Վաճառողի փաթեթներ',
+        tPlansSub: 'Ընտրեք ձեզ հարմար փաթեթը։',
+        tBasic: 'Հիմնական',
+        tBasicText: 'Հարմար է նոր վաճառողների համար՝ պարզ մեկնարկի նպատակով։',
+        tPro: 'Պրո',
+        tProText: 'Լավագույն տարբերակն ակտիվ վաճառողների համար, ովքեր ուզում են աճ և տեսանելիություն։',
+        tApplyNow: 'Դիմել հիմա',
+        tStatus: 'ԿԱՐԳԱՎԻՃԱԿ',
+        tReviewTitle: 'Հայտը ստացվել է',
+        tReviewText: 'Ձեր վաճառողի հայտը պահպանվել է։ Սեփականատերը կստուգի այն և շուտով կկապվի ձեզ հետ։',
+        tProductsTitle: 'Ապրանքներ',
+        tProductsSub: 'Կառավարեք ձեր ապրանքները',
+        tAddProduct: 'Ավելացնել ապրանք',
+        tEdit1: 'Խմբագրել',
+        tEdit2: 'Խմբագրել',
+        tOrdersTitle: 'Պատվերներ',
+        tOrdersSub: 'Հետևեք նոր և ընթացիկ պատվերներին',
+        stNew: 'Նոր',
+        stProcessing: 'Ընթացքում',
+        tSupportTitle: 'Աջակցություն',
+        tSupportText: 'Օգնությո՞ւն է պետք։ Կապվեք AMAROSE-ի սեփականատիրոջ աջակցության հետ։',
+        tContactOwner: 'Կապվել սեփականատիրոջ հետ',
+        tFaq: 'Վաճառողի FAQ',
+        tRulesTitle: 'Վաճառողի կանոններ',
+        tRulesText: 'Մուտքագրեք ճշգրիտ տվյալներ, վերբեռնեք վավեր փաստաթղթեր և տեղադրեք AMAROSE-ի որակին համապատասխան ապրանքներ։',
+        nHome: 'Գլխավոր',
+        nProducts: 'Ապրանքներ',
+        nOrders: 'Պատվերներ',
+        nSupport: 'Աջակցություն',
+        oBank: 'Բանկային փոխանցում',
+        oCard: 'Քարտ',
+        oPayPal: 'PayPal',
+        oCrypto: 'Կրիպտո',
+        oOther: 'Այլ'
+      },
+      ES: {},
+      DE: {},
+      FR: {}
     };
 
-    function setLang(lang){
-      const t = texts[lang] || texts.EN;
+    translations.ES = { ...translations.EN };
+    translations.DE = { ...translations.EN };
+    translations.FR = { ...translations.EN };
 
-      document.getElementById('tSeller').textContent = t.seller;
-      document.getElementById('tSub').textContent = t.sub;
-      document.getElementById('tWelcome').textContent = t.welcome;
-      document.getElementById('tJoin').textContent = t.join;
-      document.getElementById('tHomeText').textContent = t.home;
-      document.getElementById('tApplyBtn').textContent = t.applyBtn;
-      document.getElementById('tPlansBtn').textContent = t.plansBtn;
-      document.getElementById('tTypes').textContent = t.types;
-      document.getElementById('tChoose').textContent = t.choose;
-      document.getElementById('tIndividual').textContent = t.individual;
-      document.getElementById('tIp').textContent = t.ip;
-      document.getElementById('tCompany').textContent = t.company;
-      document.getElementById('tWhy').textContent = t.why;
-      document.getElementById('tLower').textContent = t.lower;
-      document.getElementById('tWhyBody').textContent = t.whyBody;
-      document.getElementById('tStep').textContent = t.step;
-      document.getElementById('tApplication').textContent = t.application;
-      document.getElementById('tApplicationText').textContent = t.applicationText;
-      document.getElementById('lSellerType').textContent = t.sellerType;
-      document.getElementById('lFirstName').textContent = t.firstName;
-      document.getElementById('lLastName').textContent = t.lastName;
-      document.getElementById('lMiddleName').textContent = t.middleName;
-      document.getElementById('lCompanyName').textContent = t.companyName;
-      document.getElementById('lRegNumber').textContent = t.regNumber;
-      document.getElementById('lBusinessName').textContent = t.businessName;
-      document.getElementById('lTaxNumber').textContent = t.taxNumber;
-      document.getElementById('lEmail').textContent = t.email;
-      document.getElementById('lPhone').textContent = t.phone;
-      document.getElementById('lCountry').textContent = t.country;
-      document.getElementById('lCity').textContent = t.city;
-      document.getElementById('lTelegram').textContent = t.telegram;
-      document.getElementById('lSellWhat').textContent = t.sellWhat;
-      document.getElementById('lIdDoc').textContent = t.idDoc;
-      document.getElementById('lBusinessDoc').textContent = t.businessDoc;
-      document.getElementById('lSelfieDoc').textContent = t.selfieDoc;
-      document.getElementById('lPayMethod').textContent = t.payMethod;
-      document.getElementById('lBeneficiary').textContent = t.beneficiary;
-      document.getElementById('lAccount').textContent = t.account;
-      document.getElementById('lProvider').textContent = t.provider;
-      document.getElementById('lPayNotes').textContent = t.payNotes;
-      document.getElementById('tSubmit').textContent = t.submit;
-      document.getElementById('tBack1').textContent = t.back;
-      document.getElementById('tPlansTitle').textContent = t.plansTitle;
-      document.getElementById('tPlansSub').textContent = t.plansSub;
-      document.getElementById('tBasic').textContent = t.basic;
-      document.getElementById('tBasicText').textContent = t.basicText;
-      document.getElementById('tPro').textContent = t.pro;
-      document.getElementById('tProText').textContent = t.proText;
-      document.getElementById('tApplyNow').textContent = t.applyNow;
-      document.getElementById('tStatus').textContent = t.status;
-      document.getElementById('tReviewTitle').textContent = t.reviewTitle;
-      document.getElementById('tReviewText').textContent = t.reviewText;
-      document.getElementById('tReviewPill').textContent = t.reviewPill;
-      document.getElementById('tBack3').textContent = t.backHome;
-      document.getElementById('tProductsTitle').textContent = t.productsTitle;
-      document.getElementById('tOrdersTitle').textContent = t.ordersTitle;
-      document.getElementById('tSupportTitle').textContent = t.supportTitle;
-      document.getElementById('tContactOwner').textContent = t.contactOwner;
-      document.getElementById('nHome').textContent = t.navHome;
-      document.getElementById('nProducts').textContent = t.navProducts;
-      document.getElementById('nOrders').textContent = t.navOrders;
-      document.getElementById('nSupport').textContent = t.navSupport;
+    function setLang(lang) {
+      const t = translations[lang] || translations.EN;
+      Object.keys(t).forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (id === 'tPremiumBox') {
+          el.innerHTML = t[id];
+        } else {
+          el.textContent = t[id];
+        }
+      });
 
-      document.getElementById('pFirstName').placeholder = t.pFirstName;
-      document.getElementById('pLastName').placeholder = t.pLastName;
-      document.getElementById('pMiddleName').placeholder = t.pMiddleName;
-      document.getElementById('pCompanyName').placeholder = t.pCompanyName;
-      document.getElementById('pRegNumber').placeholder = t.pRegNumber;
-      document.getElementById('pBusinessName').placeholder = t.pBusinessName;
-      document.getElementById('pTaxNumber').placeholder = t.pTaxNumber;
-      document.getElementById('pEmail').placeholder = t.pEmail;
-      document.getElementById('pPhone').placeholder = t.pPhone;
-      document.getElementById('pCountry').placeholder = t.pCountry;
-      document.getElementById('pCity').placeholder = t.pCity;
-      document.getElementById('pTelegram').placeholder = t.pTelegram;
-      document.getElementById('pSellWhat').placeholder = t.pSellWhat;
-      document.getElementById('pBeneficiary').placeholder = t.pBeneficiary;
-      document.getElementById('pAccount').placeholder = t.pAccount;
-      document.getElementById('pProvider').placeholder = t.pProvider;
-      document.getElementById('pPayNotes').placeholder = t.pPayNotes;
+      document.getElementById('pFirstName').placeholder =
+        lang === 'RU' ? 'Введите имя' :
+        lang === 'HY' ? 'Մուտքագրեք անունը' : 'Enter first name';
 
-      document.getElementById('sellerType').options[0].text = t.individual;
-      document.getElementById('sellerType').options[1].text = t.ip + ' / IP';
-      document.getElementById('sellerType').options[2].text = t.company + ' / LLC';
+      document.getElementById('pLastName').placeholder =
+        lang === 'RU' ? 'Введите фамилию' :
+        lang === 'HY' ? 'Մուտքագրեք ազգանունը' : 'Enter last name';
 
-      document.getElementById('oBank').textContent = t.oBank;
-      document.getElementById('oCard').textContent = t.oCard;
-      document.getElementById('oPaypal').textContent = t.oPaypal;
-      document.getElementById('oCrypto').textContent = t.oCrypto;
-      document.getElementById('oOther').textContent = t.oOther;
+      document.getElementById('pEmail').placeholder =
+        lang === 'RU' ? 'Введите email' :
+        lang === 'HY' ? 'Մուտքագրեք email' : 'Enter email address';
+
+      document.getElementById('pPhone').placeholder =
+        lang === 'RU' ? 'Введите номер телефона' :
+        lang === 'HY' ? 'Մուտքագրեք հեռախոսահամարը' : 'Enter phone number';
+
+      document.getElementById('pCountry').placeholder =
+        lang === 'RU' ? 'Введите страну' :
+        lang === 'HY' ? 'Մուտքագրեք երկիրը' : 'Enter country';
+
+      document.getElementById('pCity').placeholder =
+        lang === 'RU' ? 'Введите город' :
+        lang === 'HY' ? 'Մուտքագրեք քաղաքը' : 'Enter city';
+
+      document.getElementById('pTelegram').placeholder =
+        lang === 'RU' ? '@имя' :
+        lang === 'HY' ? '@անուն' : '@username';
+
+      document.getElementById('pSellWhat').placeholder =
+        lang === 'RU' ? 'Опишите ваши товары или услуги' :
+        lang === 'HY' ? 'Նկարագրեք ձեր ապրանքները կամ ծառայությունները' : 'Describe your products or services';
+
+      document.getElementById('pAccount').placeholder =
+        lang === 'RU' ? 'Введите реквизиты для выплат' :
+        lang === 'HY' ? 'Մուտքագրեք վճարման տվյալները' : 'Enter payout details';
+
+      document.getElementById('pPayNotes').placeholder =
+        lang === 'RU' ? 'Добавьте примечания при необходимости' :
+        lang === 'HY' ? 'Ավելացրեք նշումներ անհրաժեշտության դեպքում' : 'Add notes if needed';
+
+      const sellerType = document.getElementById('sellerType');
+      sellerType.options[0].text =
+        lang === 'RU' ? 'Физлицо' :
+        lang === 'HY' ? 'Անհատ' : 'Individual';
+      sellerType.options[1].text =
+        lang === 'RU' ? 'ИП' :
+        lang === 'HY' ? 'ԱՁ' : 'Sole Proprietor';
+      sellerType.options[2].text =
+        lang === 'RU' ? 'Компания' :
+        lang === 'HY' ? 'Ընկերություն' : 'Company';
     }
 
-    toggleFields();
+    document.getElementById('langSelect').addEventListener('change', function() {
+      setLang(this.value);
+    });
+
     setLang('EN');
+    pickType('individual');
   </script>
 </body>
 </html>
