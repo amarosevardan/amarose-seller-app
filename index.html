@@ -1,1075 +1,647 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AMAROSE SELLER</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root{
-      --bg1:#eef5fc;
-      --bg2:#f8fbff;
-      --card:#ffffff;
-      --text:#1d3557;
-      --muted:#6f86a3;
-      --line:#d9e5f2;
-      --blue:#2f6fe4;
-      --blue-dark:#1f53b7;
-      --blue-soft:#e9f1ff;
-      --shadow:0 10px 30px rgba(31,83,183,0.08);
-      --radius:24px;
-    }
-
-    body{
-      font-family: Arial, Helvetica, sans-serif;
-      background: linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 100%);
-      color: var(--text);
-      min-height: 100vh;
-    }
-
-    .wrap{
-      max-width: 480px;
-      margin: 0 auto;
-      padding: 16px 16px 110px;
-    }
-
-    .screen{ display:none; }
-    .screen.active{ display:block; }
-
-    .topbar{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      margin: 8px 0 18px;
-    }
-
-    .pill{
-      flex:1;
-      background: rgba(255,255,255,0.85);
-      border:1px solid var(--line);
-      color:#5b7697;
-      border-radius:999px;
-      padding:16px 18px;
-      text-align:center;
-      font-weight:700;
-      letter-spacing:4px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(8px);
-    }
-
-    .lang-select{
-      width:132px;
-      border:none;
-      outline:none;
-      background: rgba(255,255,255,0.9);
-      border:1px solid var(--line);
-      color:#5b7697;
-      border-radius:18px;
-      padding:16px 14px;
-      font-size:16px;
-      box-shadow: var(--shadow);
-    }
-
-    .hero{
-      text-align:center;
-      margin: 8px 0 22px;
-      padding: 12px 10px 6px;
-    }
-
-    .brand-mark{
-      width:74px;
-      height:74px;
-      margin: 0 auto 14px;
-      border-radius:22px;
-      background: linear-gradient(135deg, var(--blue-dark), var(--blue));
-      color:#fff;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:34px;
-      font-weight:700;
-      box-shadow: 0 14px 35px rgba(47,111,228,0.28);
-    }
-
-    h1{
-      font-size:42px;
-      line-height:1.08;
-      margin-bottom:10px;
-      color:var(--blue);
-      letter-spacing: -1px;
-      font-weight:800;
-    }
-
-    .sub{
-      color:var(--muted);
-      font-size:19px;
-      line-height:1.45;
-      max-width:380px;
-      margin:0 auto;
-    }
-
-    .card{
-      background: rgba(255,255,255,0.95);
-      border:1px solid rgba(217,229,242,0.9);
-      border-radius: var(--radius);
-      padding: 20px;
-      box-shadow: var(--shadow);
-      margin-bottom:18px;
-    }
-
-    .eyebrow{
-      color:#7da0c7;
-      letter-spacing:4px;
-      font-size:13px;
-      font-weight:700;
-      margin-bottom:12px;
-    }
-
-    .title{
-      font-size:24px;
-      line-height:1.2;
-      font-weight:800;
-      margin-bottom:12px;
-      color:var(--text);
-    }
-
-    .text{
-      color:var(--muted);
-      font-size:18px;
-      line-height:1.6;
-    }
-
-    .btn{
-      width:100%;
-      border:none;
-      outline:none;
-      cursor:pointer;
-      border-radius:20px;
-      padding:18px 18px;
-      font-size:18px;
-      font-weight:800;
-      margin-top:16px;
-    }
-
-    .btn.primary{
-      color:#fff;
-      background: linear-gradient(135deg, #65aff8 0%, var(--blue) 100%);
-      box-shadow: 0 12px 30px rgba(47,111,228,0.25);
-    }
-
-    .btn.secondary{
-      background:#fff;
-      color:#4e84c6;
-      border:1.5px solid #d6e4f5;
-    }
-
-    .section{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      margin: 10px 2px 14px;
-    }
-
-    .section h2{
-      font-size:28px;
-      line-height:1.15;
-      color:var(--text);
-    }
-
-    .section span{
-      color:#9ab2cc;
-      font-size:18px;
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:14px;
-      margin-bottom:18px;
-    }
-
-    .box{
-      background: rgba(255,255,255,0.95);
-      border:1px solid var(--line);
-      border-radius:24px;
-      min-height:156px;
-      padding:18px 14px;
-      text-align:center;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:center;
-      box-shadow: var(--shadow);
-      cursor:pointer;
-      transition: all .18s ease;
-    }
-
-    .box.active{
-      border:2px solid var(--blue);
-      box-shadow: 0 14px 30px rgba(47,111,228,0.18);
-      background: linear-gradient(180deg, #ffffff 0%, #f2f7ff 100%);
-    }
-
-    .icon{
-      font-size:34px;
-      margin-bottom:12px;
-    }
-
-    .box-title{
-      font-size:18px;
-      font-weight:700;
-      color:#315986;
-      line-height:1.35;
-    }
-
-    .benefit-list{
-      display:grid;
-      gap:12px;
-      margin-top:6px;
-    }
-
-    .benefit{
-      background: var(--blue-soft);
-      border:1px solid #d9e6ff;
-      border-radius:18px;
-      padding:14px 16px;
-      color:#355f94;
-      font-weight:700;
-      line-height:1.45;
-    }
-
-    .product-card, .order-card, .support-card{
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:22px;
-      padding:16px;
-      box-shadow: var(--shadow);
-      margin-bottom:14px;
-    }
-
-    .row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-    }
-
-    .product-name, .order-id{
-      font-size:20px;
-      font-weight:800;
-      color:var(--text);
-      margin-bottom:6px;
-    }
-
-    .meta{
-      color:var(--muted);
-      font-size:15px;
-      line-height:1.45;
-    }
-
-    .badge{
-      display:inline-block;
-      padding:8px 12px;
-      border-radius:999px;
-      font-size:13px;
-      font-weight:800;
-    }
-
-    .badge.blue{ background:#e7f0ff; color:#2d67d2; }
-    .badge.green{ background:#e7f7ee; color:#2d8c58; }
-    .badge.orange{ background:#fff1e4; color:#c67a22; }
-
-    .mini-btn{
-      border:none;
-      background:var(--blue-soft);
-      color:var(--blue-dark);
-      padding:10px 14px;
-      border-radius:14px;
-      font-weight:800;
-      margin-top:12px;
-    }
-
-    .field{
-      margin-bottom:16px;
-    }
-
-    .field label{
-      display:block;
-      font-size:15px;
-      font-weight:700;
-      color:#4c6e95;
-      margin-bottom:8px;
-    }
-
-    .field input,
-    .field select,
-    .field textarea{
-      width:100%;
-      border:1.5px solid var(--line);
-      background:#fff;
-      border-radius:16px;
-      padding:14px 14px;
-      font-size:16px;
-      color:var(--text);
-      outline:none;
-    }
-
-    .field textarea{
-      min-height:96px;
-      resize:vertical;
-    }
-
-    .two-col{
-      display:grid;
-      grid-template-columns:110px 1fr;
-      gap:10px;
-    }
-
-    .back-link{
-      display:inline-block;
-      color:#4d82c2;
-      text-decoration:none;
-      font-weight:700;
-      margin-bottom:14px;
-    }
-
-    .plans{
-      display:grid;
-      gap:14px;
-    }
-
-    .plan{
-      border:1px solid var(--line);
-      border-radius:22px;
-      padding:18px;
-      background:#fff;
-      box-shadow: var(--shadow);
-    }
-
-    .plan.pro{
-      border:2px solid var(--blue);
-      background: linear-gradient(180deg, #ffffff 0%, #f2f7ff 100%);
-    }
-
-    .plan-name{
-      font-size:22px;
-      font-weight:800;
-      color:var(--text);
-      margin-bottom:6px;
-    }
-
-    .plan-price{
-      color:var(--blue);
-      font-size:28px;
-      font-weight:800;
-      margin-bottom:8px;
-    }
-
-    .plan-text{
-      color:var(--muted);
-      line-height:1.6;
-      font-size:16px;
-    }
-
-    .nav{
-      position:fixed;
-      left:50%;
-      transform:translateX(-50%);
-      bottom:0;
-      width:100%;
-      max-width:480px;
-      padding:12px 12px 18px;
-      background: rgba(244,249,255,0.92);
-      backdrop-filter: blur(10px);
-      border-top:1px solid rgba(214,228,245,0.95);
-      display:grid;
-      grid-template-columns:repeat(4,1fr);
-      gap:10px;
-    }
-
-    .nav button{
-      border:none;
-      border-radius:18px;
-      padding:14px 8px;
-      background:#f8fbff;
-      border:1px solid #d6e4f5;
-      color:#7b94b1;
-      font-size:16px;
-      font-weight:700;
-    }
-
-    .nav button.active{
-      background:var(--blue-soft);
-      color:var(--blue);
-      border-color:#b7cff8;
-      box-shadow: inset 0 0 0 1px rgba(47,111,228,0.06);
-    }
-
-    .muted-top{
-      margin-bottom:12px;
-      color:var(--muted);
-      line-height:1.55;
-      font-size:17px;
-    }
-
-    @media (max-width:380px){
-      h1{ font-size:36px; }
-      .section h2{ font-size:24px; }
-      .grid{ grid-template-columns:1fr; }
-    }
-  </style>
-</head>
-<body>
-  <div class="wrap">
-
-    <!-- HOME -->
-    <div class="screen active" id="home">
-      <div class="topbar">
-        <div class="pill">AMAROSE SELLER</div>
-        <select class="lang-select" id="langSelect">
-          <option value="EN">English</option>
-          <option value="RU">Русский</option>
-          <option value="HY">Հայերեն</option>
-          <option value="ES">Español</option>
-          <option value="DE">Deutsch</option>
-          <option value="FR">Français</option>
-        </select>
-      </div>
-
-      <div class="hero">
-        <div class="brand-mark">A</div>
-        <h1 id="tSeller">Sell with AMAROSE</h1>
-        <div class="sub" id="tSub">Grow your business with a premium marketplace experience</div>
-      </div>
-
-      <div class="card">
-        <div class="eyebrow" id="tWelcome">WELCOME</div>
-        <div class="title" id="tJoin">Join AMAROSE Seller</div>
-        <div class="text" id="tHomeText">
-          Apply, upload your documents, choose your seller plan, and manage products, orders, and support in one elegant space.
-        </div>
-        <button class="btn primary" id="tApplyBtn" onclick="showScreen('apply')">Apply as Seller</button>
-        <button class="btn secondary" id="tPlansBtn" onclick="showScreen('plans')">View Plans</button>
-      </div>
-
-      <div class="section">
-        <h2 id="tTypes">Seller types</h2>
-        <span id="tChoose">Choose one</span>
-      </div>
-
-      <div class="grid">
-        <div class="box active" id="box-individual" onclick="pickType('individual')">
-          <div class="icon">👤</div>
-          <div class="box-title" id="tIndividual">Individual</div>
-        </div>
-        <div class="box" id="box-ip" onclick="pickType('ip')">
-          <div class="icon">🧾</div>
-          <div class="box-title" id="tIp">Sole Proprietor</div>
-        </div>
-        <div class="box" id="box-company" onclick="pickType('company')">
-          <div class="icon">🏢</div>
-          <div class="box-title" id="tCompany">Company</div>
-        </div>
-        <div class="box">
-          <div class="icon">✨</div>
-          <div class="box-title" id="tPremiumBox">Premium brand<br/>presentation</div>
-        </div>
-      </div>
-
-      <div class="section">
-        <h2 id="tWhy">Why sell with AMAROSE</h2>
-        <span id="tLower">Premium seller experience</span>
-      </div>
-
-      <div class="card">
-        <div class="text" id="tWhyBody">
-          AMAROSE gives sellers a premium brand environment, lower marketplace pressure, elegant presentation, and direct owner support during review and approval.
-        </div>
-        <div class="benefit-list" style="margin-top:16px;">
-          <div class="benefit" id="b1">Lower competitive pressure</div>
-          <div class="benefit" id="b2">Direct owner review</div>
-          <div class="benefit" id="b3">Premium storefront feeling</div>
-          <div class="benefit" id="b4">Simple seller management</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- APPLY -->
-    <div class="screen" id="apply">
-      <a href="javascript:void(0)" class="back-link" id="tBack1" onclick="showScreen('home')">← Back</a>
-
-      <div class="card">
-        <div class="eyebrow" id="tStep">STEP 1</div>
-        <div class="title" id="tApplication">Seller application</div>
-        <div class="text" id="tApplicationText">
-          Complete the seller application to begin verification and access your AMAROSE Seller tools.
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="field">
-          <label id="lSellerType" for="sellerType">Seller Type</label>
-          <select id="sellerType">
-            <option value="individual">Individual</option>
-            <option value="ip">Sole Proprietor</option>
-            <option value="company">Company</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label id="lFirstName" for="pFirstName">First Name</label>
-          <input id="pFirstName" type="text" placeholder="Enter first name" />
-        </div>
-
-        <div class="field">
-          <label id="lLastName" for="pLastName">Last Name</label>
-          <input id="pLastName" type="text" placeholder="Enter last name" />
-        </div>
-
-        <div class="field">
-          <label id="lEmail" for="pEmail">Email</label>
-          <input id="pEmail" type="email" placeholder="Enter email address" />
-        </div>
-
-        <div class="field">
-          <label id="lPhone" for="pPhone">Phone Number</label>
-          <div class="two-col">
-            <select id="phoneCode">
-              <option>+374</option>
-              <option>+7</option>
-              <option>+49</option>
-              <option>+33</option>
-              <option>+34</option>
-              <option>+31</option>
-              <option>+48</option>
-              <option>+1</option>
-              <option>+971</option>
-            </select>
-            <input id="pPhone" type="text" placeholder="Enter phone number" />
-          </div>
-        </div>
-
-        <div class="field">
-          <label id="lCountry" for="pCountry">Country</label>
-          <input id="pCountry" type="text" placeholder="Enter country" />
-        </div>
-
-        <div class="field">
-          <label id="lCity" for="pCity">City</label>
-          <input id="pCity" type="text" placeholder="Enter city" />
-        </div>
-
-        <div class="field">
-          <label id="lTelegram" for="pTelegram">Telegram username</label>
-          <input id="pTelegram" type="text" placeholder="@username" />
-        </div>
-
-        <div class="field">
-          <label id="lSellWhat" for="pSellWhat">What do you want to sell?</label>
-          <textarea id="pSellWhat" placeholder="Describe your products or services"></textarea>
-        </div>
-
-        <div class="field">
-          <label id="lPayMethod" for="payMethod">Preferred payout method</label>
-          <select id="payMethod">
-            <option id="oBank">Bank Transfer</option>
-            <option id="oCard">Card</option>
-            <option id="oPayPal">PayPal</option>
-            <option id="oCrypto">Crypto</option>
-            <option id="oOther">Other</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label id="lAccount" for="pAccount">Payout details</label>
-          <input id="pAccount" type="text" placeholder="Enter payout details" />
-        </div>
-
-        <div class="field">
-          <label id="lPayNotes" for="pPayNotes">Notes</label>
-          <textarea id="pPayNotes" placeholder="Add notes if needed"></textarea>
-        </div>
-
-        <button class="btn primary" id="tSubmit" onclick="submitApplication()">Submit application</button>
-      </div>
-    </div>
-
-    <!-- PLANS -->
-    <div class="screen" id="plans">
-      <a href="javascript:void(0)" class="back-link" id="tBack2" onclick="showScreen('home')">← Back</a>
-
-      <div class="card">
-        <div class="title" id="tPlansTitle">Seller plans</div>
-        <div class="text" id="tPlansSub">Choose the plan that fits your current stage.</div>
-      </div>
-
-      <div class="plans">
-        <div class="plan">
-          <div class="plan-name" id="tBasic">Basic</div>
-          <div class="plan-price">$19</div>
-          <div class="plan-text" id="tBasicText">
-            Good for new sellers who want to start simply with core product and order management.
-          </div>
-        </div>
-
-        <div class="plan pro">
-          <div class="plan-name" id="tPro">Pro</div>
-          <div class="plan-price">$49</div>
-          <div class="plan-text" id="tProText">
-            Best for active sellers who want stronger visibility, premium support, and advanced growth.
-          </div>
-        </div>
-
-        <button class="btn primary" id="tApplyNow" onclick="showScreen('apply')">Apply now</button>
-      </div>
-    </div>
-
-    <!-- REVIEW -->
-    <div class="screen" id="review">
-      <a href="javascript:void(0)" class="back-link" id="tBack3" onclick="showScreen('home')">← Back</a>
-
-      <div class="card">
-        <div class="eyebrow" id="tStatus">STATUS</div>
-        <div class="title" id="tReviewTitle">Application received</div>
-        <div class="text" id="tReviewText">
-          Your seller application has been saved. The owner will review your submission and contact you soon.
-        </div>
-      </div>
-    </div>
-
-    <!-- PRODUCTS -->
-    <div class="screen" id="products">
-      <div class="card">
-        <div class="row">
-          <div>
-            <div class="title" id="tProductsTitle" style="margin-bottom:4px;">Products</div>
-            <div class="muted-top" id="tProductsSub">Manage your listed products</div>
-          </div>
-          <button class="mini-btn" id="tAddProduct">Add product</button>
-        </div>
-      </div>
-
-      <div class="product-card">
-        <div class="row">
-          <div>
-            <div class="product-name">Rose Glow Set</div>
-            <div class="meta">Beauty / Gift Set</div>
-          </div>
-          <span class="badge blue">Active</span>
-        </div>
-        <button class="mini-btn" id="tEdit1">Edit</button>
-      </div>
-
-      <div class="product-card">
-        <div class="row">
-          <div>
-            <div class="product-name">Pink Elegance Bag</div>
-            <div class="meta">Accessories / Fashion</div>
-          </div>
-          <span class="badge orange">Draft</span>
-        </div>
-        <button class="mini-btn" id="tEdit2">Edit</button>
-      </div>
-    </div>
-
-    <!-- ORDERS -->
-    <div class="screen" id="orders">
-      <div class="card">
-        <div class="title" id="tOrdersTitle">Orders</div>
-        <div class="text" id="tOrdersSub">Track incoming and processed orders</div>
-      </div>
-
-      <div class="order-card">
-        <div class="row">
-          <div>
-            <div class="order-id">#1024</div>
-            <div class="meta">New customer order</div>
-          </div>
-          <span class="badge blue" id="stNew">New</span>
-        </div>
-      </div>
-
-      <div class="order-card">
-        <div class="row">
-          <div>
-            <div class="order-id">#1023</div>
-            <div class="meta">Paid and being prepared</div>
-          </div>
-          <span class="badge green" id="stProcessing">Processing</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- SUPPORT -->
-    <div class="screen" id="support">
-      <div class="card">
-        <div class="title" id="tSupportTitle">Support</div>
-        <div class="text" id="tSupportText">
-          Need help? Contact the AMAROSE owner support team for seller questions and approval guidance.
-        </div>
-        <button class="btn primary" id="tContactOwner">Contact Owner</button>
-        <button class="btn secondary" id="tFaq">Seller FAQ</button>
-      </div>
-
-      <div class="support-card">
-        <div class="product-name" id="tRulesTitle">Seller rules</div>
-        <div class="meta" id="tRulesText">
-          Keep your information accurate, upload valid documents, and list products that match AMAROSE quality expectations.
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="nav">
-    <button id="nHome" class="active" onclick="showScreen('home', this)">Home</button>
-    <button id="nProducts" onclick="showScreen('products', this)">Products</button>
-    <button id="nOrders" onclick="showScreen('orders', this)">Orders</button>
-    <button id="nSupport" onclick="showScreen('support', this)">Support</button>
-  </div>
-
-  <script>
-    const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
-    if (tg) {
-      tg.expand();
-      tg.ready();
-    }
-
-    let currentType = 'individual';
-
-    function showScreen(id, btn = null) {
-      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      const screen = document.getElementById(id);
-      if (screen) screen.classList.add('active');
-
-      const navIds = ['home', 'products', 'orders', 'support'];
-      document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
-
-      if (navIds.includes(id)) {
-        const map = {
-          home: 'nHome',
-          products: 'nProducts',
-          orders: 'nOrders',
-          support: 'nSupport'
-        };
-        const navBtn = document.getElementById(map[id]);
-        if (navBtn) navBtn.classList.add('active');
+import 'react-native-url-polyfill/auto'
+import React, { useEffect, useMemo, useState } from 'react'
+import {
+  Alert,
+  ActivityIndicator,
+  Button,
+  FlatList,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { createClient, Session, User } from '@supabase/supabase-js'
+import * as DocumentPicker from 'expo-document-picker'
+import * as FileSystem from 'expo-file-system'
+import { decode } from 'base64-arraybuffer'
+
+/* =========================
+   SUPABASE
+========================= */
+
+const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL || ''
+const SUPABASE_KEY = process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY || ''
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
+  auth: {
+    storage: AsyncStorage,
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: false,
+  },
+})
+
+/* =========================
+   TYPES
+========================= */
+
+type CurrencyCode = 'EUR' | 'USD' | 'AMD' | 'RUB'
+type DocStatus = 'pending' | 'approved' | 'rejected' | 'manual_review'
+
+type SellerProfile = {
+  id: string
+  role: 'seller'
+  email: string | null
+  full_name: string | null
+  company_name: string | null
+  seller_type: string | null
+  phone: string | null
+  country: string | null
+  city: string | null
+  language: string | null
+  currency: CurrencyCode
+  tariff_code: string | null
+  tariff_period: '1_month' | '6_months' | '1_year' | null
+  account_status: 'pending' | 'active' | 'suspended' | 'blocked'
+  verification_status: 'not_started' | 'pending' | 'approved' | 'rejected' | 'manual_review'
+  rating_avg: number
+  rating_count: number
+  activity_score: number
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+type SellerDocument = {
+  id: string
+  seller_id: string
+  document_type: string
+  file_name: string
+  file_path: string
+  file_size: number | null
+  mime_type: string | null
+  status: DocStatus
+  review_note: string | null
+  reviewed_by: string | null
+  reviewed_at: string | null
+  created_at: string
+  updated_at: string
+}
+
+type ScreenKey = 'auth' | 'profile' | 'documents'
+
+/* =========================
+   HELPERS
+========================= */
+
+function box(msg: string, type: 'ok' | 'err' = 'ok') {
+  Alert.alert(type === 'ok' ? 'Success' : 'Error', msg)
+}
+
+function safeFileName(name: string) {
+  return name.replace(/[^\w.\-]/g, '_')
+}
+
+function currencyFix(v: string): CurrencyCode {
+  const x = v.toUpperCase()
+  if (x === 'USD' || x === 'AMD' || x === 'RUB') return x
+  return 'EUR'
+}
+
+function statusColor(status: string) {
+  if (status === 'approved') return '#0a7f2e'
+  if (status === 'rejected') return '#b42318'
+  if (status === 'manual_review') return '#b54708'
+  return '#175cd3'
+}
+
+/* =========================
+   APP
+========================= */
+
+export default function App() {
+  const [booting, setBooting] = useState(true)
+  const [session, setSession] = useState<Session | null>(null)
+  const [user, setUser] = useState<User | null>(null)
+  const [screen, setScreen] = useState<ScreenKey>('auth')
+
+  // auth form
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [authLoading, setAuthLoading] = useState(false)
+
+  // profile
+  const [profileLoading, setProfileLoading] = useState(false)
+  const [profileSaving, setProfileSaving] = useState(false)
+  const [profile, setProfile] = useState<SellerProfile | null>(null)
+
+  const [fullName, setFullName] = useState('')
+  const [companyName, setCompanyName] = useState('')
+  const [sellerType, setSellerType] = useState('')
+  const [phone, setPhone] = useState('')
+  const [country, setCountry] = useState('')
+  const [city, setCity] = useState('')
+  const [language, setLanguage] = useState('')
+  const [currency, setCurrency] = useState<CurrencyCode>('EUR')
+
+  // documents
+  const [docsLoading, setDocsLoading] = useState(false)
+  const [docsUploading, setDocsUploading] = useState(false)
+  const [documents, setDocuments] = useState<SellerDocument[]>([])
+
+  useEffect(() => {
+    let mounted = true
+
+    async function init() {
+      try {
+        const { data } = await supabase.auth.getSession()
+        if (!mounted) return
+        setSession(data.session)
+        setUser(data.session?.user ?? null)
+      } catch (e: any) {
+        box(e.message || 'Init failed', 'err')
+      } finally {
+        if (mounted) setBooting(false)
       }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function pickType(type) {
-      currentType = type;
-      document.getElementById('sellerType').value = type;
-      document.querySelectorAll('.box').forEach(b => b.classList.remove('active'));
-      const selected = document.getElementById('box-' + type);
-      if (selected) selected.classList.add('active');
+    init()
+
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      setSession(nextSession)
+      setUser(nextSession?.user ?? null)
+    })
+
+    return () => {
+      mounted = false
+      sub.subscription.unsubscribe()
     }
+  }, [])
 
-    function submitApplication() {
-      showScreen('review');
+  useEffect(() => {
+    if (user) {
+      setScreen('profile')
+      loadProfile()
+      loadDocuments()
+    } else {
+      setScreen('auth')
+      setProfile(null)
+      setDocuments([])
     }
+  }, [user?.id])
 
-    const translations = {
-      EN: {
-        tSeller: 'Sell with AMAROSE',
-        tSub: 'Grow your business with a premium marketplace experience',
-        tWelcome: 'WELCOME',
-        tJoin: 'Join AMAROSE Seller',
-        tHomeText: 'Apply, upload your documents, choose your seller plan, and manage products, orders, and support in one elegant space.',
-        tApplyBtn: 'Apply as Seller',
-        tPlansBtn: 'View Plans',
-        tTypes: 'Seller types',
-        tChoose: 'Choose one',
-        tIndividual: 'Individual',
-        tIp: 'Sole Proprietor',
-        tCompany: 'Company',
-        tPremiumBox: 'Premium brand<br/>presentation',
-        tWhy: 'Why sell with AMAROSE',
-        tLower: 'Premium seller experience',
-        tWhyBody: 'AMAROSE gives sellers a premium brand environment, lower marketplace pressure, elegant presentation, and direct owner support during review and approval.',
-        b1: 'Lower competitive pressure',
-        b2: 'Direct owner review',
-        b3: 'Premium storefront feeling',
-        b4: 'Simple seller management',
-        tBack1: '← Back',
-        tStep: 'STEP 1',
-        tApplication: 'Seller application',
-        tApplicationText: 'Complete the seller application to begin verification and access your AMAROSE Seller tools.',
-        lSellerType: 'Seller Type',
-        lFirstName: 'First Name',
-        lLastName: 'Last Name',
-        lEmail: 'Email',
-        lPhone: 'Phone Number',
-        lCountry: 'Country',
-        lCity: 'City',
-        lTelegram: 'Telegram username',
-        lSellWhat: 'What do you want to sell?',
-        lPayMethod: 'Preferred payout method',
-        lAccount: 'Payout details',
-        lPayNotes: 'Notes',
-        tSubmit: 'Submit application',
-        tPlansTitle: 'Seller plans',
-        tPlansSub: 'Choose the plan that fits your current stage.',
-        tBasic: 'Basic',
-        tBasicText: 'Good for new sellers who want to start simply with core product and order management.',
-        tPro: 'Pro',
-        tProText: 'Best for active sellers who want stronger visibility, premium support, and advanced growth.',
-        tApplyNow: 'Apply now',
-        tStatus: 'STATUS',
-        tReviewTitle: 'Application received',
-        tReviewText: 'Your seller application has been saved. The owner will review your submission and contact you soon.',
-        tProductsTitle: 'Products',
-        tProductsSub: 'Manage your listed products',
-        tAddProduct: 'Add product',
-        tEdit1: 'Edit',
-        tEdit2: 'Edit',
-        tOrdersTitle: 'Orders',
-        tOrdersSub: 'Track incoming and processed orders',
-        stNew: 'New',
-        stProcessing: 'Processing',
-        tSupportTitle: 'Support',
-        tSupportText: 'Need help? Contact the AMAROSE owner support team for seller questions and approval guidance.',
-        tContactOwner: 'Contact Owner',
-        tFaq: 'Seller FAQ',
-        tRulesTitle: 'Seller rules',
-        tRulesText: 'Keep your information accurate, upload valid documents, and list products that match AMAROSE quality expectations.',
-        nHome: 'Home',
-        nProducts: 'Products',
-        nOrders: 'Orders',
-        nSupport: 'Support',
-        oBank: 'Bank Transfer',
-        oCard: 'Card',
-        oPayPal: 'PayPal',
-        oCrypto: 'Crypto',
-        oOther: 'Other'
-      },
-      RU: {
-        tSeller: 'Продавайте с AMAROSE',
-        tSub: 'Развивайте свой бизнес в премиальном маркетплейсе',
-        tWelcome: 'ДОБРО ПОЖАЛОВАТЬ',
-        tJoin: 'Присоединяйтесь к AMAROSE Seller',
-        tHomeText: 'Подайте заявку, загрузите документы, выберите тариф продавца и управляйте товарами, заказами и поддержкой в одном красивом пространстве.',
-        tApplyBtn: 'Подать заявку',
-        tPlansBtn: 'Посмотреть тарифы',
-        tTypes: 'Типы продавцов',
-        tChoose: 'Выберите',
-        tIndividual: 'Физлицо',
-        tIp: 'ИП',
-        tCompany: 'Компания',
-        tPremiumBox: 'Премиальная<br/>подача бренда',
-        tWhy: 'Почему продавать с AMAROSE',
-        tLower: 'Премиальный опыт продавца',
-        tWhyBody: 'AMAROSE даёт продавцам премиальную среду бренда, меньше давления маркетплейса, красивую подачу и прямую поддержку владельца во время проверки и одобрения.',
-        b1: 'Меньше конкурентного давления',
-        b2: 'Прямая проверка владельцем',
-        b3: 'Премиальный вид витрины',
-        b4: 'Простое управление продавцом',
-        tBack1: '← Назад',
-        tStep: 'ШАГ 1',
-        tApplication: 'Заявка продавца',
-        tApplicationText: 'Заполните заявку продавца, чтобы начать проверку и получить доступ к инструментам AMAROSE Seller.',
-        lSellerType: 'Тип продавца',
-        lFirstName: 'Имя',
-        lLastName: 'Фамилия',
-        lEmail: 'Email',
-        lPhone: 'Номер телефона',
-        lCountry: 'Страна',
-        lCity: 'Город',
-        lTelegram: 'Имя в Telegram',
-        lSellWhat: 'Что вы хотите продавать?',
-        lPayMethod: 'Предпочитаемый способ выплат',
-        lAccount: 'Реквизиты для выплат',
-        lPayNotes: 'Примечания',
-        tSubmit: 'Отправить заявку',
-        tPlansTitle: 'Тарифы продавца',
-        tPlansSub: 'Выберите тариф под ваш этап развития.',
-        tBasic: 'Базовый',
-        tBasicText: 'Подходит новым продавцам, которым нужен простой старт с товарами и заказами.',
-        tPro: 'Премиум',
-        tProText: 'Лучший вариант для активных продавцов, которым нужна видимость, поддержка и рост.',
-        tApplyNow: 'Подать сейчас',
-        tStatus: 'СТАТУС',
-        tReviewTitle: 'Заявка получена',
-        tReviewText: 'Ваша заявка продавца сохранена. Владелец проверит её и свяжется с вами.',
-        tProductsTitle: 'Товары',
-        tProductsSub: 'Управляйте своими товарами',
-        tAddProduct: 'Добавить товар',
-        tEdit1: 'Изменить',
-        tEdit2: 'Изменить',
-        tOrdersTitle: 'Заказы',
-        tOrdersSub: 'Отслеживайте новые и обработанные заказы',
-        stNew: 'Новый',
-        stProcessing: 'В обработке',
-        tSupportTitle: 'Поддержка',
-        tSupportText: 'Нужна помощь? Свяжитесь с владельцем AMAROSE по вопросам продавцов и одобрения.',
-        tContactOwner: 'Связаться с владельцем',
-        tFaq: 'FAQ продавца',
-        tRulesTitle: 'Правила продавца',
-        tRulesText: 'Указывайте точные данные, загружайте действительные документы и публикуйте товары, соответствующие качеству AMAROSE.',
-        nHome: 'Главная',
-        nProducts: 'Товары',
-        nOrders: 'Заказы',
-        nSupport: 'Поддержка',
-        oBank: 'Банковский перевод',
-        oCard: 'Карта',
-        oPayPal: 'PayPal',
-        oCrypto: 'Крипто',
-        oOther: 'Другое'
-      },
-      HY: {
-        tSeller: 'Վաճառեք AMAROSE-ի հետ',
-        tSub: 'Զարգացրեք ձեր բիզնեսը պրեմիում մարքեթփլեյսում',
-        tWelcome: 'ԲԱՐԻ ԳԱԼՈՒՍՏ',
-        tJoin: 'Միացեք AMAROSE Seller-ին',
-        tHomeText: 'Լրացրեք հայտը, վերբեռնեք փաստաթղթերը, ընտրեք վաճառողի փաթեթը և կառավարեք ապրանքները, պատվերները և աջակցությունը մեկ գեղեցիկ միջավայրում։',
-        tApplyBtn: 'Դիմել որպես վաճառող',
-        tPlansBtn: 'Տեսնել փաթեթները',
-        tTypes: 'Վաճառողի տեսակներ',
-        tChoose: 'Ընտրեք մեկը',
-        tIndividual: 'Անհատ',
-        tIp: 'ԱՁ',
-        tCompany: 'Ընկերություն',
-        tPremiumBox: 'Պրեմիում<br/>բրենդի ներկայացում',
-        tWhy: 'Ինչու վաճառել AMAROSE-ում',
-        tLower: 'Պրեմիում վաճառողի փորձ',
-        tWhyBody: 'AMAROSE-ը վաճառողներին տալիս է պրեմիում բրենդային միջավայր, ավելի քիչ ճնշում, գեղեցիկ ներկայացում և ուղղակի աջակցություն հաստատման ընթացքում։',
-        b1: 'Ավելի քիչ մրցակցային ճնշում',
-        b2: 'Ուղղակի ստուգում սեփականատիրոջ կողմից',
-        b3: 'Պրեմիում խանութի զգացողություն',
-        b4: 'Պարզ կառավարում',
-        tBack1: '← Հետ',
-        tStep: 'ՔԱՅԼ 1',
-        tApplication: 'Վաճառողի հայտ',
-        tApplicationText: 'Լրացրեք վաճառողի հայտը՝ հաստատման գործընթացը սկսելու և AMAROSE Seller գործիքներին մուտք ստանալու համար։',
-        lSellerType: 'Վաճառողի տեսակ',
-        lFirstName: 'Անուն',
-        lLastName: 'Ազգանուն',
-        lEmail: 'Email',
-        lPhone: 'Հեռախոսահամար',
-        lCountry: 'Երկիր',
-        lCity: 'Քաղաք',
-        lTelegram: 'Telegram անուն',
-        lSellWhat: 'Ի՞նչ եք ուզում վաճառել',
-        lPayMethod: 'Վճարման նախընտրելի եղանակ',
-        lAccount: 'Վճարման տվյալներ',
-        lPayNotes: 'Նշումներ',
-        tSubmit: 'Ուղարկել հայտը',
-        tPlansTitle: 'Վաճառողի փաթեթներ',
-        tPlansSub: 'Ընտրեք ձեզ հարմար փաթեթը։',
-        tBasic: 'Հիմնական',
-        tBasicText: 'Հարմար է նոր վաճառողների համար՝ պարզ մեկնարկի նպատակով։',
-        tPro: 'Պրո',
-        tProText: 'Լավագույն տարբերակն ակտիվ վաճառողների համար, ովքեր ուզում են աճ և տեսանելիություն։',
-        tApplyNow: 'Դիմել հիմա',
-        tStatus: 'ԿԱՐԳԱՎԻՃԱԿ',
-        tReviewTitle: 'Հայտը ստացվել է',
-        tReviewText: 'Ձեր վաճառողի հայտը պահպանվել է։ Սեփականատերը կստուգի այն և շուտով կկապվի ձեզ հետ։',
-        tProductsTitle: 'Ապրանքներ',
-        tProductsSub: 'Կառավարեք ձեր ապրանքները',
-        tAddProduct: 'Ավելացնել ապրանք',
-        tEdit1: 'Խմբագրել',
-        tEdit2: 'Խմբագրել',
-        tOrdersTitle: 'Պատվերներ',
-        tOrdersSub: 'Հետևեք նոր և ընթացիկ պատվերներին',
-        stNew: 'Նոր',
-        stProcessing: 'Ընթացքում',
-        tSupportTitle: 'Աջակցություն',
-        tSupportText: 'Օգնությո՞ւն է պետք։ Կապվեք AMAROSE-ի սեփականատիրոջ աջակցության հետ։',
-        tContactOwner: 'Կապվել սեփականատիրոջ հետ',
-        tFaq: 'Վաճառողի FAQ',
-        tRulesTitle: 'Վաճառողի կանոններ',
-        tRulesText: 'Մուտքագրեք ճշգրիտ տվյալներ, վերբեռնեք վավեր փաստաթղթեր և տեղադրեք AMAROSE-ի որակին համապատասխան ապրանքներ։',
-        nHome: 'Գլխավոր',
-        nProducts: 'Ապրանքներ',
-        nOrders: 'Պատվերներ',
-        nSupport: 'Աջակցություն',
-        oBank: 'Բանկային փոխանցում',
-        oCard: 'Քարտ',
-        oPayPal: 'PayPal',
-        oCrypto: 'Կրիպտո',
-        oOther: 'Այլ'
-      },
-      ES: {},
-      DE: {},
-      FR: {}
-    };
+  const profileCompletion = useMemo(() => {
+    const fields = [
+      fullName,
+      companyName,
+      sellerType,
+      phone,
+      country,
+      city,
+      language,
+      currency,
+    ]
+    const filled = fields.filter(Boolean).length
+    return Math.round((filled / fields.length) * 100)
+  }, [fullName, companyName, sellerType, phone, country, city, language, currency])
 
-    translations.ES = { ...translations.EN };
-    translations.DE = { ...translations.EN };
-    translations.FR = { ...translations.EN };
-
-    function setLang(lang) {
-      const t = translations[lang] || translations.EN;
-      Object.keys(t).forEach(id => {
-        const el = document.getElementById(id);
-        if (!el) return;
-        if (id === 'tPremiumBox') {
-          el.innerHTML = t[id];
-        } else {
-          el.textContent = t[id];
-        }
-      });
-
-      document.getElementById('pFirstName').placeholder =
-        lang === 'RU' ? 'Введите имя' :
-        lang === 'HY' ? 'Մուտքագրեք անունը' : 'Enter first name';
-
-      document.getElementById('pLastName').placeholder =
-        lang === 'RU' ? 'Введите фамилию' :
-        lang === 'HY' ? 'Մուտքագրեք ազգանունը' : 'Enter last name';
-
-      document.getElementById('pEmail').placeholder =
-        lang === 'RU' ? 'Введите email' :
-        lang === 'HY' ? 'Մուտքագրեք email' : 'Enter email address';
-
-      document.getElementById('pPhone').placeholder =
-        lang === 'RU' ? 'Введите номер телефона' :
-        lang === 'HY' ? 'Մուտքագրեք հեռախոսահամարը' : 'Enter phone number';
-
-      document.getElementById('pCountry').placeholder =
-        lang === 'RU' ? 'Введите страну' :
-        lang === 'HY' ? 'Մուտքագրեք երկիրը' : 'Enter country';
-
-      document.getElementById('pCity').placeholder =
-        lang === 'RU' ? 'Введите город' :
-        lang === 'HY' ? 'Մուտքագրեք քաղաքը' : 'Enter city';
-
-      document.getElementById('pTelegram').placeholder =
-        lang === 'RU' ? '@имя' :
-        lang === 'HY' ? '@անուն' : '@username';
-
-      document.getElementById('pSellWhat').placeholder =
-        lang === 'RU' ? 'Опишите ваши товары или услуги' :
-        lang === 'HY' ? 'Նկարագրեք ձեր ապրանքները կամ ծառայությունները' : 'Describe your products or services';
-
-      document.getElementById('pAccount').placeholder =
-        lang === 'RU' ? 'Введите реквизиты для выплат' :
-        lang === 'HY' ? 'Մուտքագրեք վճարման տվյալները' : 'Enter payout details';
-
-      document.getElementById('pPayNotes').placeholder =
-        lang === 'RU' ? 'Добавьте примечания при необходимости' :
-        lang === 'HY' ? 'Ավելացրեք նշումներ անհրաժեշտության դեպքում' : 'Add notes if needed';
-
-      const sellerType = document.getElementById('sellerType');
-      sellerType.options[0].text =
-        lang === 'RU' ? 'Физлицо' :
-        lang === 'HY' ? 'Անհատ' : 'Individual';
-      sellerType.options[1].text =
-        lang === 'RU' ? 'ИП' :
-        lang === 'HY' ? 'ԱՁ' : 'Sole Proprietor';
-      sellerType.options[2].text =
-        lang === 'RU' ? 'Компания' :
-        lang === 'HY' ? 'Ընկերություն' : 'Company';
+  async function signUp() {
+    try {
+      if (!email.trim() || !password.trim()) {
+        return box('Enter email and password', 'err')
+      }
+      setAuthLoading(true)
+      const { error } = await supabase.auth.signUp({
+        email: email.trim(),
+        password,
+      })
+      if (error) throw error
+      box('Account created')
+    } catch (e: any) {
+      box(e.message || 'Signup failed', 'err')
+    } finally {
+      setAuthLoading(false)
     }
+  }
 
-    document.getElementById('langSelect').addEventListener('change', function() {
-      setLang(this.value);
-    });
+  async function signIn() {
+    try {
+      if (!email.trim() || !password.trim()) {
+        return box('Enter email and password', 'err')
+      }
+      setAuthLoading(true)
+      const { error } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
+      })
+      if (error) throw error
+      box('Logged in')
+    } catch (e: any) {
+      box(e.message || 'Login failed', 'err')
+    } finally {
+      setAuthLoading(false)
+    }
+  }
 
-    setLang('EN');
-    pickType('individual');
-  </script>
-</body>
-</html>
+  async function resetPassword() {
+    try {
+      if (!email.trim()) return box('Enter email first', 'err')
+      setAuthLoading(true)
+      const { error } = await supabase.auth.resetPasswordForEmail(email.trim())
+      if (error) throw error
+      box('Reset email sent')
+    } catch (e: any) {
+      box(e.message || 'Reset failed', 'err')
+    } finally {
+      setAuthLoading(false)
+    }
+  }
+
+  async function logout() {
+    try {
+      const { error } = await supabase.auth.signOut()
+      if (error) throw error
+    } catch (e: any) {
+      box(e.message || 'Logout failed', 'err')
+    }
+  }
+
+  async function loadProfile() {
+    try {
+      if (!user) return
+      setProfileLoading(true)
+
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single()
+
+      if (error) throw error
+
+      const p = data as SellerProfile
+      setProfile(p)
+
+      setFullName(p.full_name ?? '')
+      setCompanyName(p.company_name ?? '')
+      setSellerType(p.seller_type ?? '')
+      setPhone(p.phone ?? '')
+      setCountry(p.country ?? '')
+      setCity(p.city ?? '')
+      setLanguage(p.language ?? '')
+      setCurrency(p.currency ?? 'EUR')
+    } catch (e: any) {
+      box(e.message || 'Profile load failed', 'err')
+    } finally {
+      setProfileLoading(false)
+    }
+  }
+
+  async function saveProfile() {
+    try {
+      if (!user) return
+      setProfileSaving(true)
+
+      const payload = {
+        full_name: fullName || null,
+        company_name: companyName || null,
+        seller_type: sellerType || null,
+        phone: phone || null,
+        country: country || null,
+        city: city || null,
+        language: language || null,
+        currency,
+      }
+
+      const { data, error } = await supabase
+        .from('profiles')
+        .update(payload)
+        .eq('id', user.id)
+        .select('*')
+        .single()
+
+      if (error) throw error
+
+      setProfile(data as SellerProfile)
+      box('Profile saved')
+    } catch (e: any) {
+      box(e.message || 'Profile save failed', 'err')
+    } finally {
+      setProfileSaving(false)
+    }
+  }
+
+  async function loadDocuments() {
+    try {
+      if (!user) return
+      setDocsLoading(true)
+
+      const { data, error } = await supabase
+        .from('seller_documents')
+        .select('*')
+        .eq('seller_id', user.id)
+        .order('created_at', { ascending: false })
+
+      if (error) throw error
+
+      setDocuments((data || []) as SellerDocument[])
+    } catch (e: any) {
+      box(e.message || 'Documents load failed', 'err')
+    } finally {
+      setDocsLoading(false)
+    }
+  }
+
+  async function uploadDocument(documentType: string) {
+    try {
+      if (!user) return
+      setDocsUploading(true)
+
+      const result = await DocumentPicker.getDocumentAsync({
+        copyToCacheDirectory: true,
+        multiple: false,
+      })
+
+      if (result.canceled) return
+
+      const file = result.assets[0]
+      const fileName = safeFileName(file.name)
+      const mimeType = file.mimeType || 'application/octet-stream'
+      const base64 = await FileSystem.readAsStringAsync(file.uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      })
+
+      const path = `${user.id}/${documentType}/${Date.now()}_${fileName}`
+
+      const { error: uploadError } = await supabase.storage
+        .from('seller-documents')
+        .upload(path, decode(base64), {
+          contentType: mimeType,
+          upsert: false,
+        })
+
+      if (uploadError) throw uploadError
+
+      const { error: dbError } = await supabase.from('seller_documents').insert({
+        seller_id: user.id,
+        document_type: documentType,
+        file_name: fileName,
+        file_path: path,
+        file_size: file.size ?? null,
+        mime_type: mimeType,
+        status: 'pending',
+      })
+
+      if (dbError) throw dbError
+
+      box('Document uploaded')
+      await loadDocuments()
+    } catch (e: any) {
+      box(e.message || 'Upload failed', 'err')
+    } finally {
+      setDocsUploading(false)
+    }
+  }
+
+  if (!SUPABASE_URL || !SUPABASE_KEY) {
+    return (
+      <SafeAreaView style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
+        <Text style={{ fontSize: 20, fontWeight: '700', marginBottom: 12 }}>
+          Supabase env missing
+        </Text>
+        <Text>
+          Add EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY in .env
+        </Text>
+      </SafeAreaView>
+    )
+  }
+
+  if (booting) {
+    return (
+      <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
+        <Text style={{ marginTop: 12 }}>Loading...</Text>
+      </SafeAreaView>
+    )
+  }
+
+  if (!user) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+        <ScrollView contentContainerStyle={{ padding: 20, flexGrow: 1, justifyContent: 'center' }}>
+          <Text style={{ fontSize: 30, fontWeight: '800', marginBottom: 6 }}>AMAROSE</Text>
+          <Text style={{ fontSize: 20, fontWeight: '700', marginBottom: 20 }}>
+            Seller App
+          </Text>
+
+          <TextInput
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+            autoCapitalize="none"
+            keyboardType="email-address"
+            style={styles.input}
+          />
+
+          <TextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            style={styles.input}
+          />
+
+          <View style={{ gap: 10 }}>
+            <Button title={authLoading ? 'Loading...' : 'Login'} onPress={signIn} disabled={authLoading} />
+            <Button title="Create account" onPress={signUp} disabled={authLoading} />
+            <Button title="Reset password" onPress={resetPassword} disabled={authLoading} />
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    )
+  }
+
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+      <View style={styles.topBar}>
+        <Text style={{ fontSize: 22, fontWeight: '800' }}>AMAROSE Seller</Text>
+        <TouchableOpacity onPress={logout} style={styles.logoutBtn}>
+          <Text style={{ color: '#fff', fontWeight: '700' }}>Logout</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.tabs}>
+        <TouchableOpacity
+          style={[styles.tabBtn, screen === 'profile' && styles.tabBtnActive]}
+          onPress={() => setScreen('profile')}
+        >
+          <Text style={[styles.tabText, screen === 'profile' && styles.tabTextActive]}>Profile</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.tabBtn, screen === 'documents' && styles.tabBtnActive]}
+          onPress={() => setScreen('documents')}
+        >
+          <Text style={[styles.tabText, screen === 'documents' && styles.tabTextActive]}>Documents</Text>
+        </TouchableOpacity>
+      </View>
+
+      {screen === 'profile' && (
+        <ScrollView contentContainerStyle={{ padding: 16 }}>
+          <Text style={styles.title}>Seller Profile</Text>
+
+          {profileLoading ? (
+            <ActivityIndicator size="large" />
+          ) : (
+            <>
+              <View style={styles.card}>
+                <Text style={styles.cardTitle}>Account</Text>
+                <Text>Email: {profile?.email || user.email || '-'}</Text>
+                <Text>Role: {profile?.role || 'seller'}</Text>
+                <Text>Account status: {profile?.account_status || '-'}</Text>
+                <Text>Verification: {profile?.verification_status || '-'}</Text>
+                <Text>Profile completion: {profileCompletion}%</Text>
+              </View>
+
+              <TextInput placeholder="Full name" value={fullName} onChangeText={setFullName} style={styles.input} />
+              <TextInput placeholder="Company name" value={companyName} onChangeText={setCompanyName} style={styles.input} />
+              <TextInput placeholder="Seller type" value={sellerType} onChangeText={setSellerType} style={styles.input} />
+              <TextInput placeholder="Phone" value={phone} onChangeText={setPhone} style={styles.input} />
+              <TextInput placeholder="Country" value={country} onChangeText={setCountry} style={styles.input} />
+              <TextInput placeholder="City" value={city} onChangeText={setCity} style={styles.input} />
+              <TextInput placeholder="Language" value={language} onChangeText={setLanguage} style={styles.input} />
+              <TextInput
+                placeholder="Currency: EUR / USD / AMD / RUB"
+                value={currency}
+                onChangeText={(v) => setCurrency(currencyFix(v))}
+                style={styles.input}
+              />
+
+              <Button title={profileSaving ? 'Saving...' : 'Save profile'} onPress={saveProfile} disabled={profileSaving} />
+
+              <View style={styles.card}>
+                <Text style={styles.cardTitle}>Realtime metrics</Text>
+                <Text>Rating avg: {profile?.rating_avg ?? 0}</Text>
+                <Text>Rating count: {profile?.rating_count ?? 0}</Text>
+                <Text>Activity score: {profile?.activity_score ?? 0}</Text>
+                <Text>Active: {profile?.is_active ? 'Yes' : 'No'}</Text>
+              </View>
+            </>
+          )}
+        </ScrollView>
+      )}
+
+      {screen === 'documents' && (
+        <View style={{ flex: 1, padding: 16 }}>
+          <Text style={styles.title}>Documents</Text>
+
+          <View style={{ gap: 10, marginBottom: 16 }}>
+            <Button
+              title={docsUploading ? 'Uploading...' : 'Upload passport'}
+              onPress={() => uploadDocument('passport')}
+              disabled={docsUploading}
+            />
+            <Button
+              title={docsUploading ? 'Uploading...' : 'Upload business license'}
+              onPress={() => uploadDocument('business_license')}
+              disabled={docsUploading}
+            />
+            <Button
+              title={docsUploading ? 'Uploading...' : 'Upload address proof'}
+              onPress={() => uploadDocument('address_proof')}
+              disabled={docsUploading}
+            />
+          </View>
+
+          {docsLoading ? (
+            <ActivityIndicator size="large" />
+          ) : (
+            <FlatList
+              data={documents}
+              keyExtractor={(item) => item.id}
+              ListEmptyComponent={
+                <View style={styles.card}>
+                  <Text>No documents yet</Text>
+                </View>
+              }
+              renderItem={({ item }) => (
+                <View style={styles.card}>
+                  <Text style={styles.cardTitle}>{item.document_type}</Text>
+                  <Text>File: {item.file_name}</Text>
+                  <Text style={{ color: statusColor(item.status), fontWeight: '700' }}>
+                    Status: {item.status}
+                  </Text>
+                  {!!item.review_note && <Text>Note: {item.review_note}</Text>}
+                  <Text>Uploaded: {new Date(item.created_at).toLocaleString()}</Text>
+                </View>
+              )}
+            />
+          )}
+        </View>
+      )}
+    </SafeAreaView>
+  )
+}
+
+/* =========================
+   STYLES
+========================= */
+
+const styles = {
+  topBar: {
+    paddingHorizontal: 16,
+    paddingTop: 14,
+    paddingBottom: 10,
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    justifyContent: 'space-between' as const,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e5e7eb',
+  },
+  logoutBtn: {
+    backgroundColor: '#175cd3',
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 12,
+  },
+  tabs: {
+    flexDirection: 'row' as const,
+    padding: 12,
+    gap: 10,
+  },
+  tabBtn: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 12,
+    backgroundColor: '#f2f4f7',
+    alignItems: 'center' as const,
+  },
+  tabBtnActive: {
+    backgroundColor: '#175cd3',
+  },
+  tabText: {
+    fontWeight: '700' as const,
+    color: '#344054',
+  },
+  tabTextActive: {
+    color: '#fff',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: '800' as const,
+    marginBottom: 16,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#d0d5dd',
+    padding: 12,
+    borderRadius: 12,
+    marginBottom: 12,
+  },
+  card: {
+    borderWidth: 1,
+    borderColor: '#e4e7ec',
+    borderRadius: 14,
+    padding: 14,
+    marginBottom: 12,
+    backgroundColor: '#fff',
+  },
+  cardTitle: {
+    fontSize: 16,
+    fontWeight: '800' as const,
+    marginBottom: 8,
+  },
+}
