@@ -1,647 +1,538 @@
-import 'react-native-url-polyfill/auto'
-import React, { useEffect, useMemo, useState } from 'react'
-import {
-  Alert,
-  ActivityIndicator,
-  Button,
-  FlatList,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { createClient, Session, User } from '@supabase/supabase-js'
-import * as DocumentPicker from 'expo-document-picker'
-import * as FileSystem from 'expo-file-system'
-import { decode } from 'base64-arraybuffer'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AMAROSE Seller App</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #111827;
+    }
+    .app {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: #fff;
+      box-shadow: 0 0 20px rgba(0,0,0,0.06);
+    }
+    .topbar {
+      background: #175cd3;
+      color: white;
+      padding: 18px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand {
+      font-size: 22px;
+      font-weight: 800;
+    }
+    .sub {
+      font-size: 13px;
+      opacity: 0.9;
+      margin-top: 4px;
+    }
+    .content {
+      padding: 16px;
+    }
+    .card {
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 14px;
+      background: #fff;
+    }
+    .card h3 {
+      margin: 0 0 10px 0;
+      font-size: 17px;
+    }
+    .title {
+      font-size: 24px;
+      font-weight: 800;
+      margin: 0 0 16px;
+    }
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d0d5dd;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      font-size: 15px;
+    }
+    button {
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    .btn-primary { background: #175cd3; color: white; }
+    .btn-secondary { background: #e9effd; color: #175cd3; }
+    .btn-danger { background: #fee4e2; color: #b42318; }
+    .tabs {
+      display: flex;
+      gap: 10px;
+      padding: 12px 16px 0;
+    }
+    .tab {
+      flex: 1;
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      background: #f2f4f7;
+      color: #344054;
+      font-weight: 700;
+    }
+    .tab.active {
+      background: #175cd3;
+      color: white;
+    }
+    .muted {
+      color: #667085;
+      font-size: 14px;
+    }
+    .row {
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    .status {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 6px;
+    }
+    .status.pending { background: #eff8ff; color: #175cd3; }
+    .status.approved { background: #ecfdf3; color: #027a48; }
+    .status.rejected { background: #fef3f2; color: #b42318; }
+    .status.manual_review { background: #fff7ed; color: #b54708; }
+    .hidden { display: none; }
+    .center { text-align: center; }
+    .small { font-size: 12px; }
+    .logout-inline {
+      width: auto;
+      margin: 0;
+      background: rgba(255,255,255,0.16);
+      color: white;
+      padding: 10px 14px;
+    }
+    .file-input {
+      margin-bottom: 12px;
+      width: 100%;
+    }
+    .note {
+      background: #fffaeb;
+      color: #b54708;
+      border: 1px solid #fedf89;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="topbar">
+      <div>
+        <div class="brand">AMAROSE</div>
+        <div class="sub">Seller App</div>
+      </div>
+      <button id="logoutBtn" class="logout-inline hidden">Logout</button>
+    </div>
 
-/* =========================
-   SUPABASE
-========================= */
+    <div id="authView" class="content">
+      <h1 class="title">Seller Login</h1>
+      <div class="card">
+        <input id="email" type="email" placeholder="Email" />
+        <input id="password" type="password" placeholder="Password" />
+        <button class="btn-primary" onclick="signIn()">Login</button>
+        <button class="btn-secondary" onclick="signUp()">Create account</button>
+        <button class="btn-secondary" onclick="resetPassword()">Reset password</button>
+      </div>
+    </div>
 
-const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL || ''
-const SUPABASE_KEY = process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY || ''
+    <div id="appView" class="hidden">
+      <div class="tabs">
+        <button id="tabProfile" class="tab active" onclick="showTab('profile')">Profile</button>
+        <button id="tabDocuments" class="tab" onclick="showTab('documents')">Documents</button>
+      </div>
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
-  auth: {
-    storage: AsyncStorage,
-    autoRefreshToken: true,
-    persistSession: true,
-    detectSessionInUrl: false,
-  },
-})
+      <div id="profileTab" class="content">
+        <h1 class="title">Seller Profile</h1>
 
-/* =========================
-   TYPES
-========================= */
+        <div class="card">
+          <h3>Account</h3>
+          <div class="row"><strong>Email:</strong> <span id="accountEmail">-</span></div>
+          <div class="row"><strong>Role:</strong> <span id="accountRole">seller</span></div>
+          <div class="row"><strong>Account status:</strong> <span id="accountStatus">-</span></div>
+          <div class="row"><strong>Verification:</strong> <span id="verificationStatus">-</span></div>
+          <div class="row"><strong>Rating avg:</strong> <span id="ratingAvg">0</span></div>
+          <div class="row"><strong>Rating count:</strong> <span id="ratingCount">0</span></div>
+          <div class="row"><strong>Activity score:</strong> <span id="activityScore">0</span></div>
+        </div>
 
-type CurrencyCode = 'EUR' | 'USD' | 'AMD' | 'RUB'
-type DocStatus = 'pending' | 'approved' | 'rejected' | 'manual_review'
+        <div class="card">
+          <h3>Edit profile</h3>
+          <input id="full_name" placeholder="Full name" />
+          <input id="company_name" placeholder="Company name" />
+          <input id="seller_type" placeholder="Seller type" />
+          <input id="phone" placeholder="Phone" />
+          <input id="country" placeholder="Country" />
+          <input id="city" placeholder="City" />
+          <input id="language" placeholder="Language" />
+          <select id="currency">
+            <option value="EUR">EUR</option>
+            <option value="USD">USD</option>
+            <option value="AMD">AMD</option>
+            <option value="RUB">RUB</option>
+          </select>
+          <button class="btn-primary" onclick="saveProfile()">Save profile</button>
+        </div>
+      </div>
 
-type SellerProfile = {
-  id: string
-  role: 'seller'
-  email: string | null
-  full_name: string | null
-  company_name: string | null
-  seller_type: string | null
-  phone: string | null
-  country: string | null
-  city: string | null
-  language: string | null
-  currency: CurrencyCode
-  tariff_code: string | null
-  tariff_period: '1_month' | '6_months' | '1_year' | null
-  account_status: 'pending' | 'active' | 'suspended' | 'blocked'
-  verification_status: 'not_started' | 'pending' | 'approved' | 'rejected' | 'manual_review'
-  rating_avg: number
-  rating_count: number
-  activity_score: number
-  is_active: boolean
-  created_at: string
-  updated_at: string
-}
+      <div id="documentsTab" class="content hidden">
+        <h1 class="title">Documents</h1>
 
-type SellerDocument = {
-  id: string
-  seller_id: string
-  document_type: string
-  file_name: string
-  file_path: string
-  file_size: number | null
-  mime_type: string | null
-  status: DocStatus
-  review_note: string | null
-  reviewed_by: string | null
-  reviewed_at: string | null
-  created_at: string
-  updated_at: string
-}
+        <div class="note">
+          Сначала выбери тип документа, потом файл, потом нажми Upload.
+        </div>
 
-type ScreenKey = 'auth' | 'profile' | 'documents'
+        <div class="card">
+          <h3>Upload document</h3>
+          <select id="documentType">
+            <option value="passport">Passport</option>
+            <option value="business_license">Business license</option>
+            <option value="address_proof">Address proof</option>
+          </select>
+          <input id="documentFile" class="file-input" type="file" />
+          <button class="btn-primary" onclick="uploadDocument()">Upload document</button>
+        </div>
 
-/* =========================
-   HELPERS
-========================= */
+        <div class="card">
+          <h3>Your documents</h3>
+          <div id="documentsList" class="muted">No documents yet</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-function box(msg: string, type: 'ok' | 'err' = 'ok') {
-  Alert.alert(type === 'ok' ? 'Success' : 'Error', msg)
-}
+  <script>
+    const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+    const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
 
-function safeFileName(name: string) {
-  return name.replace(/[^\w.\-]/g, '_')
-}
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-function currencyFix(v: string): CurrencyCode {
-  const x = v.toUpperCase()
-  if (x === 'USD' || x === 'AMD' || x === 'RUB') return x
-  return 'EUR'
-}
+    let currentUser = null;
+    let currentProfile = null;
 
-function statusColor(status: string) {
-  if (status === 'approved') return '#0a7f2e'
-  if (status === 'rejected') return '#b42318'
-  if (status === 'manual_review') return '#b54708'
-  return '#175cd3'
-}
+    const authView = document.getElementById('authView');
+    const appView = document.getElementById('appView');
+    const logoutBtn = document.getElementById('logoutBtn');
 
-/* =========================
-   APP
-========================= */
+    function showMessage(message) {
+      alert(message);
+    }
 
-export default function App() {
-  const [booting, setBooting] = useState(true)
-  const [session, setSession] = useState<Session | null>(null)
-  const [user, setUser] = useState<User | null>(null)
-  const [screen, setScreen] = useState<ScreenKey>('auth')
+    function showTab(tab) {
+      const profileTab = document.getElementById('profileTab');
+      const documentsTab = document.getElementById('documentsTab');
+      const tabProfile = document.getElementById('tabProfile');
+      const tabDocuments = document.getElementById('tabDocuments');
 
-  // auth form
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [authLoading, setAuthLoading] = useState(false)
-
-  // profile
-  const [profileLoading, setProfileLoading] = useState(false)
-  const [profileSaving, setProfileSaving] = useState(false)
-  const [profile, setProfile] = useState<SellerProfile | null>(null)
-
-  const [fullName, setFullName] = useState('')
-  const [companyName, setCompanyName] = useState('')
-  const [sellerType, setSellerType] = useState('')
-  const [phone, setPhone] = useState('')
-  const [country, setCountry] = useState('')
-  const [city, setCity] = useState('')
-  const [language, setLanguage] = useState('')
-  const [currency, setCurrency] = useState<CurrencyCode>('EUR')
-
-  // documents
-  const [docsLoading, setDocsLoading] = useState(false)
-  const [docsUploading, setDocsUploading] = useState(false)
-  const [documents, setDocuments] = useState<SellerDocument[]>([])
-
-  useEffect(() => {
-    let mounted = true
-
-    async function init() {
-      try {
-        const { data } = await supabase.auth.getSession()
-        if (!mounted) return
-        setSession(data.session)
-        setUser(data.session?.user ?? null)
-      } catch (e: any) {
-        box(e.message || 'Init failed', 'err')
-      } finally {
-        if (mounted) setBooting(false)
+      if (tab === 'profile') {
+        profileTab.classList.remove('hidden');
+        documentsTab.classList.add('hidden');
+        tabProfile.classList.add('active');
+        tabDocuments.classList.remove('active');
+      } else {
+        documentsTab.classList.remove('hidden');
+        profileTab.classList.add('hidden');
+        tabDocuments.classList.add('active');
+        tabProfile.classList.remove('active');
       }
     }
 
-    init()
-
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, nextSession) => {
-      setSession(nextSession)
-      setUser(nextSession?.user ?? null)
-    })
-
-    return () => {
-      mounted = false
-      sub.subscription.unsubscribe()
+    function renderAuth() {
+      authView.classList.remove('hidden');
+      appView.classList.add('hidden');
+      logoutBtn.classList.add('hidden');
     }
-  }, [])
 
-  useEffect(() => {
-    if (user) {
-      setScreen('profile')
-      loadProfile()
-      loadDocuments()
-    } else {
-      setScreen('auth')
-      setProfile(null)
-      setDocuments([])
+    function renderApp() {
+      authView.classList.add('hidden');
+      appView.classList.remove('hidden');
+      logoutBtn.classList.remove('hidden');
     }
-  }, [user?.id])
 
-  const profileCompletion = useMemo(() => {
-    const fields = [
-      fullName,
-      companyName,
-      sellerType,
-      phone,
-      country,
-      city,
-      language,
-      currency,
-    ]
-    const filled = fields.filter(Boolean).length
-    return Math.round((filled / fields.length) * 100)
-  }, [fullName, companyName, sellerType, phone, country, city, language, currency])
+    async function signUp() {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
 
-  async function signUp() {
-    try {
-      if (!email.trim() || !password.trim()) {
-        return box('Enter email and password', 'err')
+      if (!email || !password) {
+        showMessage('Enter email and password');
+        return;
       }
-      setAuthLoading(true)
-      const { error } = await supabase.auth.signUp({
-        email: email.trim(),
-        password,
-      })
-      if (error) throw error
-      box('Account created')
-    } catch (e: any) {
-      box(e.message || 'Signup failed', 'err')
-    } finally {
-      setAuthLoading(false)
-    }
-  }
 
-  async function signIn() {
-    try {
-      if (!email.trim() || !password.trim()) {
-        return box('Enter email and password', 'err')
+      const { error } = await supabase.auth.signUp({ email, password });
+
+      if (error) {
+        showMessage(error.message);
+        return;
       }
-      setAuthLoading(true)
-      const { error } = await supabase.auth.signInWithPassword({
-        email: email.trim(),
-        password,
-      })
-      if (error) throw error
-      box('Logged in')
-    } catch (e: any) {
-      box(e.message || 'Login failed', 'err')
-    } finally {
-      setAuthLoading(false)
-    }
-  }
 
-  async function resetPassword() {
-    try {
-      if (!email.trim()) return box('Enter email first', 'err')
-      setAuthLoading(true)
-      const { error } = await supabase.auth.resetPasswordForEmail(email.trim())
-      if (error) throw error
-      box('Reset email sent')
-    } catch (e: any) {
-      box(e.message || 'Reset failed', 'err')
-    } finally {
-      setAuthLoading(false)
+      showMessage('Account created');
     }
-  }
 
-  async function logout() {
-    try {
-      const { error } = await supabase.auth.signOut()
-      if (error) throw error
-    } catch (e: any) {
-      box(e.message || 'Logout failed', 'err')
+    async function signIn() {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      if (!email || !password) {
+        showMessage('Enter email and password');
+        return;
+      }
+
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        showMessage(error.message);
+        return;
+      }
+
+      await bootUser();
+      showMessage('Logged in');
     }
-  }
 
-  async function loadProfile() {
-    try {
-      if (!user) return
-      setProfileLoading(true)
+    async function resetPassword() {
+      const email = document.getElementById('email').value.trim();
+
+      if (!email) {
+        showMessage('Enter email first');
+        return;
+      }
+
+      const { error } = await supabase.auth.resetPasswordForEmail(email);
+
+      if (error) {
+        showMessage(error.message);
+        return;
+      }
+
+      showMessage('Reset email sent');
+    }
+
+    async function logout() {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        showMessage(error.message);
+        return;
+      }
+
+      currentUser = null;
+      currentProfile = null;
+      renderAuth();
+    }
+
+    logoutBtn.addEventListener('click', logout);
+
+    async function bootUser() {
+      const { data: userData, error: userError } = await supabase.auth.getUser();
+
+      if (userError || !userData.user) {
+        renderAuth();
+        return;
+      }
+
+      currentUser = userData.user;
+      renderApp();
+
+      await loadProfile();
+      await loadDocuments();
+    }
+
+    async function loadProfile() {
+      if (!currentUser) return;
 
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
-        .eq('id', user.id)
-        .single()
+        .eq('id', currentUser.id)
+        .single();
 
-      if (error) throw error
+      if (error) {
+        showMessage(error.message);
+        return;
+      }
 
-      const p = data as SellerProfile
-      setProfile(p)
+      currentProfile = data;
 
-      setFullName(p.full_name ?? '')
-      setCompanyName(p.company_name ?? '')
-      setSellerType(p.seller_type ?? '')
-      setPhone(p.phone ?? '')
-      setCountry(p.country ?? '')
-      setCity(p.city ?? '')
-      setLanguage(p.language ?? '')
-      setCurrency(p.currency ?? 'EUR')
-    } catch (e: any) {
-      box(e.message || 'Profile load failed', 'err')
-    } finally {
-      setProfileLoading(false)
+      document.getElementById('accountEmail').textContent = data.email || currentUser.email || '-';
+      document.getElementById('accountRole').textContent = data.role || 'seller';
+      document.getElementById('accountStatus').textContent = data.account_status || '-';
+      document.getElementById('verificationStatus').textContent = data.verification_status || '-';
+      document.getElementById('ratingAvg').textContent = data.rating_avg ?? 0;
+      document.getElementById('ratingCount').textContent = data.rating_count ?? 0;
+      document.getElementById('activityScore').textContent = data.activity_score ?? 0;
+
+      document.getElementById('full_name').value = data.full_name || '';
+      document.getElementById('company_name').value = data.company_name || '';
+      document.getElementById('seller_type').value = data.seller_type || '';
+      document.getElementById('phone').value = data.phone || '';
+      document.getElementById('country').value = data.country || '';
+      document.getElementById('city').value = data.city || '';
+      document.getElementById('language').value = data.language || '';
+      document.getElementById('currency').value = data.currency || 'EUR';
     }
-  }
 
-  async function saveProfile() {
-    try {
-      if (!user) return
-      setProfileSaving(true)
+    async function saveProfile() {
+      if (!currentUser) return;
 
       const payload = {
-        full_name: fullName || null,
-        company_name: companyName || null,
-        seller_type: sellerType || null,
-        phone: phone || null,
-        country: country || null,
-        city: city || null,
-        language: language || null,
-        currency,
-      }
+        full_name: document.getElementById('full_name').value.trim() || null,
+        company_name: document.getElementById('company_name').value.trim() || null,
+        seller_type: document.getElementById('seller_type').value.trim() || null,
+        phone: document.getElementById('phone').value.trim() || null,
+        country: document.getElementById('country').value.trim() || null,
+        city: document.getElementById('city').value.trim() || null,
+        language: document.getElementById('language').value.trim() || null,
+        currency: document.getElementById('currency').value
+      };
 
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('profiles')
         .update(payload)
-        .eq('id', user.id)
-        .select('*')
-        .single()
+        .eq('id', currentUser.id);
 
-      if (error) throw error
+      if (error) {
+        showMessage(error.message);
+        return;
+      }
 
-      setProfile(data as SellerProfile)
-      box('Profile saved')
-    } catch (e: any) {
-      box(e.message || 'Profile save failed', 'err')
-    } finally {
-      setProfileSaving(false)
+      await loadProfile();
+      showMessage('Profile saved');
     }
-  }
 
-  async function loadDocuments() {
-    try {
-      if (!user) return
-      setDocsLoading(true)
+    async function loadDocuments() {
+      if (!currentUser) return;
 
       const { data, error } = await supabase
         .from('seller_documents')
         .select('*')
-        .eq('seller_id', user.id)
-        .order('created_at', { ascending: false })
+        .eq('seller_id', currentUser.id)
+        .order('created_at', { ascending: false });
 
-      if (error) throw error
+      if (error) {
+        showMessage(error.message);
+        return;
+      }
 
-      setDocuments((data || []) as SellerDocument[])
-    } catch (e: any) {
-      box(e.message || 'Documents load failed', 'err')
-    } finally {
-      setDocsLoading(false)
+      const box = document.getElementById('documentsList');
+
+      if (!data || data.length === 0) {
+        box.innerHTML = '<div class="muted">No documents yet</div>';
+        return;
+      }
+
+      box.innerHTML = data.map(item => `
+        <div class="card" style="margin-bottom:10px;">
+          <div class="row"><strong>Type:</strong> ${item.document_type}</div>
+          <div class="row"><strong>File:</strong> ${item.file_name}</div>
+          <div class="status ${item.status}">${item.status}</div>
+          ${item.review_note ? `<div class="row" style="margin-top:8px;"><strong>Note:</strong> ${item.review_note}</div>` : ''}
+          <div class="row" style="margin-top:8px;"><strong>Uploaded:</strong> ${new Date(item.created_at).toLocaleString()}</div>
+        </div>
+      `).join('');
     }
-  }
 
-  async function uploadDocument(documentType: string) {
-    try {
-      if (!user) return
-      setDocsUploading(true)
+    async function uploadDocument() {
+      if (!currentUser) return;
 
-      const result = await DocumentPicker.getDocumentAsync({
-        copyToCacheDirectory: true,
-        multiple: false,
-      })
+      const documentType = document.getElementById('documentType').value;
+      const fileInput = document.getElementById('documentFile');
+      const file = fileInput.files[0];
 
-      if (result.canceled) return
+      if (!file) {
+        showMessage('Choose file first');
+        return;
+      }
 
-      const file = result.assets[0]
-      const fileName = safeFileName(file.name)
-      const mimeType = file.mimeType || 'application/octet-stream'
-      const base64 = await FileSystem.readAsStringAsync(file.uri, {
-        encoding: FileSystem.EncodingType.Base64,
-      })
+      const safeName = file.name.replace(/[^\w.\-]/g, '_');
+      const path = `${currentUser.id}/${documentType}/${Date.now()}_${safeName}`;
 
-      const path = `${user.id}/${documentType}/${Date.now()}_${fileName}`
-
-      const { error: uploadError } = await supabase.storage
+      const { error: uploadError } = await supabase
+        .storage
         .from('seller-documents')
-        .upload(path, decode(base64), {
-          contentType: mimeType,
-          upsert: false,
-        })
+        .upload(path, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
 
-      if (uploadError) throw uploadError
+      if (uploadError) {
+        showMessage(uploadError.message);
+        return;
+      }
 
-      const { error: dbError } = await supabase.from('seller_documents').insert({
-        seller_id: user.id,
-        document_type: documentType,
-        file_name: fileName,
-        file_path: path,
-        file_size: file.size ?? null,
-        mime_type: mimeType,
-        status: 'pending',
-      })
+      const { error: dbError } = await supabase
+        .from('seller_documents')
+        .insert({
+          seller_id: currentUser.id,
+          document_type: documentType,
+          file_name: safeName,
+          file_path: path,
+          file_size: file.size,
+          mime_type: file.type || 'application/octet-stream',
+          status: 'pending'
+        });
 
-      if (dbError) throw dbError
+      if (dbError) {
+        showMessage(dbError.message);
+        return;
+      }
 
-      box('Document uploaded')
-      await loadDocuments()
-    } catch (e: any) {
-      box(e.message || 'Upload failed', 'err')
-    } finally {
-      setDocsUploading(false)
+      fileInput.value = '';
+      await loadDocuments();
+      showMessage('Document uploaded');
     }
-  }
 
-  if (!SUPABASE_URL || !SUPABASE_KEY) {
-    return (
-      <SafeAreaView style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
-        <Text style={{ fontSize: 20, fontWeight: '700', marginBottom: 12 }}>
-          Supabase env missing
-        </Text>
-        <Text>
-          Add EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY in .env
-        </Text>
-      </SafeAreaView>
-    )
-  }
+    supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (session?.user) {
+        currentUser = session.user;
+        renderApp();
+        await loadProfile();
+        await loadDocuments();
+      } else {
+        currentUser = null;
+        renderAuth();
+      }
+    });
 
-  if (booting) {
-    return (
-      <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" />
-        <Text style={{ marginTop: 12 }}>Loading...</Text>
-      </SafeAreaView>
-    )
-  }
+    window.addEventListener('load', async () => {
+      if (SUPABASE_URL === 'YOUR_SUPABASE_URL' || SUPABASE_ANON_KEY === 'YOUR_SUPABASE_ANON_KEY') {
+        showMessage('Replace YOUR_SUPABASE_URL and YOUR_SUPABASE_ANON_KEY first');
+        return;
+      }
 
-  if (!user) {
-    return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
-        <ScrollView contentContainerStyle={{ padding: 20, flexGrow: 1, justifyContent: 'center' }}>
-          <Text style={{ fontSize: 30, fontWeight: '800', marginBottom: 6 }}>AMAROSE</Text>
-          <Text style={{ fontSize: 20, fontWeight: '700', marginBottom: 20 }}>
-            Seller App
-          </Text>
+      const { data } = await supabase.auth.getSession();
 
-          <TextInput
-            placeholder="Email"
-            value={email}
-            onChangeText={setEmail}
-            autoCapitalize="none"
-            keyboardType="email-address"
-            style={styles.input}
-          />
-
-          <TextInput
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            style={styles.input}
-          />
-
-          <View style={{ gap: 10 }}>
-            <Button title={authLoading ? 'Loading...' : 'Login'} onPress={signIn} disabled={authLoading} />
-            <Button title="Create account" onPress={signUp} disabled={authLoading} />
-            <Button title="Reset password" onPress={resetPassword} disabled={authLoading} />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    )
-  }
-
-  return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
-      <View style={styles.topBar}>
-        <Text style={{ fontSize: 22, fontWeight: '800' }}>AMAROSE Seller</Text>
-        <TouchableOpacity onPress={logout} style={styles.logoutBtn}>
-          <Text style={{ color: '#fff', fontWeight: '700' }}>Logout</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.tabs}>
-        <TouchableOpacity
-          style={[styles.tabBtn, screen === 'profile' && styles.tabBtnActive]}
-          onPress={() => setScreen('profile')}
-        >
-          <Text style={[styles.tabText, screen === 'profile' && styles.tabTextActive]}>Profile</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.tabBtn, screen === 'documents' && styles.tabBtnActive]}
-          onPress={() => setScreen('documents')}
-        >
-          <Text style={[styles.tabText, screen === 'documents' && styles.tabTextActive]}>Documents</Text>
-        </TouchableOpacity>
-      </View>
-
-      {screen === 'profile' && (
-        <ScrollView contentContainerStyle={{ padding: 16 }}>
-          <Text style={styles.title}>Seller Profile</Text>
-
-          {profileLoading ? (
-            <ActivityIndicator size="large" />
-          ) : (
-            <>
-              <View style={styles.card}>
-                <Text style={styles.cardTitle}>Account</Text>
-                <Text>Email: {profile?.email || user.email || '-'}</Text>
-                <Text>Role: {profile?.role || 'seller'}</Text>
-                <Text>Account status: {profile?.account_status || '-'}</Text>
-                <Text>Verification: {profile?.verification_status || '-'}</Text>
-                <Text>Profile completion: {profileCompletion}%</Text>
-              </View>
-
-              <TextInput placeholder="Full name" value={fullName} onChangeText={setFullName} style={styles.input} />
-              <TextInput placeholder="Company name" value={companyName} onChangeText={setCompanyName} style={styles.input} />
-              <TextInput placeholder="Seller type" value={sellerType} onChangeText={setSellerType} style={styles.input} />
-              <TextInput placeholder="Phone" value={phone} onChangeText={setPhone} style={styles.input} />
-              <TextInput placeholder="Country" value={country} onChangeText={setCountry} style={styles.input} />
-              <TextInput placeholder="City" value={city} onChangeText={setCity} style={styles.input} />
-              <TextInput placeholder="Language" value={language} onChangeText={setLanguage} style={styles.input} />
-              <TextInput
-                placeholder="Currency: EUR / USD / AMD / RUB"
-                value={currency}
-                onChangeText={(v) => setCurrency(currencyFix(v))}
-                style={styles.input}
-              />
-
-              <Button title={profileSaving ? 'Saving...' : 'Save profile'} onPress={saveProfile} disabled={profileSaving} />
-
-              <View style={styles.card}>
-                <Text style={styles.cardTitle}>Realtime metrics</Text>
-                <Text>Rating avg: {profile?.rating_avg ?? 0}</Text>
-                <Text>Rating count: {profile?.rating_count ?? 0}</Text>
-                <Text>Activity score: {profile?.activity_score ?? 0}</Text>
-                <Text>Active: {profile?.is_active ? 'Yes' : 'No'}</Text>
-              </View>
-            </>
-          )}
-        </ScrollView>
-      )}
-
-      {screen === 'documents' && (
-        <View style={{ flex: 1, padding: 16 }}>
-          <Text style={styles.title}>Documents</Text>
-
-          <View style={{ gap: 10, marginBottom: 16 }}>
-            <Button
-              title={docsUploading ? 'Uploading...' : 'Upload passport'}
-              onPress={() => uploadDocument('passport')}
-              disabled={docsUploading}
-            />
-            <Button
-              title={docsUploading ? 'Uploading...' : 'Upload business license'}
-              onPress={() => uploadDocument('business_license')}
-              disabled={docsUploading}
-            />
-            <Button
-              title={docsUploading ? 'Uploading...' : 'Upload address proof'}
-              onPress={() => uploadDocument('address_proof')}
-              disabled={docsUploading}
-            />
-          </View>
-
-          {docsLoading ? (
-            <ActivityIndicator size="large" />
-          ) : (
-            <FlatList
-              data={documents}
-              keyExtractor={(item) => item.id}
-              ListEmptyComponent={
-                <View style={styles.card}>
-                  <Text>No documents yet</Text>
-                </View>
-              }
-              renderItem={({ item }) => (
-                <View style={styles.card}>
-                  <Text style={styles.cardTitle}>{item.document_type}</Text>
-                  <Text>File: {item.file_name}</Text>
-                  <Text style={{ color: statusColor(item.status), fontWeight: '700' }}>
-                    Status: {item.status}
-                  </Text>
-                  {!!item.review_note && <Text>Note: {item.review_note}</Text>}
-                  <Text>Uploaded: {new Date(item.created_at).toLocaleString()}</Text>
-                </View>
-              )}
-            />
-          )}
-        </View>
-      )}
-    </SafeAreaView>
-  )
-}
-
-/* =========================
-   STYLES
-========================= */
-
-const styles = {
-  topBar: {
-    paddingHorizontal: 16,
-    paddingTop: 14,
-    paddingBottom: 10,
-    flexDirection: 'row' as const,
-    alignItems: 'center' as const,
-    justifyContent: 'space-between' as const,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e5e7eb',
-  },
-  logoutBtn: {
-    backgroundColor: '#175cd3',
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    borderRadius: 12,
-  },
-  tabs: {
-    flexDirection: 'row' as const,
-    padding: 12,
-    gap: 10,
-  },
-  tabBtn: {
-    flex: 1,
-    paddingVertical: 12,
-    borderRadius: 12,
-    backgroundColor: '#f2f4f7',
-    alignItems: 'center' as const,
-  },
-  tabBtnActive: {
-    backgroundColor: '#175cd3',
-  },
-  tabText: {
-    fontWeight: '700' as const,
-    color: '#344054',
-  },
-  tabTextActive: {
-    color: '#fff',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: '800' as const,
-    marginBottom: 16,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#d0d5dd',
-    padding: 12,
-    borderRadius: 12,
-    marginBottom: 12,
-  },
-  card: {
-    borderWidth: 1,
-    borderColor: '#e4e7ec',
-    borderRadius: 14,
-    padding: 14,
-    marginBottom: 12,
-    backgroundColor: '#fff',
-  },
-  cardTitle: {
-    fontSize: 16,
-    fontWeight: '800' as const,
-    marginBottom: 8,
-  },
-}
+      if (data.session?.user) {
+        currentUser = data.session.user;
+        renderApp();
+        await loadProfile();
+        await loadDocuments();
+      } else {
+        renderAuth();
+      }
+    });
+  </script>
+</body>
+  </html>
