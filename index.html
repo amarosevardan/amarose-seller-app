@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>AMAROSE Seller App v4.4.4</title>
+  <title>AMAROSE Seller App</title>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -17,7 +17,7 @@
       margin: 0 auto;
       min-height: 100vh;
       background: #f5f7fb;
-      padding-bottom: 96px;
+      padding-bottom: 92px;
     }
     .topbar {
       background: #175cd3;
@@ -49,26 +49,14 @@
       margin: 16px;
       padding: 14px;
       border-radius: 14px;
-      border: 1px solid #b2ddff;
-      background: #eff8ff;
-      color: #175cd3;
-      min-height: 48px;
-      font-size: 14px;
-      line-height: 1.45;
-    }
-    .status.success {
-      border-color: #abefc6;
-      background: #ecfdf3;
-      color: #067647;
-    }
-    .status.warn {
-      border-color: #fedf89;
+      border: 1px solid #fedf89;
       background: #fffaeb;
       color: #b54708;
+      min-height: 48px;
+      font-size: 14px;
+      line-height: 1.4;
     }
-    .content {
-      padding: 16px;
-    }
+    .content { padding: 16px; }
     .box {
       background: #fff;
       border: 1px solid #d0d5dd;
@@ -87,13 +75,6 @@
       margin: 0 0 16px;
       font-weight: 800;
     }
-    .subtitle {
-      color: #667085;
-      font-size: 14px;
-      line-height: 1.5;
-      margin-top: -6px;
-      margin-bottom: 16px;
-    }
     .label {
       display: block;
       font-size: 13px;
@@ -111,10 +92,7 @@
       background: #fff;
       color: #101828;
     }
-    textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
+    textarea { min-height: 100px; resize: vertical; }
     button {
       width: 100%;
       padding: 15px;
@@ -172,27 +150,12 @@
       background: #ecfdf3;
       color: #067647;
     }
-    .grid2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-    .miniCard, .card {
+    .card {
       border: 1px solid #d0d5dd;
       border-radius: 18px;
       padding: 14px;
       background: #fff;
       margin-bottom: 12px;
-    }
-    .miniTitle {
-      font-size: 13px;
-      color: #667085;
-      margin-bottom: 8px;
-    }
-    .miniValue {
-      font-size: 22px;
-      font-weight: 800;
-      color: #175cd3;
     }
     .cardTitle {
       font-size: 18px;
@@ -200,11 +163,10 @@
       margin-bottom: 8px;
     }
     .price {
-      font-size: 34px;
+      font-size: 32px;
       font-weight: 800;
       color: #175cd3;
       margin-bottom: 8px;
-      line-height: 1;
     }
     .saveTag {
       display: inline-block;
@@ -215,23 +177,6 @@
       font-size: 12px;
       font-weight: 800;
       margin: 4px 0 8px;
-    }
-    .messageItem {
-      border: 1px solid #d0d5dd;
-      border-radius: 18px;
-      padding: 14px;
-      margin-bottom: 12px;
-      background: #fff;
-    }
-    .messageHead {
-      font-size: 16px;
-      font-weight: 800;
-      margin-bottom: 6px;
-    }
-    .messageMeta {
-      color: #667085;
-      font-size: 12px;
-      margin-bottom: 8px;
     }
     .bottomNav {
       position: fixed;
@@ -279,7 +224,6 @@
 
     <div id="authView" class="content">
       <h1 id="loginTitle">Seller Login</h1>
-      <div id="loginSubtitle" class="subtitle">Fast access to profile, documents, tariffs and stats.</div>
 
       <div class="box">
         <label id="emailLabel" class="label">Email</label>
@@ -309,25 +253,11 @@
         <div class="box">
           <h2 id="overviewTitle">Account Overview</h2>
           <div class="row"><strong id="ovEmail">Email</strong><span id="viewEmail">-</span></div>
-          <div class="row"><strong id="ovRole">Role</strong><span id="viewRole">Seller</span></div>
-          <div class="row"><strong id="ovStatus">Status</strong><span id="viewStatus" class="pill green">Active</span></div>
-          <div class="row"><strong id="ovVerification">Verification</strong><span id="viewVerification" class="pill">Pending</span></div>
+          <div class="row"><strong id="ovRole">Role</strong><span id="viewRole">seller</span></div>
+          <div class="row"><strong id="ovStatus">Status</strong><span id="viewStatus">active</span></div>
+          <div class="row"><strong id="ovVerification">Verification</strong><span class="pill" id="viewVerification">pending</span></div>
           <div class="row"><strong id="ovTariff">Tariff</strong><span id="viewTariff">START - 1 month</span></div>
           <div class="row"><strong id="ovCurrency">Currency</strong><span id="viewCurrency">EUR</span></div>
-        </div>
-
-        <div class="box">
-          <h2 id="accountStatusTitle">Account status</h2>
-          <div class="grid2">
-            <div class="miniCard">
-              <div id="miniDocsTitle" class="miniTitle">Documents</div>
-              <div id="miniDocsValue" class="miniValue">0</div>
-            </div>
-            <div class="miniCard">
-              <div id="miniPlanTitle" class="miniTitle">Current plan</div>
-              <div id="miniPlanValue" class="miniValue" style="font-size:18px;">START</div>
-            </div>
-          </div>
         </div>
 
         <div class="box">
@@ -355,7 +285,7 @@
           <input id="cityInput" type="text">
 
           <label id="profileLanguageLabel" class="label">Language</label>
-          <select id="profileLanguageInput" onchange="changeLanguage(this.value)">
+          <select id="profileLanguageInput">
             <option value="en">English</option>
             <option value="ru">Русский</option>
           </select>
@@ -379,7 +309,7 @@
         </div>
 
         <div class="box">
-          <button id="openMessageBtn" class="secondary" type="button" onclick="openMessages()">Contact support</button>
+          <button id="openMessageBtn" class="secondary" type="button" onclick="openMessageCenter()">Contact support</button>
           <button id="logoutBtn" class="danger" type="button" onclick="logoutNow()">Logout</button>
         </div>
       </div>
@@ -387,7 +317,6 @@
       <div id="screenDocuments" class="hidden">
         <div class="box">
           <h2 id="documentsTitle">Documents</h2>
-          <div id="documentsSubtitle" class="subtitle">Upload seller verification files and keep comments together.</div>
 
           <label id="docNameLabel" class="label">Document name</label>
           <input id="docNameInput" type="text">
@@ -415,28 +344,27 @@
       <div id="screenTariffs" class="hidden">
         <div class="box">
           <h2 id="tariffsTitle">Tariffs</h2>
-          <div id="tariffsSubtitle" class="subtitle">Choose the right plan and duration for seller growth.</div>
 
           <div class="card">
             <div class="cardTitle">START</div>
             <div class="price">€19</div>
             <div id="startDesc" class="small">Basic access for a new seller.</div>
-            <button class="secondary" type="button" onclick="buyTariffNow('START','1 month')">START - 1 month</button>
-            <div id="save10Start" class="saveTag">save 10%</div>
-            <button class="secondary" type="button" onclick="buyTariffNow('START','6 months')">START - 6 months</button>
-            <div id="save20Start" class="saveTag">save 20%</div>
-            <button class="secondary" type="button" onclick="buyTariffNow('START','1 year')">START - 1 year</button>
+            <button type="button" class="secondary" onclick="buyTariffNow('START','1 month')">START - 1 month</button>
+            <div class="saveTag">save 10%</div>
+            <button type="button" class="secondary" onclick="buyTariffNow('START','6 months')">START - 6 months</button>
+            <div class="saveTag">save 20%</div>
+            <button type="button" class="secondary" onclick="buyTariffNow('START','1 year')">START - 1 year</button>
           </div>
 
           <div class="card">
             <div class="cardTitle">PRO</div>
             <div class="price">€49</div>
             <div id="proDesc" class="small">More visibility and more seller tools.</div>
-            <button class="secondary" type="button" onclick="buyTariffNow('PRO','1 month')">PRO - 1 month</button>
-            <div id="save10Pro" class="saveTag">save 10%</div>
-            <button class="secondary" type="button" onclick="buyTariffNow('PRO','6 months')">PRO - 6 months</button>
-            <div id="save20Pro" class="saveTag">save 20%</div>
-            <button class="secondary" type="button" onclick="buyTariffNow('PRO','1 year')">PRO - 1 year</button>
+            <button type="button" class="secondary" onclick="buyTariffNow('PRO','1 month')">PRO - 1 month</button>
+            <div class="saveTag">save 10%</div>
+            <button type="button" class="secondary" onclick="buyTariffNow('PRO','6 months')">PRO - 6 months</button>
+            <div class="saveTag">save 20%</div>
+            <button type="button" class="secondary" onclick="buyTariffNow('PRO','1 year')">PRO - 1 year</button>
           </div>
         </div>
       </div>
@@ -444,31 +372,30 @@
       <div id="screenStats" class="hidden">
         <div class="box">
           <h2 id="statsTitle">Stats</h2>
-          <div id="statsSubtitle" class="subtitle">Quick seller performance overview.</div>
 
           <div class="card">
-            <div id="statsRatingLabel" class="small">Rating</div>
+            <div id="statsRatingLabel">Rating</div>
             <div class="price">4.8 / 5</div>
           </div>
 
           <div class="card">
-            <div id="statsReviewsLabel" class="small">Reviews</div>
+            <div id="statsReviewsLabel">Reviews</div>
             <div class="price">12</div>
           </div>
 
           <div class="card">
-            <div id="statsActivityLabel" class="small">Activity</div>
-            <div id="statsActivityValue" class="price">Stable</div>
+            <div id="statsActivityLabel">Activity</div>
+            <div class="price">Stable</div>
           </div>
 
           <div class="card">
-            <div id="statsOrdersLabel" class="small">Orders</div>
+            <div id="statsOrdersLabel">Orders</div>
             <div class="price">24</div>
           </div>
 
           <div class="card">
-            <div id="statsTrendLabel" class="small">Trend</div>
-            <div id="statsTrendValue" class="price">Up</div>
+            <div id="statsTrendLabel">Trend</div>
+            <div class="price">Up</div>
           </div>
         </div>
       </div>
@@ -476,7 +403,6 @@
       <div id="screenMessages" class="hidden">
         <div class="box">
           <h2 id="messagesTitle">Support message</h2>
-          <div id="messagesSubtitle" class="subtitle">Send a request to support and keep your history below.</div>
 
           <label id="messageSubjectLabel" class="label">Subject</label>
           <input id="messageSubjectInput" type="text">
@@ -506,92 +432,158 @@
   </div>
 
   <script>
-    const KEY = 'amarose_seller_v444';
+    const KEY = 'amarose_seller_v43_fixed';
 
     const I18N = {
       en: {
-        brand: 'AMAROSE Seller App',
-        loginTitle: 'Seller Login',
-        loginSubtitle: 'Fast access to profile, documents, tariffs and stats.',
-        emailLabel: 'Email',
-        passwordLabel: 'Password',
-        demoTitle: 'Demo access',
-        demoText: 'You can login with any email and any password. Data is saved in this browser.',
-        loginBtn: 'Login',
-        createBtn: 'Create account',
-        resetBtn: 'Reset password',
-        resetTitle: 'Password reset',
-        resetMessage: 'Password reset request created successfully.',
-        overviewTitle: 'Account Overview',
-        ovEmail: 'Email',
-        ovRole: 'Role',
-        ovStatus: 'Status',
-        ovVerification: 'Verification',
-        ovTariff: 'Tariff',
-        ovCurrency: 'Currency',
-        accountStatusTitle: 'Account status',
-        miniDocsTitle: 'Documents',
-        miniPlanTitle: 'Current plan',
-        profileTitle: 'Seller Profile',
-        fullNameLabel: 'Full name',
-        companyLabel: 'Company name',
-        sellerTypeLabel: 'Seller type',
-        phoneLabel: 'Phone',
-        countryLabel: 'Country',
-        cityLabel: 'City',
-        profileLanguageLabel: 'Language',
-        currencyLabel: 'Currency',
-        saveProfileBtn: 'Save profile',
-        serviceRulesTitle: 'Service rules',
-        serviceRulesText: 'Seller must follow platform rules. Violations may lead to warning, manual review, temporary restriction, or removal from the system.',
-        openMessageBtn: 'Contact support',
-        logoutBtn: 'Logout',
-        documentsTitle: 'Documents',
-        documentsSubtitle: 'Upload seller verification files and keep comments together.',
-        docNameLabel: 'Document name',
-        docTypeLabel: 'Document type',
-        docCommentLabel: 'Comment',
-        addDocBtn: 'Upload document',
-        docListTitle: 'Uploaded documents',
-        tariffsTitle: 'Tariffs',
-        tariffsSubtitle: 'Choose the right plan and duration for seller growth.',
-        startDesc: 'Basic access for a new seller.',
-        proDesc: 'More visibility and more seller tools.',
-        statsTitle: 'Stats',
-        statsSubtitle: 'Quick seller performance overview.',
-        statsRatingLabel: 'Rating',
-        statsReviewsLabel: 'Reviews',
-        statsActivityLabel: 'Activity',
-        statsOrdersLabel: 'Orders',
-        statsTrendLabel: 'Trend',
-        messagesTitle: 'Support message',
-        messagesSubtitle: 'Send a request to support and keep your history below.',
-        messageSubjectLabel: 'Subject',
-        messageTextLabel: 'Message',
-        sendMessageBtn: 'Send message',
-        backFromMessagesBtn: 'Back',
-        messageHistoryTitle: 'Message history',
-        navProfile: 'Profile',
-        navDocuments: 'Documents',
-        navTariffs: 'Tariffs',
-        navStats: 'Stats',
-        loaded: 'Application loaded successfully.',
-        needEmail: 'Enter email first.',
-        needBoth: 'Enter email and password.',
-        loginOk: 'Logged in successfully.',
-        createOk: 'Account created successfully.',
-        resetOk: 'Password reset request created.',
-        logoutAsk: 'Do you want to logout?',
-        logoutOk: 'Logged out successfully.',
-        profileOk: 'Profile saved successfully.',
-        docOk: 'Document uploaded successfully.',
-        docDeleteOk: 'Document deleted successfully.',
-        tariffOk: 'Tariff selected successfully.',
-        messageNeed: 'Enter subject and message.',
-        messageOk: 'Message sent successfully.',
-        messageOpened: 'Message center opened.',
-        noDocs: 'No documents yet.',
-        noMessages: 'No messages yet.',
-        deleteBtn: 'Delete',
-        individual: 'Individual',
-        co
+        brand:'AMAROSE Seller App',
+        loginTitle:'Seller Login',
+        emailLabel:'Email',
+        passwordLabel:'Password',
+        demoTitle:'Demo access',
+        demoText:'You can login with any email and any password. Data is saved in this browser.',
+        loginBtn:'Login',
+        createBtn:'Create account',
+        resetBtn:'Reset password',
+        resetTitle:'Password reset',
+        resetMessage:'Password reset request created successfully.',
+        overviewTitle:'Account Overview',
+        ovEmail:'Email',
+        ovRole:'Role',
+        ovStatus:'Status',
+        ovVerification:'Verification',
+        ovTariff:'Tariff',
+        ovCurrency:'Currency',
+        profileTitle:'Seller Profile',
+        fullNameLabel:'Full name',
+        companyLabel:'Company name',
+        sellerTypeLabel:'Seller type',
+        phoneLabel:'Phone',
+        countryLabel:'Country',
+        cityLabel:'City',
+        profileLanguageLabel:'Language',
+        currencyLabel:'Currency',
+        saveProfileBtn:'Save profile',
+        serviceRulesTitle:'Service rules',
+        serviceRulesText:'Seller must follow platform rules. Violations may lead to warning, manual review, temporary restriction, or removal from the system.',
+        openMessageBtn:'Contact support',
+        logoutBtn:'Logout',
+        documentsTitle:'Documents',
+        docNameLabel:'Document name',
+        docTypeLabel:'Document type',
+        docCommentLabel:'Comment',
+        addDocBtn:'Upload document',
+        docListTitle:'Uploaded documents',
+        tariffsTitle:'Tariffs',
+        startDesc:'Basic access for a new seller.',
+        proDesc:'More visibility and more seller tools.',
+        statsTitle:'Stats',
+        statsRatingLabel:'Rating',
+        statsReviewsLabel:'Reviews',
+        statsActivityLabel:'Activity',
+        statsOrdersLabel:'Orders',
+        statsTrendLabel:'Trend',
+        messagesTitle:'Support message',
+        messageSubjectLabel:'Subject',
+        messageTextLabel:'Message',
+        sendMessageBtn:'Send message',
+        backFromMessagesBtn:'Back',
+        messageHistoryTitle:'Message history',
+        navProfile:'Profile',
+        navDocuments:'Documents',
+        navTariffs:'Tariffs',
+        navStats:'Stats',
+        loaded:'Application loaded successfully.',
+        needEmail:'Enter email first.',
+        needBoth:'Enter email and password.',
+        loginOk:'Logged in successfully.',
+        createOk:'Account created successfully.',
+        resetOk:'Password reset request created.',
+        logoutAsk:'Do you want to logout?',
+        logoutOk:'Logged out successfully.',
+        profileOk:'Profile saved successfully.',
+        docOk:'Document uploaded successfully.',
+        docDeleteOk:'Document deleted successfully.',
+        tariffOk:'Tariff selected successfully.',
+        messageNeed:'Enter subject and message.',
+        messageOk:'Message sent successfully.',
+        noDocs:'No documents yet.',
+        noMessages:'No messages yet.',
+        deleteBtn:'Delete',
+        individual:'Individual',
+        company:'Company'
+      },
+      ru: {
+        brand:'AMAROSE Seller App',
+        loginTitle:'Вход продавца',
+        emailLabel:'Почта',
+        passwordLabel:'Пароль',
+        demoTitle:'Демо доступ',
+        demoText:'Можно войти с любой почтой и любым паролем. Данные сохраняются в браузере.',
+        loginBtn:'Войти',
+        createBtn:'Создать аккаунт',
+        resetBtn:'Сбросить пароль',
+        resetTitle:'Сброс пароля',
+        resetMessage:'Запрос на сброс пароля успешно создан.',
+        overviewTitle:'Обзор аккаунта',
+        ovEmail:'Почта',
+        ovRole:'Роль',
+        ovStatus:'Статус',
+        ovVerification:'Проверка',
+        ovTariff:'Тариф',
+        ovCurrency:'Валюта',
+        profileTitle:'Профиль продавца',
+        fullNameLabel:'Полное имя',
+        companyLabel:'Название компании',
+        sellerTypeLabel:'Тип продавца',
+        phoneLabel:'Телефон',
+        countryLabel:'Страна',
+        cityLabel:'Город',
+        profileLanguageLabel:'Язык',
+        currencyLabel:'Валюта',
+        saveProfileBtn:'Сохранить профиль',
+        serviceRulesTitle:'Правила сервиса',
+        serviceRulesText:'Продавец обязан соблюдать правила платформы. Нарушения могут привести к предупреждению, ручной проверке, временным ограничениям или удалению из системы.',
+        openMessageBtn:'Написать в поддержку',
+        logoutBtn:'Выйти',
+        documentsTitle:'Документы',
+        docNameLabel:'Название документа',
+        docTypeLabel:'Тип документа',
+        docCommentLabel:'Комментарий',
+        addDocBtn:'Загрузить документ',
+        docListTitle:'Загруженные документы',
+        tariffsTitle:'Тарифы',
+        startDesc:'Базовый доступ для нового продавца.',
+        proDesc:'Больше видимости и больше инструментов продавца.',
+        statsTitle:'Статистика',
+        statsRatingLabel:'Рейтинг',
+        statsReviewsLabel:'Отзывы',
+        statsActivityLabel:'Активность',
+        statsOrdersLabel:'Заказы',
+        statsTrendLabel:'Тренд',
+        messagesTitle:'Сообщение в поддержку',
+        messageSubjectLabel:'Тема',
+        messageTextLabel:'Сообщение',
+        sendMessageBtn:'Отправить сообщение',
+        backFromMessagesBtn:'Назад',
+        messageHistoryTitle:'История сообщений',
+        navProfile:'Профиль',
+        navDocuments:'Документы',
+        navTariffs:'Тарифы',
+        navStats:'Статистика',
+        loaded:'Приложение загружено.',
+        needEmail:'Сначала введите почту.',
+        needBoth:'Введите почту и пароль.',
+        loginOk:'Вход выполнен успешно.',
+        createOk:'Аккаунт успешно создан.',
+        resetOk:'Запрос на сброс пароля создан.',
+        logoutAsk:'Вы точно хотите выйти?',
+        logoutOk:'Вы вышли из аккаунта.',
+        profileOk:'Профиль успешно сохранён.',
+        docOk:'Документ успешно загружен.',
+        docDeleteOk:'Документ успешно удалён.',
+        tariffOk:'Тариф успешно выбран.',
+        messageNeed:'Введите тему и сообщение.',
+        messageOk:'Сообщение успешно отправлено.',
+        noDocs:'Документов пока нет.',
+        
