@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>AMAROSE Seller App v4.5 small patch</title>
+  <title>AMAROSE Seller App v4.4.4</title>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -312,7 +312,7 @@
           <div class="row"><strong id="ovRole">Role</strong><span id="viewRole">Seller</span></div>
           <div class="row"><strong id="ovStatus">Status</strong><span id="viewStatus" class="pill green">Active</span></div>
           <div class="row"><strong id="ovVerification">Verification</strong><span id="viewVerification" class="pill">Pending</span></div>
-          <div class="row"><strong id="ovTariff">Tariff</strong><span id="viewTariff" class="pill green">START - 1 month</span></div>
+          <div class="row"><strong id="ovTariff">Tariff</strong><span id="viewTariff">START - 1 month</span></div>
           <div class="row"><strong id="ovCurrency">Currency</strong><span id="viewCurrency">EUR</span></div>
         </div>
 
@@ -400,14 +400,6 @@
             <option value="Tax document">Tax document</option>
           </select>
 
-          <label id="docStatusLabel" class="label">Document status</label>
-          <select id="docStatusInput">
-            <option value="pending">Pending</option>
-            <option value="approved">Approved</option>
-            <option value="manual_review">Manual review</option>
-            <option value="rejected">Rejected</option>
-          </select>
-
           <label id="docCommentLabel" class="label">Comment</label>
           <textarea id="docCommentInput"></textarea>
 
@@ -486,14 +478,6 @@
           <h2 id="messagesTitle">Support message</h2>
           <div id="messagesSubtitle" class="subtitle">Send a request to support and keep your history below.</div>
 
-          <label id="messageTypeLabel" class="label">Message type</label>
-          <select id="messageTypeInput">
-            <option value="support">Support</option>
-            <option value="verification">Verification</option>
-            <option value="tariff">Tariff</option>
-            <option value="complaint">Complaint</option>
-          </select>
-
           <label id="messageSubjectLabel" class="label">Subject</label>
           <input id="messageSubjectInput" type="text">
 
@@ -522,7 +506,7 @@
   </div>
 
   <script>
-    const KEY = 'amarose_seller_v45_small_patch';
+    const KEY = 'amarose_seller_v444';
 
     const I18N = {
       en: {
@@ -566,7 +550,6 @@
         documentsSubtitle: 'Upload seller verification files and keep comments together.',
         docNameLabel: 'Document name',
         docTypeLabel: 'Document type',
-        docStatusLabel: 'Document status',
         docCommentLabel: 'Comment',
         addDocBtn: 'Upload document',
         docListTitle: 'Uploaded documents',
@@ -583,7 +566,6 @@
         statsTrendLabel: 'Trend',
         messagesTitle: 'Support message',
         messagesSubtitle: 'Send a request to support and keep your history below.',
-        messageTypeLabel: 'Message type',
         messageSubjectLabel: 'Subject',
         messageTextLabel: 'Message',
         sendMessageBtn: 'Send message',
@@ -593,4 +575,23 @@
         navDocuments: 'Documents',
         navTariffs: 'Tariffs',
         navStats: 'Stats',
-        loaded: 'Application loaded
+        loaded: 'Application loaded successfully.',
+        needEmail: 'Enter email first.',
+        needBoth: 'Enter email and password.',
+        loginOk: 'Logged in successfully.',
+        createOk: 'Account created successfully.',
+        resetOk: 'Password reset request created.',
+        logoutAsk: 'Do you want to logout?',
+        logoutOk: 'Logged out successfully.',
+        profileOk: 'Profile saved successfully.',
+        docOk: 'Document uploaded successfully.',
+        docDeleteOk: 'Document deleted successfully.',
+        tariffOk: 'Tariff selected successfully.',
+        messageNeed: 'Enter subject and message.',
+        messageOk: 'Message sent successfully.',
+        messageOpened: 'Message center opened.',
+        noDocs: 'No documents yet.',
+        noMessages: 'No messages yet.',
+        deleteBtn: 'Delete',
+        individual: 'Individual',
+        co
