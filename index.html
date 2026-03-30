@@ -2,22 +2,24 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>AMAROSE Seller App v4.4.4</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>AMAROSE Seller App v4.6</title>
   <style>
     * { box-sizing: border-box; }
-    body {
+    html, body {
       margin: 0;
+      padding: 0;
       font-family: Arial, sans-serif;
       background: #f5f7fb;
       color: #101828;
     }
+    body { min-height: 100vh; }
     .app {
       max-width: 520px;
       margin: 0 auto;
       min-height: 100vh;
       background: #f5f7fb;
-      padding-bottom: 96px;
+      padding-bottom: 110px;
     }
     .topbar {
       background: #175cd3;
@@ -29,7 +31,7 @@
       gap: 12px;
       position: sticky;
       top: 0;
-      z-index: 20;
+      z-index: 50;
     }
     .brand {
       font-size: 17px;
@@ -66,9 +68,12 @@
       background: #fffaeb;
       color: #b54708;
     }
-    .content {
-      padding: 16px;
+    .status.error {
+      border-color: #fda29b;
+      background: #fef3f2;
+      color: #b42318;
     }
+    .content { padding: 16px; }
     .box {
       background: #fff;
       border: 1px solid #d0d5dd;
@@ -78,20 +83,25 @@
     }
     .hidden { display: none !important; }
     h1 {
-      font-size: 32px;
-      margin: 0 0 20px;
+      font-size: 30px;
+      margin: 0 0 18px;
       font-weight: 800;
     }
     h2 {
-      font-size: 24px;
-      margin: 0 0 16px;
+      font-size: 22px;
+      margin: 0 0 14px;
+      font-weight: 800;
+    }
+    h3 {
+      font-size: 17px;
+      margin: 0 0 12px;
       font-weight: 800;
     }
     .subtitle {
       color: #667085;
       font-size: 14px;
       line-height: 1.5;
-      margin-top: -6px;
+      margin-top: -4px;
       margin-bottom: 16px;
     }
     .label {
@@ -128,6 +138,7 @@
     .primary { background: #175cd3; color: white; }
     .secondary { background: #e8eefc; color: #175cd3; }
     .danger { background: #fee4e2; color: #b42318; }
+    .ghost { background: #f2f4f7; color: #344054; }
     .warnBox {
       background: #fff7ed;
       border: 1px solid #fed7aa;
@@ -140,6 +151,14 @@
       background: #ecfdf3;
       border: 1px solid #abefc6;
       color: #067647;
+      border-radius: 16px;
+      padding: 14px;
+      line-height: 1.45;
+    }
+    .errorBox {
+      background: #fef3f2;
+      border: 1px solid #fda29b;
+      color: #b42318;
       border-radius: 16px;
       padding: 14px;
       line-height: 1.45;
@@ -159,6 +178,11 @@
       font-size: 14px;
       line-height: 1.5;
     }
+    .tiny {
+      color: #667085;
+      font-size: 12px;
+      line-height: 1.4;
+    }
     .pill {
       display: inline-block;
       padding: 6px 10px;
@@ -167,10 +191,24 @@
       font-weight: 800;
       background: #fffaeb;
       color: #b54708;
+      text-align: center;
+      white-space: nowrap;
     }
     .pill.green {
       background: #ecfdf3;
       color: #067647;
+    }
+    .pill.red {
+      background: #fee4e2;
+      color: #b42318;
+    }
+    .pill.blue {
+      background: #eff8ff;
+      color: #175cd3;
+    }
+    .pill.gray {
+      background: #f2f4f7;
+      color: #344054;
     }
     .grid2 {
       display: grid;
@@ -216,19 +254,19 @@
       font-weight: 800;
       margin: 4px 0 8px;
     }
-    .messageItem {
+    .messageItem, .docItem, .verifyItem {
       border: 1px solid #d0d5dd;
       border-radius: 18px;
       padding: 14px;
       margin-bottom: 12px;
       background: #fff;
     }
-    .messageHead {
+    .messageHead, .docHead, .verifyHead {
       font-size: 16px;
       font-weight: 800;
       margin-bottom: 6px;
     }
-    .messageMeta {
+    .messageMeta, .docMeta, .verifyMeta {
       color: #667085;
       font-size: 12px;
       margin-bottom: 8px;
@@ -241,13 +279,13 @@
       background: #fff;
       border-top: 1px solid #d0d5dd;
       padding: 10px 8px calc(10px + env(safe-area-inset-bottom));
-      z-index: 30;
+      z-index: 60;
     }
     .bottomNavInner {
       max-width: 520px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       gap: 8px;
     }
     .navBtn {
@@ -256,12 +294,48 @@
       border-radius: 14px;
       background: #eaecf0;
       color: #344054;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 800;
     }
     .navBtn.active {
       background: #175cd3;
       color: white;
+    }
+    .phoneRow {
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      gap: 10px;
+    }
+    .scanGrid {
+      display: grid;
+      gap: 12px;
+    }
+    .uploadPreview {
+      margin-top: 8px;
+      padding: 12px;
+      border-radius: 14px;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+    }
+    .uploadPreview img {
+      width: 100%;
+      border-radius: 12px;
+      display: block;
+      margin-top: 10px;
+    }
+    .inlineActions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 420px) {
+      .grid2, .phoneRow, .inlineActions {
+        grid-template-columns: 1fr;
+      }
+      .bottomNavInner {
+        grid-template-columns: repeat(5, 1fr);
+      }
+      .navBtn { font-size: 11px; padding: 10px 6px; }
     }
   </style>
 </head>
@@ -272,6 +346,10 @@
       <select id="langSelect" class="lang" onchange="changeLanguage(this.value)">
         <option value="en">English</option>
         <option value="ru">Русский</option>
+        <option value="hy">Հայերեն</option>
+        <option value="es">Español</option>
+        <option value="fr">Français</option>
+        <option value="de">Deutsch</option>
       </select>
     </div>
 
@@ -305,6 +383,7 @@
     </div>
 
     <div id="appView" class="content hidden">
+      <!-- PROFILE -->
       <div id="screenProfile">
         <div class="box">
           <h2 id="overviewTitle">Account Overview</h2>
@@ -314,6 +393,7 @@
           <div class="row"><strong id="ovVerification">Verification</strong><span id="viewVerification" class="pill">Pending</span></div>
           <div class="row"><strong id="ovTariff">Tariff</strong><span id="viewTariff">START - 1 month</span></div>
           <div class="row"><strong id="ovCurrency">Currency</strong><span id="viewCurrency">EUR</span></div>
+          <div class="row"><strong id="ovCompliance">Compliance</strong><span id="viewCompliance" class="pill green">Good</span></div>
         </div>
 
         <div class="box">
@@ -346,7 +426,11 @@
           </select>
 
           <label id="phoneLabel" class="label">Phone</label>
-          <input id="phoneInput" type="text">
+          <div class="phoneRow">
+            <select id="phoneCodeInput"></select>
+            <input id="phoneInput" type="text" placeholder="000000000">
+          </div>
+          <div id="phoneHint" class="tiny">Select country code with flag.</div>
 
           <label id="countryLabel" class="label">Country</label>
           <input id="countryInput" type="text">
@@ -358,6 +442,10 @@
           <select id="profileLanguageInput" onchange="changeLanguage(this.value)">
             <option value="en">English</option>
             <option value="ru">Русский</option>
+            <option value="hy">Հայերեն</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+            <option value="de">Deutsch</option>
           </select>
 
           <label id="currencyLabel" class="label">Currency</label>
@@ -384,7 +472,78 @@
         </div>
       </div>
 
+      <!-- DOCUMENTS -->
       <div id="screenDocuments" class="hidden">
+        <div class="box">
+          <h2 id="verificationCenterTitle">Verification Center</h2>
+          <div id="verificationCenterSubtitle" class="subtitle">Scan required seller verification steps inside the app.</div>
+
+          <div id="russiaRestrictionBox" class="errorBox hidden">
+            <strong id="russiaRestrictionTitle">Verification for Russia is temporarily suspended.</strong>
+            <div id="russiaRestrictionText" class="small" style="margin-top:8px;">
+              Sellers from Russia can still use parts of the app, but verification is temporarily paused.
+            </div>
+          </div>
+
+          <div class="scanGrid">
+            <!-- Passport -->
+            <div class="verifyItem">
+              <div id="passportScanHead" class="verifyHead">Passport scan</div>
+              <div id="passportScanMeta" class="verifyMeta">Open camera or upload passport scan.</div>
+              <span id="passportStatusPill" class="pill gray">Not uploaded</span>
+              <div class="inlineActions" style="margin-top:12px;">
+                <button id="passportCameraBtn" class="secondary" type="button" onclick="openScanInput('passport','camera')">Open camera</button>
+                <button id="passportFileBtn" class="ghost" type="button" onclick="openScanInput('passport','file')">Choose file</button>
+              </div>
+              <input id="passportInputCamera" class="hidden" type="file" accept="image/*" capture="environment" onchange="handleVerificationUpload(event,'passport')">
+              <input id="passportInputFile" class="hidden" type="file" accept="image/*,.pdf" onchange="handleVerificationUpload(event,'passport')">
+              <div id="passportPreview" class="uploadPreview hidden"></div>
+            </div>
+
+            <!-- Selfie -->
+            <div class="verifyItem">
+              <div id="selfieScanHead" class="verifyHead">Selfie with passport in hands</div>
+              <div id="selfieScanMeta" class="verifyMeta">Use front camera to take selfie with passport.</div>
+              <span id="selfieStatusPill" class="pill gray">Not uploaded</span>
+              <div class="inlineActions" style="margin-top:12px;">
+                <button id="selfieCameraBtn" class="secondary" type="button" onclick="openScanInput('selfie','camera')">Open selfie camera</button>
+                <button id="selfieFileBtn" class="ghost" type="button" onclick="openScanInput('selfie','file')">Choose file</button>
+              </div>
+              <input id="selfieInputCamera" class="hidden" type="file" accept="image/*" capture="user" onchange="handleVerificationUpload(event,'selfie')">
+              <input id="selfieInputFile" class="hidden" type="file" accept="image/*,.pdf" onchange="handleVerificationUpload(event,'selfie')">
+              <div id="selfiePreview" class="uploadPreview hidden"></div>
+            </div>
+
+            <!-- Face -->
+            <div class="verifyItem">
+              <div id="faceScanHead" class="verifyHead">Face scan</div>
+              <div id="faceScanMeta" class="verifyMeta">Use front camera for face scan photo.</div>
+              <span id="faceStatusPill" class="pill gray">Not uploaded</span>
+              <div class="inlineActions" style="margin-top:12px;">
+                <button id="faceCameraBtn" class="secondary" type="button" onclick="openScanInput('face','camera')">Open face camera</button>
+                <button id="faceFileBtn" class="ghost" type="button" onclick="openScanInput('face','file')">Choose file</button>
+              </div>
+              <input id="faceInputCamera" class="hidden" type="file" accept="image/*" capture="user" onchange="handleVerificationUpload(event,'face')">
+              <input id="faceInputFile" class="hidden" type="file" accept="image/*,.pdf" onchange="handleVerificationUpload(event,'face')">
+              <div id="facePreview" class="uploadPreview hidden"></div>
+            </div>
+
+            <!-- LLC -->
+            <div class="verifyItem">
+              <div id="llcScanHead" class="verifyHead">LLC / Company documents</div>
+              <div id="llcScanMeta" class="verifyMeta">Upload LLC, company registration, or tax documents.</div>
+              <span id="llcStatusPill" class="pill gray">Not uploaded</span>
+              <div class="inlineActions" style="margin-top:12px;">
+                <button id="llcCameraBtn" class="secondary" type="button" onclick="openScanInput('llc','camera')">Open camera</button>
+                <button id="llcFileBtn" class="ghost" type="button" onclick="openScanInput('llc','file')">Choose file</button>
+              </div>
+              <input id="llcInputCamera" class="hidden" type="file" accept="image/*" capture="environment" onchange="handleVerificationUpload(event,'llc')">
+              <input id="llcInputFile" class="hidden" type="file" accept="image/*,.pdf" onchange="handleVerificationUpload(event,'llc')">
+              <div id="llcPreview" class="uploadPreview hidden"></div>
+            </div>
+          </div>
+        </div>
+
         <div class="box">
           <h2 id="documentsTitle">Documents</h2>
           <div id="documentsSubtitle" class="subtitle">Upload seller verification files and keep comments together.</div>
@@ -395,9 +554,12 @@
           <label id="docTypeLabel" class="label">Document type</label>
           <select id="docTypeInput">
             <option value="Passport">Passport</option>
-            <option value="License">License</option>
+            <option value="Selfie with passport">Selfie with passport</option>
+            <option value="Face scan">Face scan</option>
+            <option value="LLC document">LLC document</option>
             <option value="Company registration">Company registration</option>
             <option value="Tax document">Tax document</option>
+            <option value="Other">Other</option>
           </select>
 
           <label id="docCommentLabel" class="label">Comment</label>
@@ -412,6 +574,7 @@
         </div>
       </div>
 
+      <!-- TARIFFS -->
       <div id="screenTariffs" class="hidden">
         <div class="box">
           <h2 id="tariffsTitle">Tariffs</h2>
@@ -441,6 +604,7 @@
         </div>
       </div>
 
+      <!-- STATS -->
       <div id="screenStats" class="hidden">
         <div class="box">
           <h2 id="statsTitle">Stats</h2>
@@ -473,6 +637,27 @@
         </div>
       </div>
 
+      <!-- SETTINGS -->
+      <div id="screenSettings" class="hidden">
+        <div class="box">
+          <h2 id="settingsTitle">Settings</h2>
+          <div id="settingsSubtitle" class="subtitle">Manage password and app preferences.</div>
+
+          <div class="card">
+            <div id="securityTitle" class="cardTitle">Security</div>
+
+            <label id="currentPasswordLabel" class="label">Current password</label>
+            <input id="currentPasswordInput" type="password">
+
+            <label id="newPasswordLabel" class="label">New password</label>
+            <input id="newPasswordInput" type="password">
+
+            <button id="changePasswordBtn" class="primary" type="button" onclick="changePasswordNow()">Change password</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUPPORT -->
       <div id="screenMessages" class="hidden">
         <div class="box">
           <h2 id="messagesTitle">Support message</h2>
@@ -502,11 +687,210 @@
       <button id="navDocuments" class="navBtn" type="button" onclick="showScreen('documents')">Documents</button>
       <button id="navTariffs" class="navBtn" type="button" onclick="showScreen('tariffs')">Tariffs</button>
       <button id="navStats" class="navBtn" type="button" onclick="showScreen('stats')">Stats</button>
+      <button id="navSettings" class="navBtn" type="button" onclick="showScreen('settings')">Settings</button>
     </div>
   </div>
 
   <script>
-    const KEY = 'amarose_seller_v444';
+    const KEY = 'amarose_seller_v460';
+
+    const PHONE_CODES = [
+      { code: '+93', label: '🇦🇫 Afghanistan' },
+      { code: '+355', label: '🇦🇱 Albania' },
+      { code: '+213', label: '🇩🇿 Algeria' },
+      { code: '+376', label: '🇦🇩 Andorra' },
+      { code: '+244', label: '🇦🇴 Angola' },
+      { code: '+1-268', label: '🇦🇬 Antigua and Barbuda' },
+      { code: '+54', label: '🇦🇷 Argentina' },
+      { code: '+374', label: '🇦🇲 Armenia' },
+      { code: '+61', label: '🇦🇺 Australia' },
+      { code: '+43', label: '🇦🇹 Austria' },
+      { code: '+994', label: '🇦🇿 Azerbaijan' },
+      { code: '+1-242', label: '🇧🇸 Bahamas' },
+      { code: '+973', label: '🇧🇭 Bahrain' },
+      { code: '+880', label: '🇧🇩 Bangladesh' },
+      { code: '+1-246', label: '🇧🇧 Barbados' },
+      { code: '+375', label: '🇧🇾 Belarus' },
+      { code: '+32', label: '🇧🇪 Belgium' },
+      { code: '+501', label: '🇧🇿 Belize' },
+      { code: '+229', label: '🇧🇯 Benin' },
+      { code: '+975', label: '🇧🇹 Bhutan' },
+      { code: '+591', label: '🇧🇴 Bolivia' },
+      { code: '+387', label: '🇧🇦 Bosnia and Herzegovina' },
+      { code: '+267', label: '🇧🇼 Botswana' },
+      { code: '+55', label: '🇧🇷 Brazil' },
+      { code: '+673', label: '🇧🇳 Brunei' },
+      { code: '+359', label: '🇧🇬 Bulgaria' },
+      { code: '+226', label: '🇧🇫 Burkina Faso' },
+      { code: '+257', label: '🇧🇮 Burundi' },
+      { code: '+238', label: '🇨🇻 Cabo Verde' },
+      { code: '+855', label: '🇰🇭 Cambodia' },
+      { code: '+237', label: '🇨🇲 Cameroon' },
+      { code: '+1', label: '🇨🇦 Canada' },
+      { code: '+236', label: '🇨🇫 Central African Republic' },
+      { code: '+235', label: '🇹🇩 Chad' },
+      { code: '+56', label: '🇨🇱 Chile' },
+      { code: '+86', label: '🇨🇳 China' },
+      { code: '+57', label: '🇨🇴 Colombia' },
+      { code: '+269', label: '🇰🇲 Comoros' },
+      { code: '+242', label: '🇨🇬 Congo' },
+      { code: '+243', label: '🇨🇩 DR Congo' },
+      { code: '+506', label: '🇨🇷 Costa Rica' },
+      { code: '+385', label: '🇭🇷 Croatia' },
+      { code: '+53', label: '🇨🇺 Cuba' },
+      { code: '+357', label: '🇨🇾 Cyprus' },
+      { code: '+420', label: '🇨🇿 Czechia' },
+      { code: '+45', label: '🇩🇰 Denmark' },
+      { code: '+253', label: '🇩🇯 Djibouti' },
+      { code: '+1-767', label: '🇩🇲 Dominica' },
+      { code: '+1-809', label: '🇩🇴 Dominican Republic' },
+      { code: '+593', label: '🇪🇨 Ecuador' },
+      { code: '+20', label: '🇪🇬 Egypt' },
+      { code: '+503', label: '🇸🇻 El Salvador' },
+      { code: '+240', label: '🇬🇶 Equatorial Guinea' },
+      { code: '+291', label: '🇪🇷 Eritrea' },
+      { code: '+372', label: '🇪🇪 Estonia' },
+      { code: '+268', label: '🇸🇿 Eswatini' },
+      { code: '+251', label: '🇪🇹 Ethiopia' },
+      { code: '+679', label: '🇫🇯 Fiji' },
+      { code: '+358', label: '🇫🇮 Finland' },
+      { code: '+33', label: '🇫🇷 France' },
+      { code: '+241', label: '🇬🇦 Gabon' },
+      { code: '+220', label: '🇬🇲 Gambia' },
+      { code: '+995', label: '🇬🇪 Georgia' },
+      { code: '+49', label: '🇩🇪 Germany' },
+      { code: '+233', label: '🇬🇭 Ghana' },
+      { code: '+30', label: '🇬🇷 Greece' },
+      { code: '+1-473', label: '🇬🇩 Grenada' },
+      { code: '+502', label: '🇬🇹 Guatemala' },
+      { code: '+224', label: '🇬🇳 Guinea' },
+      { code: '+245', label: '🇬🇼 Guinea-Bissau' },
+      { code: '+592', label: '🇬🇾 Guyana' },
+      { code: '+509', label: '🇭🇹 Haiti' },
+      { code: '+504', label: '🇭🇳 Honduras' },
+      { code: '+36', label: '🇭🇺 Hungary' },
+      { code: '+354', label: '🇮🇸 Iceland' },
+      { code: '+91', label: '🇮🇳 India' },
+      { code: '+62', label: '🇮🇩 Indonesia' },
+      { code: '+98', label: '🇮🇷 Iran' },
+      { code: '+964', label: '🇮🇶 Iraq' },
+      { code: '+353', label: '🇮🇪 Ireland' },
+      { code: '+972', label: '🇮🇱 Israel' },
+      { code: '+39', label: '🇮🇹 Italy' },
+      { code: '+1-876', label: '🇯🇲 Jamaica' },
+      { code: '+81', label: '🇯🇵 Japan' },
+      { code: '+962', label: '🇯🇴 Jordan' },
+      { code: '+7', label: '🇰🇿 Kazakhstan' },
+      { code: '+254', label: '🇰🇪 Kenya' },
+      { code: '+686', label: '🇰🇮 Kiribati' },
+      { code: '+965', label: '🇰🇼 Kuwait' },
+      { code: '+996', label: '🇰🇬 Kyrgyzstan' },
+      { code: '+856', label: '🇱🇦 Laos' },
+      { code: '+371', label: '🇱🇻 Latvia' },
+      { code: '+961', label: '🇱🇧 Lebanon' },
+      { code: '+266', label: '🇱🇸 Lesotho' },
+      { code: '+231', label: '🇱🇷 Liberia' },
+      { code: '+218', label: '🇱🇾 Libya' },
+      { code: '+423', label: '🇱🇮 Liechtenstein' },
+      { code: '+370', label: '🇱🇹 Lithuania' },
+      { code: '+352', label: '🇱🇺 Luxembourg' },
+      { code: '+261', label: '🇲🇬 Madagascar' },
+      { code: '+265', label: '🇲🇼 Malawi' },
+      { code: '+60', label: '🇲🇾 Malaysia' },
+      { code: '+960', label: '🇲🇻 Maldives' },
+      { code: '+223', label: '🇲🇱 Mali' },
+      { code: '+356', label: '🇲🇹 Malta' },
+      { code: '+692', label: '🇲🇭 Marshall Islands' },
+      { code: '+222', label: '🇲🇷 Mauritania' },
+      { code: '+230', label: '🇲🇺 Mauritius' },
+      { code: '+52', label: '🇲🇽 Mexico' },
+      { code: '+691', label: '🇫🇲 Micronesia' },
+      { code: '+373', label: '🇲🇩 Moldova' },
+      { code: '+377', label: '🇲🇨 Monaco' },
+      { code: '+976', label: '🇲🇳 Mongolia' },
+      { code: '+382', label: '🇲🇪 Montenegro' },
+      { code: '+212', label: '🇲🇦 Morocco' },
+      { code: '+258', label: '🇲🇿 Mozambique' },
+      { code: '+95', label: '🇲🇲 Myanmar' },
+      { code: '+264', label: '🇳🇦 Namibia' },
+      { code: '+674', label: '🇳🇷 Nauru' },
+      { code: '+977', label: '🇳🇵 Nepal' },
+      { code: '+31', label: '🇳🇱 Netherlands' },
+      { code: '+64', label: '🇳🇿 New Zealand' },
+      { code: '+505', label: '🇳🇮 Nicaragua' },
+      { code: '+227', label: '🇳🇪 Niger' },
+      { code: '+234', label: '🇳🇬 Nigeria' },
+      { code: '+850', label: '🇰🇵 North Korea' },
+      { code: '+389', label: '🇲🇰 North Macedonia' },
+      { code: '+47', label: '🇳🇴 Norway' },
+      { code: '+968', label: '🇴🇲 Oman' },
+      { code: '+92', label: '🇵🇰 Pakistan' },
+      { code: '+680', label: '🇵🇼 Palau' },
+      { code: '+970', label: '🇵🇸 Palestine' },
+      { code: '+507', label: '🇵🇦 Panama' },
+      { code: '+675', label: '🇵🇬 Papua New Guinea' },
+      { code: '+595', label: '🇵🇾 Paraguay' },
+      { code: '+51', label: '🇵🇪 Peru' },
+      { code: '+63', label: '🇵🇭 Philippines' },
+      { code: '+48', label: '🇵🇱 Poland' },
+      { code: '+351', label: '🇵🇹 Portugal' },
+      { code: '+974', label: '🇶🇦 Qatar' },
+      { code: '+40', label: '🇷🇴 Romania' },
+      { code: '+7', label: '🇷🇺 Russia' },
+      { code: '+250', label: '🇷🇼 Rwanda' },
+      { code: '+1-869', label: '🇰🇳 Saint Kitts and Nevis' },
+      { code: '+1-758', label: '🇱🇨 Saint Lucia' },
+      { code: '+1-784', label: '🇻🇨 Saint Vincent and the Grenadines' },
+      { code: '+685', label: '🇼🇸 Samoa' },
+      { code: '+378', label: '🇸🇲 San Marino' },
+      { code: '+239', label: '🇸🇹 São Tomé and Príncipe' },
+      { code: '+966', label: '🇸🇦 Saudi Arabia' },
+      { code: '+221', label: '🇸🇳 Senegal' },
+      { code: '+381', label: '🇷🇸 Serbia' },
+      { code: '+248', label: '🇸🇨 Seychelles' },
+      { code: '+232', label: '🇸🇱 Sierra Leone' },
+      { code: '+65', label: '🇸🇬 Singapore' },
+      { code: '+421', label: '🇸🇰 Slovakia' },
+      { code: '+386', label: '🇸🇮 Slovenia' },
+      { code: '+677', label: '🇸🇧 Solomon Islands' },
+      { code: '+252', label: '🇸🇴 Somalia' },
+      { code: '+27', label: '🇿🇦 South Africa' },
+      { code: '+82', label: '🇰🇷 South Korea' },
+      { code: '+211', label: '🇸🇸 South Sudan' },
+      { code: '+34', label: '🇪🇸 Spain' },
+      { code: '+94', label: '🇱🇰 Sri Lanka' },
+      { code: '+249', label: '🇸🇩 Sudan' },
+      { code: '+597', label: '🇸🇷 Suriname' },
+      { code: '+46', label: '🇸🇪 Sweden' },
+      { code: '+41', label: '🇨🇭 Switzerland' },
+      { code: '+963', label: '🇸🇾 Syria' },
+      { code: '+886', label: '🇹🇼 Taiwan' },
+      { code: '+992', label: '🇹🇯 Tajikistan' },
+      { code: '+255', label: '🇹🇿 Tanzania' },
+      { code: '+66', label: '🇹🇭 Thailand' },
+      { code: '+670', label: '🇹🇱 Timor-Leste' },
+      { code: '+228', label: '🇹🇬 Togo' },
+      { code: '+676', label: '🇹🇴 Tonga' },
+      { code: '+1-868', label: '🇹🇹 Trinidad and Tobago' },
+      { code: '+216', label: '🇹🇳 Tunisia' },
+      { code: '+90', label: '🇹🇷 Turkey' },
+      { code: '+993', label: '🇹🇲 Turkmenistan' },
+      { code: '+688', label: '🇹🇻 Tuvalu' },
+      { code: '+256', label: '🇺🇬 Uganda' },
+      { code: '+380', label: '🇺🇦 Ukraine' },
+      { code: '+971', label: '🇦🇪 United Arab Emirates' },
+      { code: '+44', label: '🇬🇧 United Kingdom' },
+      { code: '+1', label: '🇺🇸 United States' },
+      { code: '+598', label: '🇺🇾 Uruguay' },
+      { code: '+998', label: '🇺🇿 Uzbekistan' },
+      { code: '+678', label: '🇻🇺 Vanuatu' },
+      { code: '+379', label: '🇻🇦 Vatican City' },
+      { code: '+58', label: '🇻🇪 Venezuela' },
+      { code: '+84', label: '🇻🇳 Vietnam' },
+      { code: '+967', label: '🇾🇪 Yemen' },
+      { code: '+260', label: '🇿🇲 Zambia' },
+      { code: '+263', label: '🇿🇼 Zimbabwe' }
+    ];
 
     const I18N = {
       en: {
@@ -529,6 +913,7 @@
         ovVerification: 'Verification',
         ovTariff: 'Tariff',
         ovCurrency: 'Currency',
+        ovCompliance: 'Compliance',
         accountStatusTitle: 'Account status',
         miniDocsTitle: 'Documents',
         miniPlanTitle: 'Current plan',
@@ -537,6 +922,7 @@
         companyLabel: 'Company name',
         sellerTypeLabel: 'Seller type',
         phoneLabel: 'Phone',
+        phoneHint: 'Select country code with flag.',
         countryLabel: 'Country',
         cityLabel: 'City',
         profileLanguageLabel: 'Language',
@@ -546,6 +932,26 @@
         serviceRulesText: 'Seller must follow platform rules. Violations may lead to warning, manual review, temporary restriction, or removal from the system.',
         openMessageBtn: 'Contact support',
         logoutBtn: 'Logout',
+        verificationCenterTitle: 'Verification Center',
+        verificationCenterSubtitle: 'Scan required seller verification steps inside the app.',
+        russiaRestrictionTitle: 'Verification for Russia is temporarily suspended.',
+        russiaRestrictionText: 'Sellers from Russia can still use parts of the app, but verification is temporarily paused.',
+        passportScanHead: 'Passport scan',
+        passportScanMeta: 'Open camera or upload passport scan.',
+        selfieScanHead: 'Selfie with passport in hands',
+        selfieScanMeta: 'Use front camera to take selfie with passport.',
+        faceScanHead: 'Face scan',
+        faceScanMeta: 'Use front camera for face scan photo.',
+        llcScanHead: 'LLC / Company documents',
+        llcScanMeta: 'Upload LLC, company registration, or tax documents.',
+        passportCameraBtn: 'Open camera',
+        passportFileBtn: 'Choose file',
+        selfieCameraBtn: 'Open selfie camera',
+        selfieFileBtn: 'Choose file',
+        faceCameraBtn: 'Open face camera',
+        faceFileBtn: 'Choose file',
+        llcCameraBtn: 'Open camera',
+        llcFileBtn: 'Choose file',
         documentsTitle: 'Documents',
         documentsSubtitle: 'Upload seller verification files and keep comments together.',
         docNameLabel: 'Document name',
@@ -564,6 +970,12 @@
         statsActivityLabel: 'Activity',
         statsOrdersLabel: 'Orders',
         statsTrendLabel: 'Trend',
+        settingsTitle: 'Settings',
+        settingsSubtitle: 'Manage password and app preferences.',
+        securityTitle: 'Security',
+        currentPasswordLabel: 'Current password',
+        newPasswordLabel: 'New password',
+        changePasswordBtn: 'Change password',
         messagesTitle: 'Support message',
         messagesSubtitle: 'Send a request to support and keep your history below.',
         messageSubjectLabel: 'Subject',
@@ -575,6 +987,7 @@
         navDocuments: 'Documents',
         navTariffs: 'Tariffs',
         navStats: 'Stats',
+        navSettings: 'Settings',
         loaded: 'Application loaded successfully.',
         needEmail: 'Enter email first.',
         needBoth: 'Enter email and password.',
@@ -584,6 +997,7 @@
         logoutAsk: 'Do you want to logout?',
         logoutOk: 'Logged out successfully.',
         profileOk: 'Profile saved successfully.',
+        docNeed: 'Enter document name.',
         docOk: 'Document uploaded successfully.',
         docDeleteOk: 'Document deleted successfully.',
         tariffOk: 'Tariff selected successfully.',
@@ -594,4 +1008,1326 @@
         noMessages: 'No messages yet.',
         deleteBtn: 'Delete',
         individual: 'Individual',
-        co
+        company: 'Company',
+        sellerWord: 'Seller',
+        pendingWord: 'Pending',
+        activeWord: 'Active',
+        save10: 'save 10%',
+        save20: 'save 20%',
+        stableWord: 'Stable',
+        upWord: 'Up',
+        goodWord: 'Good',
+        notUploaded: 'Not uploaded',
+        uploadedPending: 'Uploaded / pending',
+        verificationDone: 'Verification submitted',
+        passwordNeed: 'Enter current and new password.',
+        passwordWrong: 'Current password is incorrect.',
+        passwordChanged: 'Password updated successfully.',
+        verificationBlockedRussia: 'Verification is temporarily suspended for Russia.',
+        scanUploaded: 'Scan uploaded successfully.'
+      },
+      ru: {
+        brand: 'AMAROSE Seller App',
+        loginTitle: 'Вход продавца',
+        loginSubtitle: 'Спокойный доступ к профилю, документам, тарифам и статистике.',
+        emailLabel: 'Почта',
+        passwordLabel: 'Пароль',
+        demoTitle: 'Демо доступ',
+        demoText: 'Можно войти с любой почтой и любым паролем. Данные сохраняются в браузере.',
+        loginBtn: 'Войти',
+        createBtn: 'Создать аккаунт',
+        resetBtn: 'Сбросить пароль',
+        resetTitle: 'Сброс пароля',
+        resetMessage: 'Запрос на сброс пароля успешно создан.',
+        overviewTitle: 'Обзор аккаунта',
+        ovEmail: 'Почта',
+        ovRole: 'Роль',
+        ovStatus: 'Статус',
+        ovVerification: 'Проверка',
+        ovTariff: 'Тариф',
+        ovCurrency: 'Валюта',
+        ovCompliance: 'Комплаенс',
+        accountStatusTitle: 'Состояние аккаунта',
+        miniDocsTitle: 'Документы',
+        miniPlanTitle: 'Текущий тариф',
+        profileTitle: 'Профиль продавца',
+        fullNameLabel: 'Полное имя',
+        companyLabel: 'Название компании',
+        sellerTypeLabel: 'Тип продавца',
+        phoneLabel: 'Телефон',
+        phoneHint: 'Выберите код страны с флагом.',
+        countryLabel: 'Страна',
+        cityLabel: 'Город',
+        profileLanguageLabel: 'Язык',
+        currencyLabel: 'Валюта',
+        saveProfileBtn: 'Сохранить профиль',
+        serviceRulesTitle: 'Правила сервиса',
+        serviceRulesText: 'Продавец обязан соблюдать правила платформы. Нарушения могут привести к предупреждению, ручной проверке, временным ограничениям или удалению из системы.',
+        openMessageBtn: 'Написать в поддержку',
+        logoutBtn: 'Выйти',
+        verificationCenterTitle: 'Центр верификации',
+        verificationCenterSubtitle: 'Сканируйте обязательные шаги проверки прямо внутри приложения.',
+        russiaRestrictionTitle: 'Верификация для России временно приостановлена.',
+        russiaRestrictionText: 'Продавцы из России могут пользоваться частью приложения, но проверка сейчас временно остановлена.',
+        passportScanHead: 'Скан паспорта',
+        passportScanMeta: 'Откройте камеру или загрузите скан паспорта.',
+        selfieScanHead: 'Селфи с паспортом в руках',
+        selfieScanMeta: 'Используйте фронтальную камеру для селфи с паспортом.',
+        faceScanHead: 'Скан лица',
+        faceScanMeta: 'Используйте фронтальную камеру для фото лица.',
+        llcScanHead: 'Документы LLC / компании',
+        llcScanMeta: 'Загрузите ООО, регистрацию компании или налоговые документы.',
+        passportCameraBtn: 'Открыть камеру',
+        passportFileBtn: 'Выбрать файл',
+        selfieCameraBtn: 'Открыть селфи-камеру',
+        selfieFileBtn: 'Выбрать файл',
+        faceCameraBtn: 'Открыть камеру лица',
+        faceFileBtn: 'Выбрать файл',
+        llcCameraBtn: 'Открыть камеру',
+        llcFileBtn: 'Выбрать файл',
+        documentsTitle: 'Документы',
+        documentsSubtitle: 'Загружайте файлы проверки продавца и храните комментарии в одном месте.',
+        docNameLabel: 'Название документа',
+        docTypeLabel: 'Тип документа',
+        docCommentLabel: 'Комментарий',
+        addDocBtn: 'Загрузить документ',
+        docListTitle: 'Загруженные документы',
+        tariffsTitle: 'Тарифы',
+        tariffsSubtitle: 'Выберите подходящий план и срок для роста продавца.',
+        startDesc: 'Базовый доступ для нового продавца.',
+        proDesc: 'Больше видимости и больше инструментов продавца.',
+        statsTitle: 'Статистика',
+        statsSubtitle: 'Быстрый обзор показателей продавца.',
+        statsRatingLabel: 'Рейтинг',
+        statsReviewsLabel: 'Отзывы',
+        statsActivityLabel: 'Активность',
+        statsOrdersLabel: 'Заказы',
+        statsTrendLabel: 'Тренд',
+        settingsTitle: 'Настройки',
+        settingsSubtitle: 'Управление паролем и настройками приложения.',
+        securityTitle: 'Безопасность',
+        currentPasswordLabel: 'Текущий пароль',
+        newPasswordLabel: 'Новый пароль',
+        changePasswordBtn: 'Сменить пароль',
+        messagesTitle: 'Сообщение в поддержку',
+        messagesSubtitle: 'Отправьте запрос в поддержку и храните историю ниже.',
+        messageSubjectLabel: 'Тема',
+        messageTextLabel: 'Сообщение',
+        sendMessageBtn: 'Отправить сообщение',
+        backFromMessagesBtn: 'Назад',
+        messageHistoryTitle: 'История сообщений',
+        navProfile: 'Профиль',
+        navDocuments: 'Документы',
+        navTariffs: 'Тарифы',
+        navStats: 'Статистика',
+        navSettings: 'Настройки',
+        loaded: 'Приложение загружено.',
+        needEmail: 'Сначала введите почту.',
+        needBoth: 'Введите почту и пароль.',
+        loginOk: 'Вход выполнен успешно.',
+        createOk: 'Аккаунт успешно создан.',
+        resetOk: 'Запрос на сброс пароля создан.',
+        logoutAsk: 'Вы точно хотите выйти?',
+        logoutOk: 'Вы вышли из аккаунта.',
+        profileOk: 'Профиль успешно сохранён.',
+        docNeed: 'Введите название документа.',
+        docOk: 'Документ успешно загружен.',
+        docDeleteOk: 'Документ успешно удалён.',
+        tariffOk: 'Тариф успешно выбран.',
+        messageNeed: 'Введите тему и сообщение.',
+        messageOk: 'Сообщение успешно отправлено.',
+        messageOpened: 'Центр сообщений открыт.',
+        noDocs: 'Документов пока нет.',
+        noMessages: 'Сообщений пока нет.',
+        deleteBtn: 'Удалить',
+        individual: 'Частный',
+        company: 'Компания',
+        sellerWord: 'Продавец',
+        pendingWord: 'На проверке',
+        activeWord: 'Активен',
+        save10: 'скидка 10%',
+        save20: 'скидка 20%',
+        stableWord: 'Стабильно',
+        upWord: 'Рост',
+        goodWord: 'Хорошо',
+        notUploaded: 'Не загружено',
+        uploadedPending: 'Загружено / проверка',
+        verificationDone: 'Верификация отправлена',
+        passwordNeed: 'Введите текущий и новый пароль.',
+        passwordWrong: 'Текущий пароль неверный.',
+        passwordChanged: 'Пароль успешно обновлён.',
+        verificationBlockedRussia: 'Верификация для России временно приостановлена.',
+        scanUploaded: 'Скан успешно загружен.'
+      },
+      hy: {
+        brand: 'AMAROSE Seller App',
+        loginTitle: 'Վաճառողի մուտք',
+        loginSubtitle: 'Արագ մուտք պրոֆիլ, փաստաթղթեր, սակագներ և վիճակագրություն։',
+        emailLabel: 'Էլ. հասցե',
+        passwordLabel: 'Գաղտնաբառ',
+        demoTitle: 'Դեմո մուտք',
+        demoText: 'Կարող եք մուտք գործել ցանկացած էլ. հասցեով և գաղտնաբառով։ Տվյալները պահվում են բրաուզերում։',
+        loginBtn: 'Մուտք',
+        createBtn: 'Ստեղծել հաշիվ',
+        resetBtn: 'Վերականգնել գաղտնաբառը',
+        resetTitle: 'Գաղտնաբառի վերականգնում',
+        resetMessage: 'Գաղտնաբառի վերականգնման հարցումը ստեղծվել է։',
+        overviewTitle: 'Հաշվի տեսություն',
+        ovEmail: 'Էլ. հասցե',
+        ovRole: 'Դեր',
+        ovStatus: 'Կարգավիճակ',
+        ovVerification: 'Ստուգում',
+        ovTariff: 'Սակագին',
+        ovCurrency: 'Արժույթ',
+        ovCompliance: 'Համապատասխանություն',
+        accountStatusTitle: 'Հաշվի վիճակ',
+        miniDocsTitle: 'Փաստաթղթեր',
+        miniPlanTitle: 'Ընթացիկ փաթեթ',
+        profileTitle: 'Վաճառողի պրոֆիլ',
+        fullNameLabel: 'Լրիվ անուն',
+        companyLabel: 'Ընկերության անուն',
+        sellerTypeLabel: 'Վաճառողի տեսակ',
+        phoneLabel: 'Հեռախոս',
+        phoneHint: 'Ընտրեք երկրի կոդը դրոշով։',
+        countryLabel: 'Երկիր',
+        cityLabel: 'Քաղաք',
+        profileLanguageLabel: 'Լեզու',
+        currencyLabel: 'Արժույթ',
+        saveProfileBtn: 'Պահպանել պրոֆիլը',
+        serviceRulesTitle: 'Ծառայության կանոններ',
+        serviceRulesText: 'Վաճառողը պետք է պահպանի հարթակի կանոնները։ Խախտումները կարող են բերել զգուշացման, ձեռքով ստուգման, ժամանակավոր սահմանափակման կամ հեռացման։',
+        openMessageBtn: 'Կապ աջակցությանը',
+        logoutBtn: 'Դուրս գալ',
+        verificationCenterTitle: 'Ստուգման կենտրոն',
+        verificationCenterSubtitle: 'Սկանավորեք պարտադիր քայլերը հենց հավելվածի ներսում։',
+        russiaRestrictionTitle: 'Ռուսաստանի համար վերիֆիկացիան ժամանակավորապես դադարեցված է։',
+        russiaRestrictionText: 'Ռուսաստանից վաճառողները կարող են օգտագործել հավելվածի մի մասը, բայց ստուգումը ժամանակավորապես դադարեցված է։',
+        passportScanHead: 'Անձնագրի սկան',
+        passportScanMeta: 'Բացեք տեսախցիկը կամ վերբեռնեք անձնագրի սկանը։',
+        selfieScanHead: 'Սելֆի անձնագրով ձեռքին',
+        selfieScanMeta: 'Օգտագործեք դիմային տեսախցիկը սելֆիի համար։',
+        faceScanHead: 'Դեմքի սկան',
+        faceScanMeta: 'Օգտագործեք դիմային տեսախցիկը դեմքի լուսանկարի համար։',
+        llcScanHead: 'LLC / ընկերության փաստաթղթեր',
+        llcScanMeta: 'Վերբեռնեք ՍՊԸ, գրանցման կամ հարկային փաստաթղթեր։',
+        passportCameraBtn: 'Բացել տեսախցիկը',
+        passportFileBtn: 'Ընտրել ֆայլ',
+        selfieCameraBtn: 'Բացել սելֆի տեսախցիկը',
+        selfieFileBtn: 'Ընտրել ֆայլ',
+        faceCameraBtn: 'Բացել դեմքի տեսախցիկը',
+        faceFileBtn: 'Ընտրել ֆայլ',
+        llcCameraBtn: 'Բացել տեսախցիկը',
+        llcFileBtn: 'Ընտրել ֆայլ',
+        documentsTitle: 'Փաստաթղթեր',
+        documentsSubtitle: 'Վերբեռնեք վաճառողի ստուգման ֆայլերը և պահեք մեկնաբանությունները միասին։',
+        docNameLabel: 'Փաստաթղթի անուն',
+        docTypeLabel: 'Փաստաթղթի տեսակ',
+        docCommentLabel: 'Մեկնաբանություն',
+        addDocBtn: 'Վերբեռնել փաստաթուղթ',
+        docListTitle: 'Վերբեռնված փաստաթղթեր',
+        tariffsTitle: 'Սակագներ',
+        tariffsSubtitle: 'Ընտրեք ճիշտ փաթեթը և ժամկետը։',
+        startDesc: 'Հիմնական մուտք նոր վաճառողի համար։',
+        proDesc: 'Ավելի շատ տեսանելիություն և գործիքներ։',
+        statsTitle: 'Վիճակագրություն',
+        statsSubtitle: 'Վաճառողի արագ ցուցանիշներ։',
+        statsRatingLabel: 'Վարկանիշ',
+        statsReviewsLabel: 'Կարծիքներ',
+        statsActivityLabel: 'Ակտիվություն',
+        statsOrdersLabel: 'Պատվերներ',
+        statsTrendLabel: 'Թրենդ',
+        settingsTitle: 'Կարգավորումներ',
+        settingsSubtitle: 'Կառավարեք գաղտնաբառը և հավելվածի նախընտրությունները։',
+        securityTitle: 'Անվտանգություն',
+        currentPasswordLabel: 'Ընթացիկ գաղտնաբառ',
+        newPasswordLabel: 'Նոր գաղտնաբառ',
+        changePasswordBtn: 'Փոխել գաղտնաբառը',
+        messagesTitle: 'Աջակցության հաղորդագրություն',
+        messagesSubtitle: 'Ուղարկեք հարցում և պահեք պատմությունը ներքևում։',
+        messageSubjectLabel: 'Թեմա',
+        messageTextLabel: 'Հաղորդագրություն',
+        sendMessageBtn: 'Ուղարկել հաղորդագրություն',
+        backFromMessagesBtn: 'Հետ',
+        messageHistoryTitle: 'Հաղորդագրությունների պատմություն',
+        navProfile: 'Պրոֆիլ',
+        navDocuments: 'Փաստաթուղթեր',
+        navTariffs: 'Սակագներ',
+        navStats: 'Վիճակագրություն',
+        navSettings: 'Կարգավորումներ',
+        loaded: 'Հավելվածը բեռնված է։',
+        needEmail: 'Մուտքագրեք էլ. հասցեն։',
+        needBoth: 'Մուտքագրեք էլ. հասցեն և գաղտնաբառը։',
+        loginOk: 'Մուտքը հաջողվեց։',
+        createOk: 'Հաշիվը ստեղծվել է։',
+        resetOk: 'Վերականգնման հարցումը ստեղծվել է։',
+        logoutAsk: 'Վստա՞հ եք, որ ուզում եք դուրս գալ։',
+        logoutOk: 'Դուք դուրս եկաք։',
+        profileOk: 'Պրոֆիլը պահպանվել է։',
+        docNeed: 'Մուտքագրեք փաստաթղթի անունը։',
+        docOk: 'Փաստաթուղթը վերբեռնված է։',
+        docDeleteOk: 'Փաստաթուղթը ջնջված է։',
+        tariffOk: 'Սակագինը ընտրված է։',
+        messageNeed: 'Մուտքագրեք թեման և հաղորդագրությունը։',
+        messageOk: 'Հաղորդագրությունն ուղարկված է։',
+        messageOpened: 'Հաղորդագրությունների կենտրոնը բացված է։',
+        noDocs: 'Փաստաթղթեր դեռ չկան։',
+        noMessages: 'Հաղորդագրություններ դեռ չկան։',
+        deleteBtn: 'Ջնջել',
+        individual: 'Անհատ',
+        company: 'Ընկերություն',
+        sellerWord: 'Վաճառող',
+        pendingWord: 'Ստուգման մեջ',
+        activeWord: 'Ակտիվ',
+        save10: 'խնայի՛ր 10%',
+        save20: 'խնայի՛ր 20%',
+        stableWord: 'Կայուն',
+        upWord: 'Աճ',
+        goodWord: 'Լավ',
+        notUploaded: 'Չի վերբեռնվել',
+        uploadedPending: 'Վերբեռնված / սպասման մեջ',
+        verificationDone: 'Ստուգումը ուղարկված է',
+        passwordNeed: 'Մուտքագրեք ընթացիկ և նոր գաղտնաբառը։',
+        passwordWrong: 'Ընթացիկ գաղտնաբառը սխալ է։',
+        passwordChanged: 'Գաղտնաբառը թարմացվել է։',
+        verificationBlockedRussia: 'Ռուսաստանի համար ստուգումը ժամանակավորապես դադարեցված է։',
+        scanUploaded: 'Սկանը հաջողությամբ վերբեռնվեց։'
+      },
+      es: {
+        brand: 'AMAROSE Seller App',
+        loginTitle: 'Inicio de vendedor',
+        loginSubtitle: 'Acceso rápido al perfil, documentos, tarifas y estadísticas.',
+        emailLabel: 'Correo',
+        passwordLabel: 'Contraseña',
+        demoTitle: 'Acceso demo',
+        demoText: 'Puedes entrar con cualquier correo y cualquier contraseña. Los datos se guardan en este navegador.',
+        loginBtn: 'Entrar',
+        createBtn: 'Crear cuenta',
+        resetBtn: 'Restablecer contraseña',
+        resetTitle: 'Restablecimiento de contraseña',
+        resetMessage: 'La solicitud de restablecimiento fue creada correctamente.',
+        overviewTitle: 'Resumen de cuenta',
+        ovEmail: 'Correo',
+        ovRole: 'Rol',
+        ovStatus: 'Estado',
+        ovVerification: 'Verificación',
+        ovTariff: 'Tarifa',
+        ovCurrency: 'Moneda',
+        ovCompliance: 'Cumplimiento',
+        accountStatusTitle: 'Estado de la cuenta',
+        miniDocsTitle: 'Documentos',
+        miniPlanTitle: 'Plan actual',
+        profileTitle: 'Perfil del vendedor',
+        fullNameLabel: 'Nombre completo',
+        companyLabel: 'Nombre de la empresa',
+        sellerTypeLabel: 'Tipo de vendedor',
+        phoneLabel: 'Teléfono',
+        phoneHint: 'Selecciona el código del país con bandera.',
+        countryLabel: 'País',
+        cityLabel: 'Ciudad',
+        profileLanguageLabel: 'Idioma',
+        currencyLabel: 'Moneda',
+        saveProfileBtn: 'Guardar perfil',
+        serviceRulesTitle: 'Reglas del servicio',
+        serviceRulesText: 'El vendedor debe seguir las reglas de la plataforma. Las infracciones pueden llevar a advertencia, revisión manual, restricción temporal o eliminación del sistema.',
+        openMessageBtn: 'Contactar soporte',
+        logoutBtn: 'Cerrar sesión',
+        verificationCenterTitle: 'Centro de verificación',
+        verificationCenterSubtitle: 'Escanea los pasos obligatorios de verificación dentro de la app.',
+        russiaRestrictionTitle: 'La verificación para Rusia está suspendida temporalmente.',
+        russiaRestrictionText: 'Los vendedores de Rusia pueden usar parte de la app, pero la verificación está pausada temporalmente.',
+        passportScanHead: 'Escaneo de pasaporte',
+        passportScanMeta: 'Abre la cámara o sube el escaneo del pasaporte.',
+        selfieScanHead: 'Selfie con pasaporte en la mano',
+        selfieScanMeta: 'Usa la cámara frontal para tomar la selfie con pasaporte.',
+        faceScanHead: 'Escaneo facial',
+        faceScanMeta: 'Usa la cámara frontal para la foto facial.',
+        llcScanHead: 'Documentos LLC / empresa',
+        llcScanMeta: 'Sube LLC, registro de empresa o documentos fiscales.',
+        passportCameraBtn: 'Abrir cámara',
+        passportFileBtn: 'Elegir archivo',
+        selfieCameraBtn: 'Abrir cámara selfie',
+        selfieFileBtn: 'Elegir archivo',
+        faceCameraBtn: 'Abrir cámara facial',
+        faceFileBtn: 'Elegir archivo',
+        llcCameraBtn: 'Abrir cámara',
+        llcFileBtn: 'Elegir archivo',
+        documentsTitle: 'Documentos',
+        documentsSubtitle: 'Sube archivos de verificación del vendedor y guarda comentarios juntos.',
+        docNameLabel: 'Nombre del documento',
+        docTypeLabel: 'Tipo de documento',
+        docCommentLabel: 'Comentario',
+        addDocBtn: 'Subir documento',
+        docListTitle: 'Documentos subidos',
+        tariffsTitle: 'Tarifas',
+        tariffsSubtitle: 'Elige el plan y la duración adecuados.',
+        startDesc: 'Acceso básico para un vendedor nuevo.',
+        proDesc: 'Más visibilidad y más herramientas.',
+        statsTitle: 'Estadísticas',
+        statsSubtitle: 'Resumen rápido del rendimiento del vendedor.',
+        statsRatingLabel: 'Calificación',
+        statsReviewsLabel: 'Reseñas',
+        statsActivityLabel: 'Actividad',
+        statsOrdersLabel: 'Pedidos',
+        statsTrendLabel: 'Tendencia',
+        settingsTitle: 'Configuración',
+        settingsSubtitle: 'Administra la contraseña y preferencias de la app.',
+        securityTitle: 'Seguridad',
+        currentPasswordLabel: 'Contraseña actual',
+        newPasswordLabel: 'Nueva contraseña',
+        changePasswordBtn: 'Cambiar contraseña',
+        messagesTitle: 'Mensaje a soporte',
+        messagesSubtitle: 'Envía una solicitud a soporte y guarda el historial abajo.',
+        messageSubjectLabel: 'Asunto',
+        messageTextLabel: 'Mensaje',
+        sendMessageBtn: 'Enviar mensaje',
+        backFromMessagesBtn: 'Volver',
+        messageHistoryTitle: 'Historial de mensajes',
+        navProfile: 'Perfil',
+        navDocuments: 'Docs',
+        navTariffs: 'Tarifas',
+        navStats: 'Stats',
+        navSettings: 'Ajustes',
+        loaded: 'La aplicación se cargó correctamente.',
+        needEmail: 'Primero introduce el correo.',
+        needBoth: 'Introduce correo y contraseña.',
+        loginOk: 'Inicio de sesión correcto.',
+        createOk: 'Cuenta creada correctamente.',
+        resetOk: 'Solicitud de restablecimiento creada.',
+        logoutAsk: '¿Quieres cerrar sesión?',
+        logoutOk: 'Sesión cerrada correctamente.',
+        profileOk: 'Perfil guardado correctamente.',
+        docNeed: 'Introduce el nombre del documento.',
+        docOk: 'Documento subido correctamente.',
+        docDeleteOk: 'Documento eliminado correctamente.',
+        tariffOk: 'Tarifa seleccionada correctamente.',
+        messageNeed: 'Introduce asunto y mensaje.',
+        messageOk: 'Mensaje enviado correctamente.',
+        messageOpened: 'Centro de mensajes abierto.',
+        noDocs: 'Todavía no hay documentos.',
+        noMessages: 'Todavía no hay mensajes.',
+        deleteBtn: 'Eliminar',
+        individual: 'Individual',
+        company: 'Empresa',
+        sellerWord: 'Vendedor',
+        pendingWord: 'Pendiente',
+        activeWord: 'Activo',
+        save10: 'ahorra 10%',
+        save20: 'ahorra 20%',
+        stableWord: 'Estable',
+        upWord: 'Sube',
+        goodWord: 'Bueno',
+        notUploaded: 'No subido',
+        uploadedPending: 'Subido / pendiente',
+        verificationDone: 'Verificación enviada',
+        passwordNeed: 'Introduce la contraseña actual y la nueva.',
+        passwordWrong: 'La contraseña actual es incorrecta.',
+        passwordChanged: 'La contraseña se actualizó correctamente.',
+        verificationBlockedRussia: 'La verificación para Rusia está temporalmente suspendida.',
+        scanUploaded: 'Escaneo subido correctamente.'
+      },
+      fr: {
+        brand: 'AMAROSE Seller App',
+        loginTitle: 'Connexion vendeur',
+        loginSubtitle: 'Accès rapide au profil, aux documents, aux tarifs et aux statistiques.',
+        emailLabel: 'E-mail',
+        passwordLabel: 'Mot de passe',
+        demoTitle: 'Accès démo',
+        demoText: 'Vous pouvez vous connecter avec n’importe quel e-mail et mot de passe. Les données sont enregistrées dans ce navigateur.',
+        loginBtn: 'Connexion',
+        createBtn: 'Créer un compte',
+        resetBtn: 'Réinitialiser le mot de passe',
+        resetTitle: 'Réinitialisation du mot de passe',
+        resetMessage: 'La demande de réinitialisation a été créée avec succès.',
+        overviewTitle: 'Vue d’ensemble du compte',
+        ovEmail: 'E-mail',
+        ovRole: 'Rôle',
+        ovStatus: 'Statut',
+        ovVerification: 'Vérification',
+        ovTariff: 'Tarif',
+        ovCurrency: 'Devise',
+        ovCompliance: 'Conformité',
+        accountStatusTitle: 'État du compte',
+        miniDocsTitle: 'Documents',
+        miniPlanTitle: 'Plan actuel',
+        profileTitle: 'Profil vendeur',
+        fullNameLabel: 'Nom complet',
+        companyLabel: 'Nom de l’entreprise',
+        sellerTypeLabel: 'Type de vendeur',
+        phoneLabel: 'Téléphone',
+        phoneHint: 'Sélectionnez l’indicatif du pays avec le drapeau.',
+        countryLabel: 'Pays',
+        cityLabel: 'Ville',
+        profileLanguageLabel: 'Langue',
+        currencyLabel: 'Devise',
+        saveProfileBtn: 'Enregistrer le profil',
+        serviceRulesTitle: 'Règles du service',
+        serviceRulesText: 'Le vendeur doit suivre les règles de la plateforme. Les violations peuvent entraîner un avertissement, une révision manuelle, une restriction temporaire ou une suppression du système.',
+        openMessageBtn: 'Contacter le support',
+        logoutBtn: 'Déconnexion',
+        verificationCenterTitle: 'Centre de vérification',
+        verificationCenterSubtitle: 'Scannez les étapes de vérification requises dans l’application.',
+        russiaRestrictionTitle: 'La vérification pour la Russie est temporairement suspendue.',
+        russiaRestrictionText: 'Les vendeurs de Russie peuvent utiliser une partie de l’application, mais la vérification est temporairement en pause.',
+        passportScanHead: 'Scan du passeport',
+        passportScanMeta: 'Ouvrez la caméra ou téléchargez le scan du passeport.',
+        selfieScanHead: 'Selfie avec passeport à la main',
+        selfieScanMeta: 'Utilisez la caméra avant pour prendre un selfie avec le passeport.',
+        faceScanHead: 'Scan du visage',
+        faceScanMeta: 'Utilisez la caméra avant pour la photo du visage.',
+        llcScanHead: 'Documents LLC / société',
+        llcScanMeta: 'Téléchargez LLC, immatriculation ou documents fiscaux.',
+        passportCameraBtn: 'Ouvrir la caméra',
+        passportFileBtn: 'Choisir un fichier',
+        selfieCameraBtn: 'Ouvrir la caméra selfie',
+        selfieFileBtn: 'Choisir un fichier',
+        faceCameraBtn: 'Ouvrir la caméra visage',
+        faceFileBtn: 'Choisir un fichier',
+        llcCameraBtn: 'Ouvrir la caméra',
+        llcFileBtn: 'Choisir un fichier',
+        documentsTitle: 'Documents',
+        documentsSubtitle: 'Téléchargez les fichiers de vérification vendeur et gardez les commentaires ensemble.',
+        docNameLabel: 'Nom du document',
+        docTypeLabel: 'Type de document',
+        docCommentLabel: 'Commentaire',
+        addDocBtn: 'Télécharger le document',
+        docListTitle: 'Documents téléchargés',
+        tariffsTitle: 'Tarifs',
+        tariffsSubtitle: 'Choisissez le bon plan et la bonne durée.',
+        startDesc: 'Accès de base pour un nouveau vendeur.',
+        proDesc: 'Plus de visibilité et plus d’outils vendeur.',
+        statsTitle: 'Statistiques',
+        statsSubtitle: 'Vue rapide des performances du vendeur.',
+        statsRatingLabel: 'Note',
+        statsReviewsLabel: 'Avis',
+        statsActivityLabel: 'Activité',
+        statsOrdersLabel: 'Commandes',
+        statsTrendLabel: 'Tendance',
+        settingsTitle: 'Paramètres',
+        settingsSubtitle: 'Gérez le mot de passe et les préférences de l’application.',
+        securityTitle: 'Sécurité',
+        currentPasswordLabel: 'Mot de passe actuel',
+        newPasswordLabel: 'Nouveau mot de passe',
+        changePasswordBtn: 'Changer le mot de passe',
+        messagesTitle: 'Message au support',
+        messagesSubtitle: 'Envoyez une demande au support et conservez votre historique ci-dessous.',
+        messageSubjectLabel: 'Sujet',
+        messageTextLabel: 'Message',
+        sendMessageBtn: 'Envoyer le message',
+        backFromMessagesBtn: 'Retour',
+        messageHistoryTitle: 'Historique des messages',
+        navProfile: 'Profil',
+        navDocuments: 'Docs',
+        navTariffs: 'Tarifs',
+        navStats: 'Stats',
+        navSettings: 'Réglages',
+        loaded: 'Application chargée avec succès.',
+        needEmail: 'Entrez d’abord un e-mail.',
+        needBoth: 'Entrez e-mail et mot de passe.',
+        loginOk: 'Connexion réussie.',
+        createOk: 'Compte créé avec succès.',
+        resetOk: 'Demande de réinitialisation créée.',
+        logoutAsk: 'Voulez-vous vous déconnecter ?',
+        logoutOk: 'Déconnexion réussie.',
+        profileOk: 'Profil enregistré avec succès.',
+        docNeed: 'Entrez le nom du document.',
+        docOk: 'Document téléchargé avec succès.',
+        docDeleteOk: 'Document supprimé avec succès.',
+        tariffOk: 'Tarif sélectionné avec succès.',
+        messageNeed: 'Entrez le sujet et le message.',
+        messageOk: 'Message envoyé avec succès.',
+        messageOpened: 'Centre de messages ouvert.',
+        noDocs: 'Aucun document pour le moment.',
+        noMessages: 'Aucun message pour le moment.',
+        deleteBtn: 'Supprimer',
+        individual: 'Individuel',
+        company: 'Entreprise',
+        sellerWord: 'Vendeur',
+        pendingWord: 'En attente',
+        activeWord: 'Actif',
+        save10: 'économisez 10%',
+        save20: 'économisez 20%',
+        stableWord: 'Stable',
+        upWord: 'Hausse',
+        goodWord: 'Bon',
+        notUploaded: 'Non téléchargé',
+        uploadedPending: 'Téléchargé / en attente',
+        verificationDone: 'Vérification envoyée',
+        passwordNeed: 'Entrez le mot de passe actuel et le nouveau.',
+        passwordWrong: 'Le mot de passe actuel est incorrect.',
+        passwordChanged: 'Le mot de passe a été mis à jour.',
+        verificationBlockedRussia: 'La vérification pour la Russie est temporairement suspendue.',
+        scanUploaded: 'Scan téléchargé avec succès.'
+      },
+      de: {
+        brand: 'AMAROSE Seller App',
+        loginTitle: 'Verkäufer-Login',
+        loginSubtitle: 'Schneller Zugriff auf Profil, Dokumente, Tarife und Statistiken.',
+        emailLabel: 'E-Mail',
+        passwordLabel: 'Passwort',
+        demoTitle: 'Demo-Zugang',
+        demoText: 'Sie können sich mit jeder E-Mail und jedem Passwort anmelden. Daten werden in diesem Browser gespeichert.',
+        loginBtn: 'Anmelden',
+        createBtn: 'Konto erstellen',
+        resetBtn: 'Passwort zurücksetzen',
+        resetTitle: 'Passwort zurücksetzen',
+        resetMessage: 'Die Anfrage zum Zurücksetzen wurde erfolgreich erstellt.',
+        overviewTitle: 'Kontoübersicht',
+        ovEmail: 'E-Mail',
+        ovRole: 'Rolle',
+        ovStatus: 'Status',
+        ovVerification: 'Verifizierung',
+        ovTariff: 'Tarif',
+        ovCurrency: 'Währung',
+        ovCompliance: 'Compliance',
+        accountStatusTitle: 'Kontostatus',
+        miniDocsTitle: 'Dokumente',
+        miniPlanTitle: 'Aktueller Plan',
+        profileTitle: 'Verkäuferprofil',
+        fullNameLabel: 'Vollständiger Name',
+        companyLabel: 'Firmenname',
+        sellerTypeLabel: 'Verkäufertyp',
+        phoneLabel: 'Telefon',
+        phoneHint: 'Wählen Sie die Landesvorwahl mit Flagge.',
+        countryLabel: 'Land',
+        cityLabel: 'Stadt',
+        profileLanguageLabel: 'Sprache',
+        currencyLabel: 'Währung',
+        saveProfileBtn: 'Profil speichern',
+        serviceRulesTitle: 'Serviceregeln',
+        serviceRulesText: 'Der Verkäufer muss die Plattformregeln befolgen. Verstöße können zu Warnung, manueller Prüfung, temporärer Einschränkung oder Entfernung aus dem System führen.',
+        openMessageBtn: 'Support kontaktieren',
+        logoutBtn: 'Abmelden',
+        verificationCenterTitle: 'Verifizierungszentrum',
+        verificationCenterSubtitle: 'Scannen Sie die erforderlichen Verifizierungsschritte direkt in der App.',
+        russiaRestrictionTitle: 'Die Verifizierung für Russland ist vorübergehend ausgesetzt.',
+        russiaRestrictionText: 'Verkäufer aus Russland können Teile der App nutzen, aber die Verifizierung ist derzeit pausiert.',
+        passportScanHead: 'Passscan',
+        passportScanMeta: 'Öffnen Sie die Kamera oder laden Sie den Passscan hoch.',
+        selfieScanHead: 'Selfie mit Pass in der Hand',
+        selfieScanMeta: 'Verwenden Sie die Frontkamera für ein Selfie mit Pass.',
+        faceScanHead: 'Gesichtsscan',
+        faceScanMeta: 'Verwenden Sie die Frontkamera für das Gesichtsbild.',
+        llcScanHead: 'LLC / Firmendokumente',
+        llcScanMeta: 'Laden Sie LLC-, Registrierungs- oder Steuerdokumente hoch.',
+        passportCameraBtn: 'Kamera öffnen',
+        passportFileBtn: 'Datei wählen',
+        selfieCameraBtn: 'Selfie-Kamera öffnen',
+        selfieFileBtn: 'Datei wählen',
+        faceCameraBtn: 'Gesichtskamera öffnen',
+        faceFileBtn: 'Datei wählen',
+        llcCameraBtn: 'Kamera öffnen',
+        llcFileBtn: 'Datei wählen',
+        documentsTitle: 'Dokumente',
+        documentsSubtitle: 'Laden Sie Verkäufer-Verifizierungsdateien hoch und speichern Sie Kommentare zusammen.',
+        docNameLabel: 'Dokumentname',
+        docTypeLabel: 'Dokumenttyp',
+        docCommentLabel: 'Kommentar',
+        addDocBtn: 'Dokument hochladen',
+        docListTitle: 'Hochgeladene Dokumente',
+        tariffsTitle: 'Tarife',
+        tariffsSubtitle: 'Wählen Sie den richtigen Plan und die richtige Laufzeit.',
+        startDesc: 'Basiszugang für neue Verkäufer.',
+        proDesc: 'Mehr Sichtbarkeit und mehr Verkäufer-Tools.',
+        statsTitle: 'Statistiken',
+        statsSubtitle: 'Schneller Überblick über die Verkäuferleistung.',
+        statsRatingLabel: 'Bewertung',
+        statsReviewsLabel: 'Rezensionen',
+        statsActivityLabel: 'Aktivität',
+        statsOrdersLabel: 'Bestellungen',
+        statsTrendLabel: 'Trend',
+        settingsTitle: 'Einstellungen',
+        settingsSubtitle: 'Verwalten Sie Passwort und App-Einstellungen.',
+        securityTitle: 'Sicherheit',
+        currentPasswordLabel: 'Aktuelles Passwort',
+        newPasswordLabel: 'Neues Passwort',
+        changePasswordBtn: 'Passwort ändern',
+        messagesTitle: 'Support-Nachricht',
+        messagesSubtitle: 'Senden Sie eine Anfrage an den Support und speichern Sie den Verlauf unten.',
+        messageSubjectLabel: 'Betreff',
+        messageTextLabel: 'Nachricht',
+        sendMessageBtn: 'Nachricht senden',
+        backFromMessagesBtn: 'Zurück',
+        messageHistoryTitle: 'Nachrichtenverlauf',
+        navProfile: 'Profil',
+        navDocuments: 'Docs',
+        navTariffs: 'Tarife',
+        navStats: 'Stats',
+        navSettings: 'Einst.',
+        loaded: 'Anwendung erfolgreich geladen.',
+        needEmail: 'Bitte zuerst E-Mail eingeben.',
+        needBoth: 'Bitte E-Mail und Passwort eingeben.',
+        loginOk: 'Erfolgreich angemeldet.',
+        createOk: 'Konto erfolgreich erstellt.',
+        resetOk: 'Anfrage zum Zurücksetzen erstellt.',
+        logoutAsk: 'Möchten Sie sich abmelden?',
+        logoutOk: 'Erfolgreich abgemeldet.',
+        profileOk: 'Profil erfolgreich gespeichert.',
+        docNeed: 'Bitte Dokumentname eingeben.',
+        docOk: 'Dokument erfolgreich hochgeladen.',
+        docDeleteOk: 'Dokument erfolgreich gelöscht.',
+        tariffOk: 'Tarif erfolgreich ausgewählt.',
+        messageNeed: 'Bitte Betreff und Nachricht eingeben.',
+        messageOk: 'Nachricht erfolgreich gesendet.',
+        messageOpened: 'Nachrichtenzentrum geöffnet.',
+        noDocs: 'Noch keine Dokumente.',
+        noMessages: 'Noch keine Nachrichten.',
+        deleteBtn: 'Löschen',
+        individual: 'Einzelperson',
+        company: 'Unternehmen',
+        sellerWord: 'Verkäufer',
+        pendingWord: 'Ausstehend',
+        activeWord: 'Aktiv',
+        save10: '10% sparen',
+        save20: '20% sparen',
+        stableWord: 'Stabil',
+        upWord: 'Steigend',
+        goodWord: 'Gut',
+        notUploaded: 'Nicht hochgeladen',
+        uploadedPending: 'Hochgeladen / ausstehend',
+        verificationDone: 'Verifizierung gesendet',
+        passwordNeed: 'Aktuelles und neues Passwort eingeben.',
+        passwordWrong: 'Aktuelles Passwort ist falsch.',
+        passwordChanged: 'Passwort erfolgreich aktualisiert.',
+        verificationBlockedRussia: 'Die Verifizierung für Russland ist vorübergehend ausgesetzt.',
+        scanUploaded: 'Scan erfolgreich hochgeladen.'
+      }
+    };
+
+    let state = {
+      language: 'en',
+      loggedIn: false,
+      email: '',
+      password: '',
+      resetShown: false,
+      activeScreen: 'profile',
+      tariff: 'START - 1 month',
+      profile: {
+        fullName: '',
+        company: '',
+        sellerType: 'individual',
+        phoneCode: '+374',
+        phone: '',
+        country: '',
+        city: '',
+        profileLanguage: 'en',
+        currency: 'EUR'
+      },
+      docs: [],
+      messages: [],
+      verification: {
+        passport: null,
+        selfie: null,
+        face: null,
+        llc: null
+      }
+    };
+
+    function t(key) {
+      const lang = I18N[state.language] ? state.language : 'en';
+      return I18N[lang][key] || I18N.en[key] || key;
+    }
+
+    function saveState() {
+      localStorage.setItem(KEY, JSON.stringify(state));
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          state = Object.assign({}, state, parsed || {});
+          state.profile = Object.assign({
+            fullName: '',
+            company: '',
+            sellerType: 'individual',
+            phoneCode: '+374',
+            phone: '',
+            country: '',
+            city: '',
+            profileLanguage: 'en',
+            currency: 'EUR'
+          }, parsed.profile || {});
+          state.docs = Array.isArray(parsed.docs) ? parsed.docs : [];
+          state.messages = Array.isArray(parsed.messages) ? parsed.messages : [];
+          state.verification = Object.assign({
+            passport: null,
+            selfie: null,
+            face: null,
+            llc: null
+          }, parsed.verification || {});
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function setStatus(msg, variant) {
+      const el = document.getElementById('status');
+      el.className = 'status';
+      if (variant === 'success') el.classList.add('success');
+      if (variant === 'warn') el.classList.add('warn');
+      if (variant === 'error') el.classList.add('error');
+      el.innerText = msg;
+    }
+
+    function esc(str) {
+      return String(str).replace(/[&<>"']/g, function(m) {
+        return ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;', "'":'&#39;' })[m];
+      });
+    }
+
+    function isRussiaBlocked() {
+      const country = (state.profile.country || '').trim().toLowerCase();
+      const phoneCode = state.profile.phoneCode || '';
+      return country === 'russia' || country === 'россия' || country === 'russian federation' || phoneCode === '+7';
+    }
+
+    function getVerificationOverallStatus() {
+      if (isRussiaBlocked()) return t('verificationBlockedRussia');
+      const v = state.verification;
+      if (v.passport && v.selfie && v.face) return t('verificationDone');
+      return t('pendingWord');
+    }
+
+    function fillPhoneCodes() {
+      const select = document.getElementById('phoneCodeInput');
+      select.innerHTML = PHONE_CODES.map(function(item) {
+        return '<option value="' + esc(item.code) + '">' + esc(item.label + ' ' + item.code) + '</option>';
+      }).join('');
+      select.value = state.profile.phoneCode || '+374';
+    }
+
+    function applyTranslations() {
+      document.getElementById('brand').innerText = t('brand');
+      document.getElementById('loginTitle').innerText = t('loginTitle');
+      document.getElementById('loginSubtitle').innerText = t('loginSubtitle');
+      document.getElementById('emailLabel').innerText = t('emailLabel');
+      document.getElementById('passwordLabel').innerText = t('passwordLabel');
+      document.getElementById('demoTitle').innerText = t('demoTitle');
+      document.getElementById('demoText').innerText = t('demoText');
+      document.getElementById('loginBtn').innerText = t('loginBtn');
+      document.getElementById('createBtn').innerText = t('createBtn');
+      document.getElementById('resetBtn').innerText = t('resetBtn');
+      document.getElementById('resetTitle').innerText = t('resetTitle');
+      document.getElementById('resetMessage').innerText = t('resetMessage');
+
+      document.getElementById('overviewTitle').innerText = t('overviewTitle');
+      document.getElementById('ovEmail').innerText = t('ovEmail');
+      document.getElementById('ovRole').innerText = t('ovRole');
+      document.getElementById('ovStatus').innerText = t('ovStatus');
+      document.getElementById('ovVerification').innerText = t('ovVerification');
+      document.getElementById('ovTariff').innerText = t('ovTariff');
+      document.getElementById('ovCurrency').innerText = t('ovCurrency');
+      document.getElementById('ovCompliance').innerText = t('ovCompliance');
+
+      document.getElementById('accountStatusTitle').innerText = t('accountStatusTitle');
+      document.getElementById('miniDocsTitle').innerText = t('miniDocsTitle');
+      document.getElementById('miniPlanTitle').innerText = t('miniPlanTitle');
+
+      document.getElementById('profileTitle').innerText = t('profileTitle');
+      document.getElementById('fullNameLabel').innerText = t('fullNameLabel');
+      document.getElementById('companyLabel').innerText = t('companyLabel');
+      document.getElementById('sellerTypeLabel').innerText = t('sellerTypeLabel');
+      document.getElementById('phoneLabel').innerText = t('phoneLabel');
+      document.getElementById('phoneHint').innerText = t('phoneHint');
+      document.getElementById('countryLabel').innerText = t('countryLabel');
+      document.getElementById('cityLabel').innerText = t('cityLabel');
+      document.getElementById('profileLanguageLabel').innerText = t('profileLanguageLabel');
+      document.getElementById('currencyLabel').innerText = t('currencyLabel');
+      document.getElementById('saveProfileBtn').innerText = t('saveProfileBtn');
+
+      document.getElementById('serviceRulesTitle').innerText = t('serviceRulesTitle');
+      document.getElementById('serviceRulesText').innerText = t('serviceRulesText');
+      document.getElementById('openMessageBtn').innerText = t('openMessageBtn');
+      document.getElementById('logoutBtn').innerText = t('logoutBtn');
+
+      document.getElementById('verificationCenterTitle').innerText = t('verificationCenterTitle');
+      document.getElementById('verificationCenterSubtitle').innerText = t('verificationCenterSubtitle');
+      document.getElementById('russiaRestrictionTitle').innerText = t('russiaRestrictionTitle');
+      document.getElementById('russiaRestrictionText').innerText = t('russiaRestrictionText');
+
+      document.getElementById('passportScanHead').innerText = t('passportScanHead');
+      document.getElementById('passportScanMeta').innerText = t('passportScanMeta');
+      document.getElementById('selfieScanHead').innerText = t('selfieScanHead');
+      document.getElementById('selfieScanMeta').innerText = t('selfieScanMeta');
+      document.getElementById('faceScanHead').innerText = t('faceScanHead');
+      document.getElementById('faceScanMeta').innerText = t('faceScanMeta');
+      document.getElementById('llcScanHead').innerText = t('llcScanHead');
+      document.getElementById('llcScanMeta').innerText = t('llcScanMeta');
+
+      document.getElementById('passportCameraBtn').innerText = t('passportCameraBtn');
+      document.getElementById('passportFileBtn').innerText = t('passportFileBtn');
+      document.getElementById('selfieCameraBtn').innerText = t('selfieCameraBtn');
+      document.getElementById('selfieFileBtn').innerText = t('selfieFileBtn');
+      document.getElementById('faceCameraBtn').innerText = t('faceCameraBtn');
+      document.getElementById('faceFileBtn').innerText = t('faceFileBtn');
+      document.getElementById('llcCameraBtn').innerText = t('llcCameraBtn');
+      document.getElementById('llcFileBtn').innerText = t('llcFileBtn');
+
+      document.getElementById('documentsTitle').innerText = t('documentsTitle');
+      document.getElementById('documentsSubtitle').innerText = t('documentsSubtitle');
+      document.getElementById('docNameLabel').innerText = t('docNameLabel');
+      document.getElementById('docTypeLabel').innerText = t('docTypeLabel');
+      document.getElementById('docCommentLabel').innerText = t('docCommentLabel');
+      document.getElementById('addDocBtn').innerText = t('addDocBtn');
+      document.getElementById('docListTitle').innerText = t('docListTitle');
+
+      document.getElementById('tariffsTitle').innerText = t('tariffsTitle');
+      document.getElementById('tariffsSubtitle').innerText = t('tariffsSubtitle');
+      document.getElementById('startDesc').innerText = t('startDesc');
+      document.getElementById('proDesc').innerText = t('proDesc');
+      document.getElementById('save10Start').innerText = t('save10');
+      document.getElementById('save20Start').innerText = t('save20');
+      document.getElementById('save10Pro').innerText = t('save10');
+      document.getElementById('save20Pro').innerText = t('save20');
+
+      document.getElementById('statsTitle').innerText = t('statsTitle');
+      document.getElementById('statsSubtitle').innerText = t('statsSubtitle');
+      document.getElementById('statsRatingLabel').innerText = t('statsRatingLabel');
+      document.getElementById('statsReviewsLabel').innerText = t('statsReviewsLabel');
+      document.getElementById('statsActivityLabel').innerText = t('statsActivityLabel');
+      document.getElementById('statsOrdersLabel').innerText = t('statsOrdersLabel');
+      document.getElementById('statsTrendLabel').innerText = t('statsTrendLabel');
+      document.getElementById('statsActivityValue').innerText = t('stableWord');
+      document.getElementById('statsTrendValue').innerText = t('upWord');
+
+      document.getElementById('settingsTitle').innerText = t('settingsTitle');
+      document.getElementById('settingsSubtitle').innerText = t('settingsSubtitle');
+      document.getElementById('securityTitle').innerText = t('securityTitle');
+      document.getElementById('currentPasswordLabel').innerText = t('currentPasswordLabel');
+      document.getElementById('newPasswordLabel').innerText = t('newPasswordLabel');
+      document.getElementById('changePasswordBtn').innerText = t('changePasswordBtn');
+
+      document.getElementById('messagesTitle').innerText = t('messagesTitle');
+      document.getElementById('messagesSubtitle').innerText = t('messagesSubtitle');
+      document.getElementById('messageSubjectLabel').innerText = t('messageSubjectLabel');
+      document.getElementById('messageTextLabel').innerText = t('messageTextLabel');
+      document.getElementById('sendMessageBtn').innerText = t('sendMessageBtn');
+      document.getElementById('backFromMessagesBtn').innerText = t('backFromMessagesBtn');
+      document.getElementById('messageHistoryTitle').innerText = t('messageHistoryTitle');
+
+      document.getElementById('navProfile').innerText = t('navProfile');
+      document.getElementById('navDocuments').innerText = t('navDocuments');
+      document.getElementById('navTariffs').innerText = t('navTariffs');
+      document.getElementById('navStats').innerText = t('navStats');
+      document.getElementById('navSettings').innerText = t('navSettings');
+
+      document.getElementById('langSelect').value = state.language;
+      document.getElementById('profileLanguageInput').value = state.language;
+
+      const sellerType = document.getElementById('sellerTypeInput');
+      sellerType.options[0].text = t('individual');
+      sellerType.options[1].text = t('company');
+
+      updateVerificationStatusPills();
+    }
+
+    function renderProfile() {
+      document.getElementById('viewEmail').innerText = state.email || '-';
+      document.getElementById('viewRole').innerText = t('sellerWord');
+      document.getElementById('viewStatus').innerText = t('activeWord');
+      document.getElementById('viewVerification').innerText = getVerificationOverallStatus();
+      document.getElementById('viewTariff').innerText = state.tariff;
+      document.getElementById('viewCurrency').innerText = state.profile.currency || 'EUR';
+      document.getElementById('viewCompliance').innerText = isRussiaBlocked() ? t('verificationBlockedRussia') : t('goodWord');
+
+      document.getElementById('miniDocsValue').innerText = String(state.docs.length);
+      document.getElementById('miniPlanValue').innerText = state.tariff.split(' - ')[0] || 'START';
+
+      document.getElementById('fullNameInput').value = state.profile.fullName || '';
+      document.getElementById('companyInput').value = state.profile.company || '';
+      document.getElementById('sellerTypeInput').value = state.profile.sellerType || 'individual';
+      document.getElementById('phoneCodeInput').value = state.profile.phoneCode || '+374';
+      document.getElementById('phoneInput').value = state.profile.phone || '';
+      document.getElementById('countryInput').value = state.profile.country || '';
+      document.getElementById('cityInput').value = state.profile.city || '';
+      document.getElementById('currencyInput').value = state.profile.currency || 'EUR';
+
+      document.getElementById('russiaRestrictionBox').classList.toggle('hidden', !isRussiaBlocked());
+    }
+
+    function renderDocs() {
+      const wrap = document.getElementById('docList');
+      if (!state.docs.length) {
+        wrap.innerHTML = '<div class="small">' + t('noDocs') + '</div>';
+        return;
+      }
+
+      wrap.innerHTML = state.docs.map(function(doc, index) {
+        return `
+          <div class="docItem">
+            <div class="docHead">${esc(doc.name)}</div>
+            <div class="docMeta">${esc(doc.type)} • ${esc(doc.time)}</div>
+            <div class="small">${esc(doc.comment || '')}</div>
+            <div style="margin:10px 0 12px;"><span class="pill">${t('pendingWord')}</span></div>
+            <button class="danger" type="button" onclick="deleteDoc(${index})">${t('deleteBtn')}</button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderMessages() {
+      const wrap = document.getElementById('messageHistory');
+      if (!state.messages.length) {
+        wrap.innerHTML = '<div class="small">' + t('noMessages') + '</div>';
+        return;
+      }
+
+      wrap.innerHTML = state.messages.map(function(msg) {
+        return `
+          <div class="messageItem">
+            <div class="messageHead">${esc(msg.subject)}</div>
+            <div class="messageMeta">${esc(msg.time)}</div>
+            <div class="small">${esc(msg.text)}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function updateVerificationStatusPills() {
+      setVerifyPill('passport', state.verification.passport);
+      setVerifyPill('selfie', state.verification.selfie);
+      setVerifyPill('face', state.verification.face);
+      setVerifyPill('llc', state.verification.llc);
+
+      renderVerificationPreview('passport');
+      renderVerificationPreview('selfie');
+      renderVerificationPreview('face');
+      renderVerificationPreview('llc');
+    }
+
+    function setVerifyPill(type, value) {
+      const pill = document.getElementById(type + 'StatusPill');
+      if (!pill) return;
+      pill.className = 'pill gray';
+      if (!value) {
+        pill.innerText = t('notUploaded');
+        return;
+      }
+      pill.className = 'pill blue';
+      pill.innerText = t('uploadedPending');
+    }
+
+    function renderVerificationPreview(type) {
+      const box = document.getElementById(type + 'Preview');
+      const item = state.verification[type];
+      if (!box) return;
+
+      if (!item) {
+        box.classList.add('hidden');
+        box.innerHTML = '';
+        return;
+      }
+
+      let html = `
+        <div class="tiny"><strong>${esc(item.name)}</strong></div>
+        <div class="tiny" style="margin-top:4px;">${esc(item.time)}</div>
+      `;
+
+      if (item.dataUrl && item.mime && item.mime.startsWith('image/')) {
+        html += `<img src="${item.dataUrl}" alt="${esc(item.name)}">`;
+      } else {
+        html += `<div class="tiny" style="margin-top:10px;">File saved locally.</div>`;
+      }
+
+      box.innerHTML = html;
+      box.classList.remove('hidden');
+    }
+
+    function showScreen(name) {
+      state.activeScreen = name;
+      saveState();
+
+      document.getElementById('screenProfile').classList.add('hidden');
+      document.getElementById('screenDocuments').classList.add('hidden');
+      document.getElementById('screenTariffs').classList.add('hidden');
+      document.getElementById('screenStats').classList.add('hidden');
+      document.getElementById('screenSettings').classList.add('hidden');
+      document.getElementById('screenMessages').classList.add('hidden');
+
+      document.getElementById('navProfile').classList.remove('active');
+      document.getElementById('navDocuments').classList.remove('active');
+      document.getElementById('navTariffs').classList.remove('active');
+      document.getElementById('navStats').classList.remove('active');
+      document.getElementById('navSettings').classList.remove('active');
+
+      if (name === 'profile') {
+        document.getElementById('screenProfile').classList.remove('hidden');
+        document.getElementById('navProfile').classList.add('active');
+      }
+      if (name === 'documents') {
+        document.getElementById('screenDocuments').classList.remove('hidden');
+        document.getElementById('navDocuments').classList.add('active');
+      }
+      if (name === 'tariffs') {
+        document.getElementById('screenTariffs').classList.remove('hidden');
+        document.getElementById('navTariffs').classList.add('active');
+      }
+      if (name === 'stats') {
+        document.getElementById('screenStats').classList.remove('hidden');
+        document.getElementById('navStats').classList.add('active');
+      }
+      if (name === 'settings') {
+        document.getElementById('screenSettings').classList.remove('hidden');
+        document.getElementById('navSettings').classList.add('active');
+      }
+      if (name === 'messages') {
+        document.getElementById('screenMessages').classList.remove('hidden');
+      }
+    }
+
+    function render() {
+      fillPhoneCodes();
+      applyTranslations();
+      renderProfile();
+      renderDocs();
+      renderMessages();
+
+      document.getElementById('resetBox').classList.toggle('hidden', !(state.resetShown && !state.loggedIn));
+      document.getElementById('authView').classList.toggle('hidden', state.loggedIn);
+      document.getElementById('appView').classList.toggle('hidden', !state.loggedIn);
+      document.getElementById('bottomNav').classList.toggle('hidden', !state.loggedIn);
+
+      if (state.loggedIn) {
+        showScreen(state.activeScreen || 'profile');
+        setStatus(t('loginOk'));
+      } else if (state.resetShown) {
+        setStatus(t('resetOk'), 'success');
+      } else {
+        setStatus(t('loaded'));
+      }
+    }
+
+    function changeLanguage(lang) {
+      const allowed = ['en', 'ru', 'hy', 'es', 'fr', 'de'];
+      state.language = allowed.indexOf(lang) >= 0 ? lang : 'en';
+      state.profile.profileLanguage = state.language;
+      saveState();
+      render();
+    }
+
+    function loginNow() {
+      const email = document.getElementById('emailInput').value.trim();
+      const password = document.getElementById('passwordInput').value.trim();
+
+      if (!email || !password) {
+        setStatus(t('needBoth'), 'warn');
+        return;
+      }
+
+      state.loggedIn = true;
+      state.email = email;
+      state.password = password;
+      state.resetShown = false;
+      saveState();
+      render();
+      setStatus(t('loginOk'), 'success');
+    }
+
+    function createNow() {
+      const email = document.getElementById('emailInput').value.trim();
+      const password = document.getElementById('passwordInput').value.trim();
+
+      if (!email || !password) {
+        setStatus(t('needBoth'), 'warn');
+        return;
+      }
+
+      state.loggedIn = true;
+      state.email = email;
+      state.password = password;
+      state.resetShown = false;
+      saveState();
+      render();
+      setStatus(t('createOk'), 'success');
+    }
+
+    function resetNow() {
+      const email = document.getElementById('emailInput').value.trim();
+
+      if (!email) {
+        setStatus(t('needEmail'), 'warn');
+        return;
+      }
+
+      state.loggedIn = false;
+      state.email = email;
+      state.resetShown = true;
+      saveState();
+      render();
+      setStatus(t('resetOk'), 'success');
+    }
+
+    function saveProfileNow() {
+      state.profile.fullName = document.getElementById('fullNameInput').value.trim();
+      state.profile.company = document.getElementById('companyInput').value.trim();
+      state.profile.sellerType = document.getElementById('sellerTypeInput').value;
+      state.profile.phoneCode = document.getElementById('phoneCodeInput').value;
+      state.profile.phone = document.getElementById('phoneInput').value.trim();
+      state.profile.country = document.getElementById('countryInput').value.trim();
+      state.profile.city = document.getElementById('cityInput').value.trim();
+      state.profile.currency = document.getElementById('currencyInput').value;
+      state.profile.profileLanguage = state.language;
+      saveState();
+      render();
+      setStatus(t('profileOk'), 'success');
+    }
+
+    function addDocNow() {
+      const name = document.getElementById('docNameInput').value.trim();
+      const type = document.getElementById('docTypeInput').value;
+      const comment = document.getElementById('docCommentInput').value.trim();
+
+      if (!name) {
+        setStatus(t('docNeed'), 'warn');
+        return;
+      }
+
+      state.docs.unshift({
+        name: name,
+        type: type,
+        comment: comment,
+        time: new Date().toLocaleString()
+      });
+
+      document.getElementById('docNameInput').value = '';
+      document.getElementById('docCommentInput').value = '';
+      saveState();
+      render();
+      setStatus(t('docOk'), 'success');
+    }
+
+    function deleteDoc(index) {
+      state.docs.splice(index, 1);
+      saveState();
+      render();
+      setStatus(t('docDeleteOk'), 'success');
+    }
+
+    function buyTariffNow(plan, duration) {
+      state.tariff = plan + ' - ' + duration;
+      saveState();
+      render();
+      setStatus(t('tariffOk'), 'success');
+    }
+
+    function openMessages() {
+      showScreen('messages');
+      setStatus(t('messageOpened'), 'success');
+    }
+
+    function backToProfile() {
+      showScreen('profile');
+    }
+
+    function sendMessageNow() {
+      const subject = document.getElementById('messageSubjectInput').value.trim();
+      const text = document.getElementById('messageTextInput').value.trim();
+
+      if (!subject || !text) {
+        setStatus(t('messageNeed'), 'warn');
+        return;
+      }
+
+      state.messages.unshift({
+        subject: subject,
+        text: text,
+        time: new Date().toLocaleString()
+      });
+
+      document.getElementById('messageSubjectInput').value = '';
+      document.getElementById('messageTextInput').value = '';
+      saveState();
+      render();
+      setStatus(t('messageOk'), 'success');
+    }
+
+    function changePasswordNow() {
+      const currentPassword = document.getElementById('currentPasswordInput').value.trim();
+      const newPassword = document.getElementById('newPasswordInput').value.trim();
+
+      if (!currentPassword || !newPassword) {
+        setStatus(t('passwordNeed'), 'warn');
+        return;
+      }
+
+      if (currentPassword !== state.password) {
+        setStatus(t('passwordWrong'), 'error');
+        return;
+      }
+
+      state.password = newPassword;
+      document.getElementById('currentPasswordInput').value = '';
+      document.getElementById('newPasswordInput').value = '';
+      saveState();
+      setStatus(t('passwordChanged'), 'success');
+    }
+
+    function logoutNow() {
+      if (!confirm(t('logoutAsk'))) return;
+      state.loggedIn = false;
+      state.resetShown = false;
+      saveState();
+      render();
+      setStatus(t('logoutOk'), 'success');
+    }
+
+    function openScanInput(type, mode) {
+      if (isRussiaBlocked()) {
+        setStatus(t('verificationBlockedRussia'), 'warn');
+        return;
+      }
+
+      const id = type + 'Input' + (mode === 'camera' ? 'Camera' : 'File');
+      const input = document.getElementById(id);
+      if (input) input.click();
+    }
+
+    function handleVerificationUpload(event, type) {
+      if (isRussiaBlocked()) {
+        setStatus(t('verificationBlockedRussia'), 'warn');
+        event.target.value = '';
+        return;
+      }
+
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        state.verification[type] = {
+          name: file.name,
+          size: file.size,
+          mime: file.type || '',
+          time: new Date().toLocaleString(),
+          dataUrl: (file.type && file.type.startsWith('image/')) ? e.target.result : ''
+        };
+        saveState();
+        render();
+        setStatus(t('scanUploaded'), 'success');
+      };
+
+      if (file.type && file.type.startsWith('image/')) {
+        reader.readAsDataURL(file);
+      } else {
+        state.verification[type] = {
+          name: file.name,
+          size: file.size,
+          mime: file.type || '',
+          time: new Date().toLocaleString(),
+          dataUrl: ''
+        };
+        saveState();
+        render();
+        setStatus(t('scanUploaded'), 'success');
+      }
+
+      event.target.value = '';
+    }
+
+    loadState();
+    render();
+  </script>
+</body>
+</html>
