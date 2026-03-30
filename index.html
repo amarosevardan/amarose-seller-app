@@ -1,817 +1,1022 @@
-<script>
-  const KEY = 'amarose_seller_v441_clean';
-
-  const DEFAULT_STATE = {
-    language: 'en',
-    loggedIn: false,
-    email: '',
-    resetShown: false,
-    activeScreen: 'profile',
-    tariff: 'START - 1 month',
-    profile: {
-      fullName: '',
-      company: '',
-      sellerType: 'individual',
-      phone: '',
-      country: '',
-      city: '',
-      profileLanguage: 'en',
-      currency: 'EUR'
-    },
-    docs: [],
-    messages: [],
-    warnings: [],
-    activity: [],
-    compliance: 'good_standing'
-  };
-
-  const I18N = {
-    en: {
-      brand:'AMAROSE Seller App',
-      loginTitle:'Seller Login',
-      emailLabel:'Email',
-      passwordLabel:'Password',
-      demoTitle:'Demo access',
-      demoText:'You can login with any email and any password. Data is saved in this browser.',
-      loginBtn:'Login',
-      createBtn:'Create account',
-      resetBtn:'Reset password',
-      resetTitle:'Password reset',
-      resetMessage:'Password reset request created successfully.',
-      overviewTitle:'Account Overview',
-      ovEmail:'Email',
-      ovRole:'Role',
-      ovStatus:'Status',
-      ovVerification:'Verification',
-      ovTariff:'Tariff',
-      ovCurrency:'Currency',
-      ovCompliance:'Compliance',
-      dashboardTitle:'Seller dashboard',
-      statDocsLabel:'Documents',
-      statWarningsLabel:'Warnings',
-      statMessagesLabel:'Messages',
-      statReviewsLabel2:'Manual review',
-      profileTitle:'Seller Profile',
-      fullNameLabel:'Full name',
-      companyLabel:'Company name',
-      sellerTypeLabel:'Seller type',
-      phoneLabel:'Phone',
-      countryLabel:'Country',
-      cityLabel:'City',
-      profileLanguageLabel:'Language',
-      currencyLabel:'Currency',
-      saveProfileBtn:'Save profile',
-      serviceRulesTitle:'Service rules',
-      serviceRulesText:'Seller must follow platform rules. Violations may lead to warning, manual review, temporary restriction, or removal from the system.',
-      warningHistoryTitle:'Warning history',
-      documentsTitle:'Documents',
-      docNameLabel:'Document name',
-      docTypeLabel:'Document type',
-      docCommentLabel:'Comment',
-      addDocBtn:'Upload document',
-      docListTitle:'Uploaded documents',
-      tariffsTitle:'Tariffs',
-      startDesc:'Basic access for a new seller.',
-      proDesc:'More visibility and more seller tools.',
-      statsTitle:'Stats',
-      statsRatingLabel:'Rating',
-      statsReviewsLabel:'Reviews',
-      statsActivityLabel:'Activity',
-      statsOrdersLabel:'Orders',
-      statsTrendLabel:'Trend',
-      activityHistoryTitle:'Activity history',
-      messagesTitle:'Support message',
-      messageTypeLabel:'Message type',
-      messageSubjectLabel:'Subject',
-      messageTextLabel:'Message',
-      sendMessageBtn:'Send message',
-      backFromMessagesBtn:'Back',
-      messageHistoryTitle:'Message history',
-      openMessageBtn:'Contact support',
-      logoutBtn:'Logout',
-      navProfile:'Profile',
-      navDocuments:'Documents',
-      navTariffs:'Tariffs',
-      navStats:'Stats',
-      loaded:'Application loaded successfully.',
-      needEmail:'Enter email first.',
-      needBoth:'Enter email and password.',
-      loginOk:'Logged in successfully.',
-      createOk:'Account created successfully.',
-      resetOk:'Password reset request created.',
-      logoutAsk:'Do you want to logout?',
-      logoutOk:'Logged out successfully.',
-      profileOk:'Profile saved successfully.',
-      docOk:'Document uploaded successfully.',
-      docDeleteOk:'Document deleted successfully.',
-      tariffOk:'Tariff selected successfully.',
-      messageNeed:'Enter subject and message.',
-      messageOk:'Message sent successfully.',
-      noDocs:'No documents yet.',
-      noMessages:'No messages yet.',
-      noWarnings:'No warnings yet.',
-      noHistory:'No activity yet.',
-      deleteBtn:'Delete',
-      support:'Support',
-      review_request:'Review request',
-      dispute:'Dispute',
-      problem_report:'Problem report',
-      individual:'Individual',
-      company:'Company',
-      sellerWord:'seller',
-      pending:'pending',
-      approved:'approved',
-      rejected:'rejected',
-      manual_review:'manual review',
-      good_standing:'good standing',
-      warning:'warning',
-      restricted:'restricted',
-      docUploaded:'Document uploaded',
-      docDeleted:'Document deleted',
-      profileSaved:'Profile updated',
-      tariffChanged:'Tariff changed',
-      messageSent:'Message sent',
-      accountCreated:'Account created',
-      loginAction:'Logged in',
-      passwordReset:'Password reset requested'
-    },
-    ru: {
-      brand:'AMAROSE Seller App',
-      loginTitle:'Вход продавца',
-      emailLabel:'Почта',
-      passwordLabel:'Пароль',
-      demoTitle:'Демо доступ',
-      demoText:'Можно войти с любой почтой и любым паролем. Данные сохраняются в браузере.',
-      loginBtn:'Войти',
-      createBtn:'Создать аккаунт',
-      resetBtn:'Сбросить пароль',
-      resetTitle:'Сброс пароля',
-      resetMessage:'Запрос на сброс пароля успешно создан.',
-      overviewTitle:'Обзор аккаунта',
-      ovEmail:'Почта',
-      ovRole:'Роль',
-      ovStatus:'Статус',
-      ovVerification:'Проверка',
-      ovTariff:'Тариф',
-      ovCurrency:'Валюта',
-      ovCompliance:'Соблюдение правил',
-      dashboardTitle:'Панель продавца',
-      statDocsLabel:'Документы',
-      statWarningsLabel:'Предупреждения',
-      statMessagesLabel:'Сообщения',
-      statReviewsLabel2:'Ручная проверка',
-      profileTitle:'Профиль продавца',
-      fullNameLabel:'Полное имя',
-      companyLabel:'Название компании',
-      sellerTypeLabel:'Тип продавца',
-      phoneLabel:'Телефон',
-      countryLabel:'Страна',
-      cityLabel:'Город',
-      profileLanguageLabel:'Язык',
-      currencyLabel:'Валюта',
-      saveProfileBtn:'Сохранить профиль',
-      serviceRulesTitle:'Правила сервиса',
-      serviceRulesText:'Продавец обязан соблюдать правила платформы. Нарушения могут привести к предупреждению, ручной проверке, временным ограничениям или удалению из системы.',
-      warningHistoryTitle:'История предупреждений',
-      documentsTitle:'Документы',
-      docNameLabel:'Название документа',
-      docTypeLabel:'Тип документа',
-      docCommentLabel:'Комментарий',
-      addDocBtn:'Загрузить документ',
-      docListTitle:'Загруженные документы',
-      tariffsTitle:'Тарифы',
-      startDesc:'Базовый доступ для нового продавца.',
-      proDesc:'Больше видимости и больше инструментов продавца.',
-      statsTitle:'Статистика',
-      statsRatingLabel:'Рейтинг',
-      statsReviewsLabel:'Отзывы',
-      statsActivityLabel:'Активность',
-      statsOrdersLabel:'Заказы',
-      statsTrendLabel:'Тренд',
-      activityHistoryTitle:'История активности',
-      messagesTitle:'Сообщение в поддержку',
-      messageTypeLabel:'Тип сообщения',
-      messageSubjectLabel:'Тема',
-      messageTextLabel:'Сообщение',
-      sendMessageBtn:'Отправить сообщение',
-      backFromMessagesBtn:'Назад',
-      messageHistoryTitle:'История сообщений',
-      openMessageBtn:'Написать в поддержку',
-      logoutBtn:'Выйти',
-      navProfile:'Профиль',
-      navDocuments:'Документы',
-      navTariffs:'Тарифы',
-      navStats:'Статистика',
-      loaded:'Приложение загружено.',
-      needEmail:'Сначала введите почту.',
-      needBoth:'Введите почту и пароль.',
-      loginOk:'Вход выполнен успешно.',
-      createOk:'Аккаунт успешно создан.',
-      resetOk:'Запрос на сброс пароля создан.',
-      logoutAsk:'Вы точно хотите выйти?',
-      logoutOk:'Вы вышли из аккаунта.',
-      profileOk:'Профиль успешно сохранён.',
-      docOk:'Документ успешно загружен.',
-      docDeleteOk:'Документ успешно удалён.',
-      tariffOk:'Тариф успешно выбран.',
-      messageNeed:'Введите тему и сообщение.',
-      messageOk:'Сообщение успешно отправлено.',
-      noDocs:'Документов пока нет.',
-      noMessages:'Сообщений пока нет.',
-      noWarnings:'Предупреждений пока нет.',
-      noHistory:'Истории активности пока нет.',
-      deleteBtn:'Удалить',
-      support:'Поддержка',
-      review_request:'Запрос проверки',
-      dispute:'Оспаривание',
-      problem_report:'Сообщение о проблеме',
-      individual:'Частный',
-      company:'Компания',
-      sellerWord:'seller',
-      pending:'pending',
-      approved:'approved',
-      rejected:'rejected',
-      manual_review:'manual review',
-      good_standing:'нормально',
-      warning:'предупреждение',
-      restricted:'ограничен',
-      docUploaded:'Документ загружен',
-      docDeleted:'Документ удалён',
-      profileSaved:'Профиль обновлён',
-      tariffChanged:'Тариф изменён',
-      messageSent:'Сообщение отправлено',
-      accountCreated:'Аккаунт создан',
-      loginAction:'Вход выполнен',
-      passwordReset:'Запрошен сброс пароля'
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AMAROSE Seller App v4.4.1</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #101828;
     }
-  };
+    .app {
+      max-width: 520px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: #f5f7fb;
+      padding-bottom: 94px;
+    }
+    .topbar {
+      background: #175cd3;
+      color: #fff;
+      padding: 18px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+    .brand {
+      font-size: 17px;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+    .lang {
+      width: 150px;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: #fff;
+      font-size: 14px;
+      color: #101828;
+    }
+    .status {
+      margin: 16px;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid #fedf89;
+      background: #fffaeb;
+      color: #b54708;
+      min-height: 48px;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    .status.success {
+      border-color: #abefc6;
+      background: #ecfdf3;
+      color: #067647;
+    }
+    .status.info {
+      border-color: #b2ddff;
+      background: #eff8ff;
+      color: #175cd3;
+    }
+    .content {
+      padding: 16px;
+    }
+    .box {
+      background: #fff;
+      border: 1px solid #d0d5dd;
+      border-radius: 20px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .hidden {
+      display: none !important;
+    }
+    h1 {
+      font-size: 32px;
+      margin: 0 0 20px;
+      font-weight: 800;
+    }
+    h2 {
+      font-size: 24px;
+      margin: 0 0 16px;
+      font-weight: 800;
+    }
+    .label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: #344054;
+      margin-bottom: 6px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #d0d5dd;
+      border-radius: 14px;
+      font-size: 16px;
+      margin-bottom: 12px;
+      background: #fff;
+      color: #101828;
+    }
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    button {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+    .primary {
+      background: #175cd3;
+      color: #fff;
+    }
+    .secondary {
+      background: #e8eefc;
+      color: #175cd3;
+    }
+    .danger {
+      background: #fee4e2;
+      color: #b42318;
+    }
+    .softDanger {
+      background: #fff1f3;
+      color: #c01048;
+    }
+    .warnBox {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      color: #9a3412;
+      border-radius: 16px;
+      padding: 14px;
+      line-height: 1.45;
+    }
+    .successBox {
+      background: #ecfdf3;
+      border: 1px solid #abefc6;
+      color: #067647;
+      border-radius: 16px;
+      padding: 14px;
+      line-height: 1.45;
+    }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #eaecf0;
+      font-size: 14px;
+      align-items: center;
+    }
+    .row:last-child {
+      border-bottom: none;
+    }
+    .small {
+      color: #667085;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .pill {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      background: #fffaeb;
+      color: #b54708;
+    }
+    .pill.green {
+      background: #ecfdf3;
+      color: #067647;
+    }
+    .pill.blue {
+      background: #eff8ff;
+      color: #175cd3;
+    }
+    .grid2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .miniCard,
+    .card {
+      border: 1px solid #d0d5dd;
+      border-radius: 18px;
+      padding: 14px;
+      background: #fff;
+      margin-bottom: 12px;
+    }
+    .miniTitle {
+      font-size: 13px;
+      color: #667085;
+      margin-bottom: 8px;
+    }
+    .miniValue {
+      font-size: 22px;
+      font-weight: 800;
+      color: #175cd3;
+    }
+    .docName,
+    .cardTitle {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .price {
+      font-size: 34px;
+      font-weight: 800;
+      color: #175cd3;
+      margin-bottom: 8px;
+      line-height: 1;
+    }
+    .saveTag {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: #ecfdf3;
+      color: #067647;
+      font-size: 12px;
+      font-weight: 800;
+      margin: 4px 0 8px;
+    }
+    .bottomNav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border-top: 1px solid #d0d5dd;
+      padding: 10px 8px calc(10px + env(safe-area-inset-bottom));
+      z-index: 50;
+    }
+    .bottomNavInner {
+      max-width: 520px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    .navBtn {
+      margin: 0;
+      padding: 12px 8px;
+      border-radius: 14px;
+      background: #eaecf0;
+      color: #344054;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .navBtn.active {
+      background: #175cd3;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="topbar">
+      <div id="brand" class="brand">AMAROSE Seller App</div>
+      <select id="langSelect" class="lang">
+        <option value="en">English</option>
+        <option value="ru">Русский</option>
+      </select>
+    </div>
 
-  let state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+    <div id="status" class="status"></div>
 
-  function mergeDeep(target, source) {
-    const out = Array.isArray(target) ? [...target] : { ...target };
-    if (!source || typeof source !== 'object') return out;
-    Object.keys(source).forEach(key => {
-      const srcVal = source[key];
-      const tgtVal = out[key];
-      if (Array.isArray(srcVal)) {
-        out[key] = srcVal;
-      } else if (srcVal && typeof srcVal === 'object') {
-        out[key] = mergeDeep(
-          tgtVal && typeof tgtVal === 'object' ? tgtVal : {},
-          srcVal
-        );
-      } else {
-        out[key] = srcVal;
+    <div id="authView" class="content">
+      <h1 id="loginTitle">Seller Login</h1>
+
+      <div class="box">
+        <label id="emailLabel" class="label">Email</label>
+        <input id="emailInput" type="email" placeholder="seller@amarose.com">
+
+        <label id="passwordLabel" class="label">Password</label>
+        <input id="passwordInput" type="password" placeholder="Enter password">
+
+        <button id="loginBtn" class="primary" type="button">Login</button>
+        <button id="createBtn" class="secondary" type="button">Create account</button>
+        <button id="resetBtn" class="secondary" type="button">Reset password</button>
+      </div>
+
+      <div id="resetBox" class="box hidden">
+        <h2 id="resetTitle">Password reset</h2>
+        <div id="resetMessage" class="successBox">Password reset request created successfully.</div>
+      </div>
+
+      <div class="box">
+        <h2 id="demoTitle">Demo access</h2>
+        <div id="demoText" class="small">You can login with any email and any password. Data is saved in this browser.</div>
+      </div>
+    </div>
+
+    <div id="appView" class="content hidden">
+      <div id="screenProfile">
+        <div class="box">
+          <h2 id="overviewTitle">Account Overview</h2>
+          <div class="row"><strong id="ovEmail">Email</strong><span id="viewEmail">-</span></div>
+          <div class="row"><strong id="ovRole">Role</strong><span id="viewRole">seller</span></div>
+          <div class="row"><strong id="ovStatus">Status</strong><span id="viewStatus">active</span></div>
+          <div class="row"><strong id="ovVerification">Verification</strong><span class="pill" id="viewVerification">pending</span></div>
+          <div class="row"><strong id="ovTariff">Tariff</strong><span id="viewTariff">START - 1 month</span></div>
+          <div class="row"><strong id="ovCurrency">Currency</strong><span id="viewCurrency">EUR</span></div>
+        </div>
+
+        <div class="box">
+          <h2 id="accountStatusTitle">Account status</h2>
+          <div class="grid2">
+            <div class="miniCard">
+              <div id="miniDocsTitle" class="miniTitle">Documents</div>
+              <div id="miniDocsValue" class="miniValue">0</div>
+            </div>
+            <div class="miniCard">
+              <div id="miniPlanTitle" class="miniTitle">Current plan</div>
+              <div id="miniPlanValue" class="miniValue" style="font-size:18px;">START</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="box">
+          <h2 id="profileTitle">Seller Profile</h2>
+
+          <label id="fullNameLabel" class="label">Full name</label>
+          <input id="fullNameInput" type="text">
+
+          <label id="companyLabel" class="label">Company name</label>
+          <input id="companyInput" type="text">
+
+          <label id="sellerTypeLabel" class="label">Seller type</label>
+          <select id="sellerTypeInput">
+            <option value="individual">Individual</option>
+            <option value="company">Company</option>
+          </select>
+
+          <label id="phoneLabel" class="label">Phone</label>
+          <input id="phoneInput" type="text">
+
+          <label id="countryLabel" class="label">Country</label>
+          <input id="countryInput" type="text">
+
+          <label id="cityLabel" class="label">City</label>
+          <input id="cityInput" type="text">
+
+          <label id="profileLanguageLabel" class="label">Language</label>
+          <select id="profileLanguageInput">
+            <option value="en">English</option>
+            <option value="ru">Русский</option>
+          </select>
+
+          <label id="currencyLabel" class="label">Currency</label>
+          <select id="currencyInput">
+            <option value="EUR">EUR</option>
+            <option value="USD">USD</option>
+            <option value="AMD">AMD</option>
+            <option value="RUB">RUB</option>
+          </select>
+
+          <button id="saveProfileBtn" class="primary" type="button">Save profile</button>
+        </div>
+
+        <div class="box">
+          <h2 id="serviceRulesTitle">Service rules</h2>
+          <div id="serviceRulesText" class="warnBox">
+            Seller must follow platform rules. Violations may lead to warning, manual review, temporary restriction, or removal from the system.
+          </div>
+        </div>
+
+        <div class="box">
+          <button id="openMessageBtn" class="secondary" type="button">Contact support</button>
+          <button id="logoutBtn" class="danger" type="button">Logout</button>
+        </div>
+      </div>
+
+      <div id="screenDocuments" class="hidden">
+        <div class="box">
+          <h2 id="documentsTitle">Documents</h2>
+
+          <label id="docNameLabel" class="label">Document name</label>
+          <input id="docNameInput" type="text">
+
+          <label id="docTypeLabel" class="label">Document type</label>
+          <select id="docTypeInput">
+            <option value="Passport">Passport</option>
+            <option value="License">License</option>
+            <option value="Company registration">Company registration</option>
+            <option value="Tax document">Tax document</option>
+          </select>
+
+          <label id="docCommentLabel" class="label">Comment</label>
+          <textarea id="docCommentInput"></textarea>
+
+          <button id="addDocBtn" class="primary" type="button">Upload document</button>
+        </div>
+
+        <div class="box">
+          <h2 id="docListTitle">Uploaded documents</h2>
+          <div id="docList"></div>
+        </div>
+      </div>
+
+      <div id="screenTariffs" class="hidden">
+        <div class="box">
+          <h2 id="tariffsTitle">Tariffs</h2>
+
+          <div class="card">
+            <div class="cardTitle">START</div>
+            <div class="price">€19</div>
+            <div id="startDesc" class="small">Basic access for a new seller.</div>
+            <button type="button" class="secondary tariffBtn" data-plan="START" data-duration="1 month">START - 1 month</button>
+            <div class="saveTag">save 10%</div>
+            <button type="button" class="secondary tariffBtn" data-plan="START" data-duration="6 months">START - 6 months</button>
+            <div class="saveTag">save 20%</div>
+            <button type="button" class="secondary tariffBtn" data-plan="START" data-duration="1 year">START - 1 year</button>
+          </div>
+
+          <div class="card">
+            <div class="cardTitle">PRO</div>
+            <div class="price">€49</div>
+            <div id="proDesc" class="small">More visibility and more seller tools.</div>
+            <button type="button" class="secondary tariffBtn" data-plan="PRO" data-duration="1 month">PRO - 1 month</button>
+            <div class="saveTag">save 10%</div>
+            <button type="button" class="secondary tariffBtn" data-plan="PRO" data-duration="6 months">PRO - 6 months</button>
+            <div class="saveTag">save 20%</div>
+            <button type="button" class="secondary tariffBtn" data-plan="PRO" data-duration="1 year">PRO - 1 year</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="screenStats" class="hidden">
+        <div class="box">
+          <h2 id="statsTitle">Stats</h2>
+
+          <div class="card">
+            <div id="statsRatingLabel">Rating</div>
+            <div class="price">4.8 / 5</div>
+          </div>
+
+          <div class="card">
+            <div id="statsReviewsLabel">Reviews</div>
+            <div class="price">12</div>
+          </div>
+
+          <div class="card">
+            <div id="statsActivityLabel">Activity</div>
+            <div class="price">Stable</div>
+          </div>
+
+          <div class="card">
+            <div id="statsOrdersLabel">Orders</div>
+            <div class="price">24</div>
+          </div>
+
+          <div class="card">
+            <div id="statsTrendLabel">Trend</div>
+            <div class="price">Up</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="screenMessages" class="hidden">
+        <div class="box">
+          <h2 id="messagesTitle">Support message</h2>
+
+          <label id="messageSubjectLabel" class="label">Subject</label>
+          <input id="messageSubjectInput" type="text">
+
+          <label id="messageTextLabel" class="label">Message</label>
+          <textarea id="messageTextInput"></textarea>
+
+          <button id="sendMessageBtn" class="primary" type="button">Send message</button>
+          <button id="backFromMessagesBtn" class="secondary" type="button">Back</button>
+        </div>
+
+        <div class="box">
+          <h2 id="messageHistoryTitle">Message history</h2>
+          <div id="messageHistory"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="bottomNav" class="bottomNav hidden">
+    <div class="bottomNavInner">
+      <button id="navProfile" class="navBtn active" type="button">Profile</button>
+      <button id="navDocuments" class="navBtn" type="button">Documents</button>
+      <button id="navTariffs" class="navBtn" type="button">Tariffs</button>
+      <button id="navStats" class="navBtn" type="button">Stats</button>
+    </div>
+  </div>
+
+  <script>
+    const KEY = 'amarose_seller_v441';
+
+    const I18N = {
+      en: {
+        brand:'AMAROSE Seller App',
+        loginTitle:'Seller Login',
+        emailLabel:'Email',
+        passwordLabel:'Password',
+        demoTitle:'Demo access',
+        demoText:'You can login with any email and any password. Data is saved in this browser.',
+        loginBtn:'Login',
+        createBtn:'Create account',
+        resetBtn:'Reset password',
+        resetTitle:'Password reset',
+        resetMessage:'Password reset request created successfully.',
+        overviewTitle:'Account Overview',
+        ovEmail:'Email',
+        ovRole:'Role',
+        ovStatus:'Status',
+        ovVerification:'Verification',
+        ovTariff:'Tariff',
+        ovCurrency:'Currency',
+        accountStatusTitle:'Account status',
+        miniDocsTitle:'Documents',
+        miniPlanTitle:'Current plan',
+        profileTitle:'Seller Profile',
+        fullNameLabel:'Full name',
+        companyLabel:'Company name',
+        sellerTypeLabel:'Seller type',
+        phoneLabel:'Phone',
+        countryLabel:'Country',
+        cityLabel:'City',
+        profileLanguageLabel:'Language',
+        currencyLabel:'Currency',
+        saveProfileBtn:'Save profile',
+        serviceRulesTitle:'Service rules',
+        serviceRulesText:'Seller must follow platform rules. Violations may lead to warning, manual review, temporary restriction, or removal from the system.',
+        openMessageBtn:'Contact support',
+        logoutBtn:'Logout',
+        documentsTitle:'Documents',
+        docNameLabel:'Document name',
+        docTypeLabel:'Document type',
+        docCommentLabel:'Comment',
+        addDocBtn:'Upload document',
+        docListTitle:'Uploaded documents',
+        tariffsTitle:'Tariffs',
+        startDesc:'Basic access for a new seller.',
+        proDesc:'More visibility and more seller tools.',
+        statsTitle:'Stats',
+        statsRatingLabel:'Rating',
+        statsReviewsLabel:'Reviews',
+        statsActivityLabel:'Activity',
+        statsOrdersLabel:'Orders',
+        statsTrendLabel:'Trend',
+        messagesTitle:'Support message',
+        messageSubjectLabel:'Subject',
+        messageTextLabel:'Message',
+        sendMessageBtn:'Send message',
+        backFromMessagesBtn:'Back',
+        messageHistoryTitle:'Message history',
+        navProfile:'Profile',
+        navDocuments:'Documents',
+        navTariffs:'Tariffs',
+        navStats:'Stats',
+        loaded:'Application loaded successfully.',
+        needEmail:'Enter email first.',
+        needBoth:'Enter email and password.',
+        loginOk:'Logged in successfully.',
+        createOk:'Account created successfully.',
+        resetOk:'Password reset request created.',
+        logoutAsk:'Do you want to logout?',
+        logoutOk:'Logged out successfully.',
+        profileOk:'Profile saved successfully.',
+        docOk:'Document uploaded successfully.',
+        docDeleteOk:'Document deleted successfully.',
+        tariffOk:'Tariff selected successfully.',
+        messageNeed:'Enter subject and message.',
+        messageOk:'Message sent successfully.',
+        messageOpened:'Message center opened.',
+        noDocs:'No documents yet.',
+        noMessages:'No messages yet.',
+        deleteBtn:'Delete',
+        individual:'Individual',
+        company:'Company',
+        sellerWord:'seller'
+      },
+      ru: {
+        brand:'AMAROSE Seller App',
+        loginTitle:'Вход продавца',
+        emailLabel:'Почта',
+        passwordLabel:'Пароль',
+        demoTitle:'Демо доступ',
+        demoText:'Можно войти с любой почтой и любым паролем. Данные сохраняются в браузере.',
+        loginBtn:'Войти',
+        createBtn:'Создать аккаунт',
+        resetBtn:'Сбросить пароль',
+        resetTitle:'Сброс пароля',
+        resetMessage:'Запрос на сброс пароля успешно создан.',
+        overviewTitle:'Обзор аккаунта',
+        ovEmail:'Почта',
+        ovRole:'Роль',
+        ovStatus:'Статус',
+        ovVerification:'Проверка',
+        ovTariff:'Тариф',
+        ovCurrency:'Валюта',
+        accountStatusTitle:'Состояние аккаунта',
+        miniDocsTitle:'Документы',
+        miniPlanTitle:'Текущий тариф',
+        profileTitle:'Профиль продавца',
+        fullNameLabel:'Полное имя',
+        companyLabel:'Название компании',
+        sellerTypeLabel:'Тип продавца',
+        phoneLabel:'Телефон',
+        countryLabel:'Страна',
+        cityLabel:'Город',
+        profileLanguageLabel:'Язык',
+        currencyLabel:'Валюта',
+        saveProfileBtn:'Сохранить профиль',
+        serviceRulesTitle:'Правила сервиса',
+        serviceRulesText:'Продавец обязан соблюдать правила платформы. Нарушения могут привести к предупреждению, ручной проверке, временным ограничениям или удалению из системы.',
+        openMessageBtn:'Написать в поддержку',
+        logoutBtn:'Выйти',
+        documentsTitle:'Документы',
+        docNameLabel:'Название документа',
+        docTypeLabel:'Тип документа',
+        docCommentLabel:'Комментарий',
+        addDocBtn:'Загрузить документ',
+        docListTitle:'Загруженные документы',
+        tariffsTitle:'Тарифы',
+        startDesc:'Базовый доступ для нового продавца.',
+        proDesc:'Больше видимости и больше инструментов продавца.',
+        statsTitle:'Статистика',
+        statsRatingLabel:'Рейтинг',
+        statsReviewsLabel:'Отзывы',
+        statsActivityLabel:'Активность',
+        statsOrdersLabel:'Заказы',
+        statsTrendLabel:'Тренд',
+        messagesTitle:'Сообщение в поддержку',
+        messageSubjectLabel:'Тема',
+        messageTextLabel:'Сообщение',
+        sendMessageBtn:'Отправить сообщение',
+        backFromMessagesBtn:'Назад',
+        messageHistoryTitle:'История сообщений',
+        navProfile:'Профиль',
+        navDocuments:'Документы',
+        navTariffs:'Тарифы',
+        navStats:'Статистика',
+        loaded:'Приложение загружено.',
+        needEmail:'Сначала введите почту.',
+        needBoth:'Введите почту и пароль.',
+        loginOk:'Вход выполнен успешно.',
+        createOk:'Аккаунт успешно создан.',
+        resetOk:'Запрос на сброс пароля создан.',
+        logoutAsk:'Вы точно хотите выйти?',
+        logoutOk:'Вы вышли из аккаунта.',
+        profileOk:'Профиль успешно сохранён.',
+        docOk:'Документ успешно загружен.',
+        docDeleteOk:'Документ успешно удалён.',
+        tariffOk:'Тариф успешно выбран.',
+        messageNeed:'Введите тему и сообщение.',
+        messageOk:'Сообщение успешно отправлено.',
+        messageOpened:'Центр сообщений открыт.',
+        noDocs:'Документов пока нет.',
+        noMessages:'Сообщений пока нет.',
+        deleteBtn:'Удалить',
+        individual:'Частный',
+        company:'Компания',
+        sellerWord:'seller'
       }
-    });
-    return out;
-  }
-
-  function safeState() {
-    state = mergeDeep(DEFAULT_STATE, state || {});
-    if (!Array.isArray(state.docs)) state.docs = [];
-    if (!Array.isArray(state.messages)) state.messages = [];
-    if (!Array.isArray(state.warnings)) state.warnings = [];
-    if (!Array.isArray(state.activity)) state.activity = [];
-    if (!state.profile || typeof state.profile !== 'object') {
-      state.profile = JSON.parse(JSON.stringify(DEFAULT_STATE.profile));
-    }
-  }
-
-  function saveState() {
-    safeState();
-    localStorage.setItem(KEY, JSON.stringify(state));
-  }
-
-  function loadState() {
-    try {
-      const raw = localStorage.getItem(KEY);
-      if (raw) state = JSON.parse(raw);
-    } catch (e) {
-      state = JSON.parse(JSON.stringify(DEFAULT_STATE));
-    }
-    safeState();
-  }
-
-  function nowText() {
-    return new Date().toLocaleString();
-  }
-
-  function esc(str) {
-    return String(str).replace(/[&<>"']/g, function(m) {
-      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]);
-    });
-  }
-
-  function t(key) {
-    safeState();
-    const lang = I18N[state.language] ? state.language : 'en';
-    return I18N[lang][key] || I18N.en[key] || key;
-  }
-
-  function addActivity(title, details) {
-    safeState();
-    state.activity.unshift({ title, details, time: nowText() });
-    if (state.activity.length > 20) state.activity = state.activity.slice(0, 20);
-  }
-
-  function setStatus(msg, type) {
-    const el = document.getElementById('status');
-    if (!el) return;
-    el.className = 'status';
-    if (type === 'success') el.classList.add('success');
-    if (type === 'info') el.classList.add('info');
-    el.innerText = msg || '';
-  }
-
-  function getComplianceClass(val) {
-    if (val === 'good_standing') return 'pill good';
-    if (val === 'warning') return 'pill warning';
-    if (val === 'restricted') return 'pill rejected';
-    return 'pill pending';
-  }
-
-  function computeCompliance() {
-    safeState();
-    const rejectedCount = state.docs.filter(d => d.status === 'rejected').length;
-    const warningCount = state.warnings.length;
-    if (rejectedCount >= 2 || warningCount >= 2) return 'restricted';
-    if (rejectedCount >= 1 || warningCount >= 1) return 'warning';
-    return 'good_standing';
-  }
-
-  function randomDocStatus() {
-    const r = Math.random();
-    if (r < 0.45) return 'pending';
-    if (r < 0.70) return 'approved';
-    if (r < 0.90) return 'manual_review';
-    return 'rejected';
-  }
-
-  function pillForDocStatus(status) {
-    if (status === 'approved') return '<span class="pill approved">' + t('approved') + '</span>';
-    if (status === 'rejected') return '<span class="pill rejected">' + t('rejected') + '</span>';
-    if (status === 'manual_review') return '<span class="pill review">' + t('manual_review') + '</span>';
-    return '<span class="pill pending">' + t('pending') + '</span>';
-  }
-
-  function applyTranslations() {
-    safeState();
-    document.documentElement.lang = state.language;
-
-    const map = {
-      brand:'brand',
-      loginTitle:'loginTitle',
-      emailLabel:'emailLabel',
-      passwordLabel:'passwordLabel',
-      demoTitle:'demoTitle',
-      demoText:'demoText',
-      loginBtn:'loginBtn',
-      createBtn:'createBtn',
-      resetBtn:'resetBtn',
-      resetTitle:'resetTitle',
-      resetMessage:'resetMessage',
-      overviewTitle:'overviewTitle',
-      ovEmail:'ovEmail',
-      ovRole:'ovRole',
-      ovStatus:'ovStatus',
-      ovVerification:'ovVerification',
-      ovTariff:'ovTariff',
-      ovCurrency:'ovCurrency',
-      ovCompliance:'ovCompliance',
-      dashboardTitle:'dashboardTitle',
-      statDocsLabel:'statDocsLabel',
-      statWarningsLabel:'statWarningsLabel',
-      statMessagesLabel:'statMessagesLabel',
-      statReviewsLabel2:'statReviewsLabel2',
-      profileTitle:'profileTitle',
-      fullNameLabel:'fullNameLabel',
-      companyLabel:'companyLabel',
-      sellerTypeLabel:'sellerTypeLabel',
-      phoneLabel:'phoneLabel',
-      countryLabel:'countryLabel',
-      cityLabel:'cityLabel',
-      profileLanguageLabel:'profileLanguageLabel',
-      currencyLabel:'currencyLabel',
-      saveProfileBtn:'saveProfileBtn',
-      serviceRulesTitle:'serviceRulesTitle',
-      serviceRulesText:'serviceRulesText',
-      warningHistoryTitle:'warningHistoryTitle',
-      documentsTitle:'documentsTitle',
-      docNameLabel:'docNameLabel',
-      docTypeLabel:'docTypeLabel',
-      docCommentLabel:'docCommentLabel',
-      addDocBtn:'addDocBtn',
-      docListTitle:'docListTitle',
-      tariffsTitle:'tariffsTitle',
-      startDesc:'startDesc',
-      proDesc:'proDesc',
-      statsTitle:'statsTitle',
-      statsRatingLabel:'statsRatingLabel',
-      statsReviewsLabel:'statsReviewsLabel',
-      statsActivityLabel:'statsActivityLabel',
-      statsOrdersLabel:'statsOrdersLabel',
-      statsTrendLabel:'statsTrendLabel',
-      activityHistoryTitle:'activityHistoryTitle',
-      messagesTitle:'messagesTitle',
-      messageTypeLabel:'messageTypeLabel',
-      messageSubjectLabel:'messageSubjectLabel',
-      messageTextLabel:'messageTextLabel',
-      sendMessageBtn:'sendMessageBtn',
-      backFromMessagesBtn:'backFromMessagesBtn',
-      messageHistoryTitle:'messageHistoryTitle',
-      openMessageBtn:'openMessageBtn',
-      logoutBtn:'logoutBtn',
-      navProfile:'navProfile',
-      navDocuments:'navDocuments',
-      navTariffs:'navTariffs',
-      navStats:'navStats'
     };
 
-    Object.keys(map).forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.innerText = t(map[id]);
-    });
+    let state = {
+      language: 'en',
+      loggedIn: false,
+      email: '',
+      resetShown: false,
+      activeScreen: 'profile',
+      tariff: 'START - 1 month',
+      profile: {
+        fullName: '',
+        company: '',
+        sellerType: 'individual',
+        phone: '',
+        country: '',
+        city: '',
+        profileLanguage: 'en',
+        currency: 'EUR'
+      },
+      docs: [],
+      messages: []
+    };
 
-    const langSelect = document.getElementById('langSelect');
-    if (langSelect) langSelect.value = state.language;
-
-    const profileLanguageInput = document.getElementById('profileLanguageInput');
-    if (profileLanguageInput) profileLanguageInput.value = state.profile.profileLanguage || state.language;
-
-    const messageTypeInput = document.getElementById('messageTypeInput');
-    if (messageTypeInput) {
-      messageTypeInput.options[0].text = t('support');
-      messageTypeInput.options[1].text = t('review_request');
-      messageTypeInput.options[2].text = t('dispute');
-      messageTypeInput.options[3].text = t('problem_report');
+    function t(key) {
+      const lang = I18N[state.language] ? state.language : 'en';
+      return I18N[lang][key] || I18N.en[key] || key;
     }
 
-    const sellerType = document.getElementById('sellerTypeInput');
-    if (sellerType) {
+    function saveState() {
+      localStorage.setItem(KEY, JSON.stringify(state));
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(KEY);
+        if (raw) state = JSON.parse(raw);
+      } catch (e) {}
+    }
+
+    function setStatus(msg, type) {
+      const el = document.getElementById('status');
+      el.className = 'status';
+      if (type === 'success') el.classList.add('success');
+      if (type === 'info') el.classList.add('info');
+      el.innerText = msg;
+    }
+
+    function applyTranslations() {
+      document.getElementById('brand').innerText = t('brand');
+      document.getElementById('loginTitle').innerText = t('loginTitle');
+      document.getElementById('emailLabel').innerText = t('emailLabel');
+      document.getElementById('passwordLabel').innerText = t('passwordLabel');
+      document.getElementById('demoTitle').innerText = t('demoTitle');
+      document.getElementById('demoText').innerText = t('demoText');
+      document.getElementById('loginBtn').innerText = t('loginBtn');
+      document.getElementById('createBtn').innerText = t('createBtn');
+      document.getElementById('resetBtn').innerText = t('resetBtn');
+      document.getElementById('resetTitle').innerText = t('resetTitle');
+      document.getElementById('resetMessage').innerText = t('resetMessage');
+      document.getElementById('overviewTitle').innerText = t('overviewTitle');
+      document.getElementById('ovEmail').innerText = t('ovEmail');
+      document.getElementById('ovRole').innerText = t('ovRole');
+      document.getElementById('ovStatus').innerText = t('ovStatus');
+      document.getElementById('ovVerification').innerText = t('ovVerification');
+      document.getElementById('ovTariff').innerText = t('ovTariff');
+      document.getElementById('ovCurrency').innerText = t('ovCurrency');
+      document.getElementById('accountStatusTitle').innerText = t('accountStatusTitle');
+      document.getElementById('miniDocsTitle').innerText = t('miniDocsTitle');
+      document.getElementById('miniPlanTitle').innerText = t('miniPlanTitle');
+      document.getElementById('profileTitle').innerText = t('profileTitle');
+      document.getElementById('fullNameLabel').innerText = t('fullNameLabel');
+      document.getElementById('companyLabel').innerText = t('companyLabel');
+      document.getElementById('sellerTypeLabel').innerText = t('sellerTypeLabel');
+      document.getElementById('phoneLabel').innerText = t('phoneLabel');
+      document.getElementById('countryLabel').innerText = t('countryLabel');
+      document.getElementById('cityLabel').innerText = t('cityLabel');
+      document.getElementById('profileLanguageLabel').innerText = t('profileLanguageLabel');
+      document.getElementById('currencyLabel').innerText = t('currencyLabel');
+      document.getElementById('saveProfileBtn').innerText = t('saveProfileBtn');
+      document.getElementById('serviceRulesTitle').innerText = t('serviceRulesTitle');
+      document.getElementById('serviceRulesText').innerText = t('serviceRulesText');
+      document.getElementById('openMessageBtn').innerText = t('openMessageBtn');
+      document.getElementById('logoutBtn').innerText = t('logoutBtn');
+      document.getElementById('documentsTitle').innerText = t('documentsTitle');
+      document.getElementById('docNameLabel').innerText = t('docNameLabel');
+      document.getElementById('docTypeLabel').innerText = t('docTypeLabel');
+      document.getElementById('docCommentLabel').innerText = t('docCommentLabel');
+      document.getElementById('addDocBtn').innerText = t('addDocBtn');
+      document.getElementById('docListTitle').innerText = t('docListTitle');
+      document.getElementById('tariffsTitle').innerText = t('tariffsTitle');
+      document.getElementById('startDesc').innerText = t('startDesc');
+      document.getElementById('proDesc').innerText = t('proDesc');
+      document.getElementById('statsTitle').innerText = t('statsTitle');
+      document.getElementById('statsRatingLabel').innerText = t('statsRatingLabel');
+      document.getElementById('statsReviewsLabel').innerText = t('statsReviewsLabel');
+      document.getElementById('statsActivityLabel').innerText = t('statsActivityLabel');
+      document.getElementById('statsOrdersLabel').innerText = t('statsOrdersLabel');
+      document.getElementById('statsTrendLabel').innerText = t('statsTrendLabel');
+      document.getElementById('messagesTitle').innerText = t('messagesTitle');
+      document.getElementById('messageSubjectLabel').innerText = t('messageSubjectLabel');
+      document.getElementById('messageTextLabel').innerText = t('messageTextLabel');
+      document.getElementById('sendMessageBtn').innerText = t('sendMessageBtn');
+      document.getElementById('backFromMessagesBtn').innerText = t('backFromMessagesBtn');
+      document.getElementById('messageHistoryTitle').innerText = t('messageHistoryTitle');
+      document.getElementById('navProfile').innerText = t('navProfile');
+      document.getElementById('navDocuments').innerText = t('navDocuments');
+      document.getElementById('navTariffs').innerText = t('navTariffs');
+      document.getElementById('navStats').innerText = t('navStats');
+      document.getElementById('langSelect').value = state.language;
+
+      const sellerType = document.getElementById('sellerTypeInput');
       sellerType.options[0].text = t('individual');
       sellerType.options[1].text = t('company');
     }
-  }
 
-  function renderReset() {
-    const el = document.getElementById('resetBox');
-    if (el) el.classList.toggle('hidden', !(state.resetShown && !state.loggedIn));
-  }
-
-  function renderProfile() {
-    safeState();
-    state.compliance = computeCompliance();
-
-    const byId = id => document.getElementById(id);
-
-    if (byId('viewEmail')) byId('viewEmail').innerText = state.email || '-';
-    if (byId('viewRole')) byId('viewRole').innerText = t('sellerWord');
-    if (byId('viewTariff')) byId('viewTariff').innerText = state.tariff;
-    if (byId('viewCurrency')) byId('viewCurrency').innerText = state.profile.currency || 'EUR';
-
-    const ver = state.docs.length ? state.docs[0].status : 'pending';
-    const verEl = byId('viewVerification');
-    if (verEl) {
-      verEl.className = 'pill pending';
-      if (ver === 'approved') verEl.className = 'pill approved';
-      if (ver === 'rejected') verEl.className = 'pill rejected';
-      if (ver === 'manual_review') verEl.className = 'pill review';
-      verEl.innerText = t(ver);
+    function renderReset() {
+      document.getElementById('resetBox').classList.toggle('hidden', !(state.resetShown && !state.loggedIn));
     }
 
-    const compEl = byId('viewCompliance');
-    if (compEl) {
-      compEl.className = getComplianceClass(state.compliance);
-      compEl.innerText = t(state.compliance);
+    function renderProfile() {
+      document.getElementById('viewEmail').innerText = state.email || '-';
+      document.getElementById('viewRole').innerText = t('sellerWord');
+      document.getElementById('viewTariff').innerText = state.tariff;
+      document.getElementById('viewCurrency').innerText = state.profile.currency || 'EUR';
+      document.getElementById('miniDocsValue').innerText = String((state.docs || []).length);
+      document.getElementById('miniPlanValue').innerText = (state.tariff.split(' - ')[0] || 'START');
+
+      document.getElementById('fullNameInput').value = state.profile.fullName || '';
+      document.getElementById('companyInput').value = state.profile.company || '';
+      document.getElementById('sellerTypeInput').value = state.profile.sellerType || 'individual';
+      document.getElementById('phoneInput').value = state.profile.phone || '';
+      document.getElementById('countryInput').value = state.profile.country || '';
+      document.getElementById('cityInput').value = state.profile.city || '';
+      document.getElementById('profileLanguageInput').value = state.profile.profileLanguage || state.language || 'en';
+      document.getElementById('currencyInput').value = state.profile.currency || 'EUR';
     }
 
-    if (byId('statDocsValue')) byId('statDocsValue').innerText = String(state.docs.length);
-    if (byId('statWarningsValue')) byId('statWarningsValue').innerText = String(state.warnings.length);
-    if (byId('statMessagesValue')) byId('statMessagesValue').innerText = String(state.messages.length);
-    if (byId('statReviewsValue2')) byId('statReviewsValue2').innerText = String(state.docs.filter(d => d.status === 'manual_review').length);
-
-    if (byId('fullNameInput')) byId('fullNameInput').value = state.profile.fullName || '';
-    if (byId('companyInput')) byId('companyInput').value = state.profile.company || '';
-    if (byId('sellerTypeInput')) byId('sellerTypeInput').value = state.profile.sellerType || 'individual';
-    if (byId('phoneInput')) byId('phoneInput').value = state.profile.phone || '';
-    if (byId('countryInput')) byId('countryInput').value = state.profile.country || '';
-    if (byId('cityInput')) byId('cityInput').value = state.profile.city || '';
-    if (byId('profileLanguageInput')) byId('profileLanguageInput').value = state.profile.profileLanguage || state.language || 'en';
-    if (byId('currencyInput')) byId('currencyInput').value = state.profile.currency || 'EUR';
-  }
-
-  function renderWarnings() {
-    const wrap = document.getElementById('warningHistory');
-    if (!wrap) return;
-    if (!state.warnings.length) {
-      wrap.innerHTML = '<div class="small">' + t('noWarnings') + '</div>';
-      return;
+    function esc(str) {
+      return String(str).replace(/[&<>"']/g, function(m) {
+        return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]);
+      });
     }
-    wrap.innerHTML = state.warnings.map(function(w) {
-      return `
-        <div class="historyItem">
-          <div class="topLine">
-            <div class="historyTitle">${esc(w.title)}</div>
-            <span class="pill warning">${t('warning')}</span>
+
+    function renderDocs() {
+      const wrap = document.getElementById('docList');
+      if (!state.docs.length) {
+        wrap.innerHTML = '<div class="small">' + t('noDocs') + '</div>';
+        return;
+      }
+      wrap.innerHTML = state.docs.map(function(d, i) {
+        return `
+          <div class="card">
+            <div class="cardTitle">${esc(d.name)}</div>
+            <div class="small">${esc(d.type)}</div>
+            <div class="small">${esc(d.comment || '')}</div>
+            <div style="margin:10px 0 12px;"><span class="pill">pending</span></div>
+            <button type="button" class="danger" onclick="deleteDoc(${i})">${t('deleteBtn')}</button>
           </div>
-          <div class="historyMeta">${esc(w.text)}</div>
-          <div class="historyMeta">${esc(w.time)}</div>
-        </div>
-      `;
-    }).join('');
-  }
-
-  function renderDocs() {
-    const wrap = document.getElementById('docList');
-    if (!wrap) return;
-    if (!state.docs.length) {
-      wrap.innerHTML = '<div class="small">' + t('noDocs') + '</div>';
-      return;
+        `;
+      }).join('');
     }
-    wrap.innerHTML = state.docs.map(function(d, i) {
-      return `
-        <div class="card">
-          <div class="topLine">
-            <div>
-              <div class="cardTitle">${esc(d.name)}</div>
-              <div class="docMeta">${esc(d.type)}</div>
-            </div>
-            ${pillForDocStatus(d.status)}
-          </div>
-          <div class="docMeta">${esc(d.comment || '')}</div>
-          <div class="docMeta">${esc(d.time || '')}</div>
-          <button type="button" class="danger" onclick="deleteDoc(${i})">${t('deleteBtn')}</button>
-        </div>
-      `;
-    }).join('');
-  }
 
-  function renderMessages() {
-    const wrap = document.getElementById('messageHistory');
-    if (!wrap) return;
-    if (!state.messages.length) {
-      wrap.innerHTML = '<div class="small">' + t('noMessages') + '</div>';
-      return;
-    }
-    wrap.innerHTML = state.messages.map(function(m) {
-      return `
-        <div class="card">
-          <div class="topLine">
+    function renderMessages() {
+      const wrap = document.getElementById('messageHistory');
+      if (!state.messages.length) {
+        wrap.innerHTML = '<div class="small">' + t('noMessages') + '</div>';
+        return;
+      }
+      wrap.innerHTML = state.messages.map(function(m) {
+        return `
+          <div class="card">
             <div class="cardTitle">${esc(m.subject)}</div>
-            <span class="pill review">${t(m.type)}</span>
+            <div class="small">${esc(m.text)}</div>
           </div>
-          <div class="docMeta">${esc(m.text)}</div>
-          <div class="docMeta">${esc(m.time)}</div>
-        </div>
-      `;
-    }).join('');
-  }
-
-  function renderActivity() {
-    const wrap = document.getElementById('activityHistory');
-    if (!wrap) return;
-    if (!state.activity.length) {
-      wrap.innerHTML = '<div class="small">' + t('noHistory') + '</div>';
-      return;
-    }
-    wrap.innerHTML = state.activity.map(function(a) {
-      return `
-        <div class="historyItem">
-          <div class="historyTitle">${esc(a.title)}</div>
-          <div class="historyMeta">${esc(a.details || '')}</div>
-          <div class="historyMeta">${esc(a.time)}</div>
-        </div>
-      `;
-    }).join('');
-  }
-
-  function showScreen(name) {
-    safeState();
-    state.activeScreen = name;
-    saveState();
-
-    const screens = ['screenProfile','screenDocuments','screenTariffs','screenStats','screenMessages'];
-    screens.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.classList.add('hidden');
-    });
-
-    const navs = ['navProfile','navDocuments','navTariffs','navStats'];
-    navs.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.classList.remove('active');
-    });
-
-    if (name === 'profile') {
-      document.getElementById('screenProfile').classList.remove('hidden');
-      document.getElementById('navProfile').classList.add('active');
-    }
-    if (name === 'documents') {
-      document.getElementById('screenDocuments').classList.remove('hidden');
-      document.getElementById('navDocuments').classList.add('active');
-    }
-    if (name === 'tariffs') {
-      document.getElementById('screenTariffs').classList.remove('hidden');
-      document.getElementById('navTariffs').classList.add('active');
-    }
-    if (name === 'stats') {
-      document.getElementById('screenStats').classList.remove('hidden');
-      document.getElementById('navStats').classList.add('active');
-    }
-    if (name === 'messages') {
-      document.getElementById('screenMessages').classList.remove('hidden');
-    }
-  }
-
-  function loginNow() {
-    const email = (document.getElementById('emailInput')?.value || '').trim();
-    const password = (document.getElementById('passwordInput')?.value || '').trim();
-    if (!email || !password) {
-      setStatus(t('needBoth'));
-      return;
-    }
-    state.loggedIn = true;
-    state.email = email;
-    state.resetShown = false;
-    addActivity(t('loginAction'), email);
-    saveState();
-    render();
-    setStatus(t('loginOk'), 'success');
-  }
-
-  function createNow() {
-    const email = (document.getElementById('emailInput')?.value || '').trim();
-    const password = (document.getElementById('passwordInput')?.value || '').trim();
-    if (!email || !password) {
-      setStatus(t('needBoth'));
-      return;
-    }
-    state.loggedIn = true;
-    state.email = email;
-    state.resetShown = false;
-    addActivity(t('accountCreated'), email);
-    saveState();
-    render();
-    setStatus(t('createOk'), 'success');
-  }
-
-  function resetNow() {
-    const email = (document.getElementById('emailInput')?.value || '').trim();
-    if (!email) {
-      setStatus(t('needEmail'));
-      return;
-    }
-    state.loggedIn = false;
-    state.email = email;
-    state.resetShown = true;
-    addActivity(t('passwordReset'), email);
-    saveState();
-    render();
-    setStatus(t('resetOk'), 'success');
-  }
-
-  function logoutNow() {
-    if (!confirm(t('logoutAsk'))) return;
-    state.loggedIn = false;
-    state.resetShown = false;
-    saveState();
-    render();
-    setStatus(t('logoutOk'), 'info');
-  }
-
-  function saveProfileNow() {
-    state.profile.fullName = (document.getElementById('fullNameInput')?.value || '').trim();
-    state.profile.company = (document.getElementById('companyInput')?.value || '').trim();
-    state.profile.sellerType = document.getElementById('sellerTypeInput')?.value || 'individual';
-    state.profile.phone = (document.getElementById('phoneInput')?.value || '').trim();
-    state.profile.country = (document.getElementById('countryInput')?.value || '').trim();
-    state.profile.city = (document.getElementById('cityInput')?.value || '').trim();
-    state.profile.profileLanguage = document.getElementById('profileLanguageInput')?.value || state.language;
-    state.profile.currency = document.getElementById('currencyInput')?.value || 'EUR';
-    addActivity(t('profileSaved'), state.profile.fullName || state.email || '');
-    saveState();
-    renderProfile();
-    renderActivity();
-    setStatus(t('profileOk'), 'success');
-  }
-
-  function addDocNow() {
-    const name = (document.getElementById('docNameInput')?.value || '').trim();
-    const type = document.getElementById('docTypeInput')?.value || 'Passport';
-    const comment = (document.getElementById('docCommentInput')?.value || '').trim();
-
-    if (!name) {
-      setStatus(t('docNameLabel'));
-      return;
+        `;
+      }).join('');
     }
 
-    const status = randomDocStatus();
-    const doc = { name, type, comment, status, time: nowText() };
-    state.docs.unshift(doc);
+    function showScreen(name) {
+      state.activeScreen = name;
+      saveState();
 
-    if (status === 'rejected') {
-      state.warnings.unshift({
-        title: name,
-        text: 'Document was rejected during verification.',
-        time: nowText()
-      });
+      document.getElementById('screenProfile').classList.add('hidden');
+      document.getElementById('screenDocuments').classList.add('hidden');
+      document.getElementById('screenTariffs').classList.add('hidden');
+      document.getElementById('screenStats').classList.add('hidden');
+      document.getElementById('screenMessages').classList.add('hidden');
+
+      document.getElementById('navProfile').classList.remove('active');
+      document.getElementById('navDocuments').classList.remove('active');
+      document.getElementById('navTariffs').classList.remove('active');
+      document.getElementById('navStats').classList.remove('active');
+
+      if (name === 'profile') {
+        document.getElementById('screenProfile').classList.remove('hidden');
+        document.getElementById('navProfile').classList.add('active');
+      }
+      if (name === 'documents') {
+        document.getElementById('screenDocuments').classList.remove('hidden');
+        document.getElementById('navDocuments').classList.add('active');
+      }
+      if (name === 'tariffs') {
+        document.getElementById('screenTariffs').classList.remove('hidden');
+        document.getElementById('navTariffs').classList.add('active');
+      }
+      if (name === 'stats') {
+        document.getElementById('screenStats').classList.remove('hidden');
+        document.getElementById('navStats').classList.add('active');
+      }
+      if (name === 'messages') {
+        document.getElementById('screenMessages').classList.remove('hidden');
+      }
     }
 
-    if (document.getElementById('docNameInput')) document.getElementById('docNameInput').value = '';
-    if (document.getElementById('docCommentInput')) document.getElementById('docCommentInput').value = '';
-
-    addActivity(t('docUploaded'), name + ' / ' + t(status));
-    saveState();
-    render();
-    showScreen('documents');
-    setStatus(t('docOk'), 'success');
-  }
-
-  function deleteDoc(index) {
-    const removed = state.docs[index];
-    state.docs.splice(index, 1);
-    addActivity(t('docDeleted'), removed ? removed.name : '');
-    saveState();
-    render();
-    showScreen('documents');
-    setStatus(t('docDeleteOk'), 'info');
-  }
-
-  function buyTariffNow(plan, duration) {
-    state.tariff = plan + ' - ' + duration;
-    addActivity(t('tariffChanged'), state.tariff);
-    saveState();
-    renderProfile();
-    renderActivity();
-    setStatus(t('tariffOk'), 'success');
-  }
-
-  function openMessageCenter() {
-    showScreen('messages');
-    renderMessages();
-    setStatus(t('messagesTitle'), 'info');
-  }
-
-  function backToProfile() {
-    showScreen('profile');
-  }
-
-  function sendMessageNow() {
-    const type = document.getElementById('messageTypeInput')?.value || 'support';
-    const subject = (document.getElementById('messageSubjectInput')?.value || '').trim();
-    const text = (document.getElementById('messageTextInput')?.value || '').trim();
-
-    if (!subject || !text) {
-      setStatus(t('messageNeed'));
-      return;
+    function loginNow() {
+      const email = document.getElementById('emailInput').value.trim();
+      const password = document.getElementById('passwordInput').value.trim();
+      if (!email || !password) {
+        setStatus(t('needBoth'));
+        return;
+      }
+      state.loggedIn = true;
+      state.email = email;
+      state.resetShown = false;
+      saveState();
+      render();
+      setStatus(t('loginOk'), 'success');
     }
 
-    state.messages.unshift({ type, subject, text, time: nowText() });
-
-    if (type === 'problem_report') {
-      state.warnings.unshift({
-        title: subject,
-        text: 'Problem reported and sent to support.',
-        time: nowText()
-      });
+    function createNow() {
+      const email = document.getElementById('emailInput').value.trim();
+      const password = document.getElementById('passwordInput').value.trim();
+      if (!email || !password) {
+        setStatus(t('needBoth'));
+        return;
+      }
+      state.loggedIn = true;
+      state.email = email;
+      state.resetShown = false;
+      saveState();
+      render();
+      setStatus(t('createOk'), 'success');
     }
 
-    if (document.getElementById('messageSubjectInput')) document.getElementById('messageSubjectInput').value = '';
-    if (document.getElementById('messageTextInput')) document.getElementById('messageTextInput').value = '';
+    function resetNow() {
+      const email = document.getElementById('emailInput').value.trim();
+      if (!email) {
+        setStatus(t('needEmail'));
+        return;
+      }
+      state.loggedIn = false;
+      state.email = email;
+      state.resetShown = true;
+      saveState();
+      render();
+      setStatus(t('resetOk'), 'success');
+    }
 
-    addActivity(t('messageSent'), subject + ' / ' + t(type));
-    saveState();
-    render();
-    showScreen('messages');
-    setStatus(t('messageOk'), 'success');
-  }
+    function logoutNow() {
+      if (!confirm(t('logoutAsk'))) return;
+      state.loggedIn = false;
+      state.resetShown = false;
+      saveState();
+      render();
+      setStatus(t('logoutOk'), 'info');
+    }
 
-  function changeLanguage(lang) {
-    state.language = I18N[lang] ? lang : 'en';
-    saveState();
-    render();
-  }
+    function saveProfileNow() {
+      state.profile.fullName = document.getElementById('fullNameInput').value.trim();
+      state.profile.company = document.getElementById('companyInput').value.trim();
+      state.profile.sellerType = document.getElementById('sellerTypeInput').value;
+      state.profile.phone = document.getElementById('phoneInput').value.trim();
+      state.profile.country = document.getElementById('countryInput').value.trim();
+      state.profile.city = document.getElementById('cityInput').value.trim();
+      state.profile.profileLanguage = document.getElementById('profileLanguageInput').value;
+      state.profile.currency = document.getElementById('currencyInput').value;
+      saveState();
+      renderProfile();
+      setStatus(t('profileOk'), 'success');
+    }
 
-  function render() {
-    try {
-      safeState();
+    function addDocNow() {
+      const name = document.getElementById('docNameInput').value.trim();
+      const type = document.getElementById('docTypeInput').value;
+      const comment = document.getElementById('docCommentInput').value.trim();
+      if (!name) {
+        setStatus(t('docNameLabel'));
+        return;
+      }
+      state.docs.unshift({ name, type, comment });
+      document.getElementById('docNameInput').value = '';
+      document.getElementById('docCommentInput').value = '';
+      saveState();
+      renderDocs();
+      renderProfile();
+      setStatus(t('docOk'), 'success');
+    }
+
+    function deleteDoc(index) {
+      state.docs.splice(index, 1);
+      saveState();
+      renderDocs();
+      renderProfile();
+      setStatus(t('docDeleteOk'), 'info');
+    }
+
+    function buyTariffNow(plan, duration) {
+      state.tariff = plan + ' - ' + duration;
+      saveState();
+      renderProfile();
+      setStatus(t('tariffOk'), 'success');
+    }
+
+    function openMessageCenter() {
+      showScreen('messages');
+      renderMessages();
+      setStatus(t('messageOpened'), 'info');
+    }
+
+    function backToProfile() {
+      showScreen('profile');
+    }
+
+    function sendMessageNow() {
+      const subject = document.getElementById('messageSubjectInput').value.trim();
+      const text = document.getElementById('messageTextInput').value.trim();
+      if (!subject || !text) {
+        setStatus(t('messageNeed'));
+        return;
+      }
+      state.messages.unshift({ subject, text });
+      document.getElementById('messageSubjectInput').value = '';
+      document.getElementById('messageTextInput').value = '';
+      saveState();
+      renderMessages();
+      setStatus(t('messageOk'), 'success');
+    }
+
+    function render() {
       applyTranslations();
       renderReset();
       renderProfile();
-      renderWarnings();
       renderDocs();
       renderMessages();
-      renderActivity();
 
-      const authView = document.getElementById('authView');
-      const appView = document.getElementById('appView');
-      const bottomNav = document.getElementById('bottomNav');
-
-      if (authView) authView.classList.toggle('hidden', state.loggedIn);
-      if (appView) appView.classList.toggle('hidden', !state.loggedIn);
-      if (bottomNav) bottomNav.classList.toggle('hidden', !state.loggedIn);
+      document.getElementById('authView').classList.toggle('hidden', state.loggedIn);
+      document.getElementById('appView').classList.toggle('hidden', !state.loggedIn);
+      document.getElementById('bottomNav').classList.toggle('hidden', !state.loggedIn);
 
       if (state.loggedIn) {
         showScreen(state.activeScreen || 'profile');
@@ -820,12 +1025,40 @@
       if (state.loggedIn) setStatus(t('loginOk'));
       else if (state.resetShown) setStatus(t('resetOk'));
       else setStatus(t('loaded'), 'info');
-    } catch (e) {
-      console.error(e);
-      setStatus('JS error fixed mode: reload page once.', 'info');
     }
-  }
 
-  loadState();
-  render();
-</script>
+    function changeLanguage(lang) {
+      state.language = I18N[lang] ? lang : 'en';
+      saveState();
+      render();
+    }
+
+    document.getElementById('langSelect').addEventListener('change', function() {
+      changeLanguage(this.value);
+    });
+    document.getElementById('loginBtn').addEventListener('click', loginNow);
+    document.getElementById('createBtn').addEventListener('click', createNow);
+    document.getElementById('resetBtn').addEventListener('click', resetNow);
+    document.getElementById('saveProfileBtn').addEventListener('click', saveProfileNow);
+    document.getElementById('addDocBtn').addEventListener('click', addDocNow);
+    document.getElementById('openMessageBtn').addEventListener('click', openMessageCenter);
+    document.getElementById('sendMessageBtn').addEventListener('click', sendMessageNow);
+    document.getElementById('backFromMessagesBtn').addEventListener('click', backToProfile);
+    document.getElementById('logoutBtn').addEventListener('click', logoutNow);
+
+    document.getElementById('navProfile').addEventListener('click', function() { showScreen('profile'); });
+    document.getElementById('navDocuments').addEventListener('click', function() { showScreen('documents'); });
+    document.getElementById('navTariffs').addEventListener('click', function() { showScreen('tariffs'); });
+    document.getElementById('navStats').addEventListener('click', function() { showScreen('stats'); });
+
+    document.querySelectorAll('.tariffBtn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        buyTariffNow(this.dataset.plan, this.dataset.duration);
+      });
+    });
+
+    loadState();
+    render();
+  </script>
+</body>
+</html>
