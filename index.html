@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>AMAROSE Seller App v4.5</title>
+  <title>AMAROSE Seller App v4.4.4</title>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -37,7 +37,7 @@
       line-height: 1.2;
     }
     .lang {
-      width: 160px;
+      width: 150px;
       border: none;
       border-radius: 12px;
       padding: 10px 12px;
@@ -66,7 +66,9 @@
       background: #fffaeb;
       color: #b54708;
     }
-    .content { padding: 16px; }
+    .content {
+      padding: 16px;
+    }
     .box {
       background: #fff;
       border: 1px solid #d0d5dd;
@@ -126,10 +128,6 @@
     .primary { background: #175cd3; color: white; }
     .secondary { background: #e8eefc; color: #175cd3; }
     .danger { background: #fee4e2; color: #b42318; }
-    .ghostDanger {
-      background: #fff1f3;
-      color: #c01048;
-    }
     .warnBox {
       background: #fff7ed;
       border: 1px solid #fed7aa;
@@ -173,14 +171,6 @@
     .pill.green {
       background: #ecfdf3;
       color: #067647;
-    }
-    .pill.blue {
-      background: #eff8ff;
-      color: #175cd3;
-    }
-    .pill.red {
-      background: #fee4e2;
-      color: #b42318;
     }
     .grid2 {
       display: grid;
@@ -273,44 +263,6 @@
       background: #175cd3;
       color: white;
     }
-    .phoneRow {
-      display: grid;
-      grid-template-columns: 1.2fr 1.4fr;
-      gap: 10px;
-    }
-    .methodRow {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 10px 0;
-      border-bottom: 1px solid #eaecf0;
-    }
-    .methodRow:last-child {
-      border-bottom: none;
-    }
-    .methodToggle {
-      width: auto;
-      margin: 0;
-      transform: scale(1.2);
-    }
-    .stepCard {
-      border: 1px solid #d0d5dd;
-      border-radius: 16px;
-      padding: 14px;
-      margin-bottom: 12px;
-      background: #fff;
-    }
-    .stepTitle {
-      font-size: 17px;
-      font-weight: 800;
-      margin-bottom: 6px;
-    }
-    .inlineButtons {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
   </style>
 </head>
 <body>
@@ -319,10 +271,6 @@
       <div id="brand" class="brand">AMAROSE Seller App</div>
       <select id="langSelect" class="lang" onchange="changeLanguage(this.value)">
         <option value="en">English</option>
-        <option value="hy">Հայերեն</option>
-        <option value="es">Español</option>
-        <option value="fr">Français</option>
-        <option value="de">Deutsch</option>
         <option value="ru">Русский</option>
       </select>
     </div>
@@ -394,14 +342,11 @@
           <label id="sellerTypeLabel" class="label">Seller type</label>
           <select id="sellerTypeInput">
             <option value="individual">Individual</option>
-            <option value="company">Company / LLC</option>
+            <option value="company">Company</option>
           </select>
 
           <label id="phoneLabel" class="label">Phone</label>
-          <div class="phoneRow">
-            <select id="phoneCountryInput"></select>
-            <input id="phoneNumberInput" type="text" placeholder="Phone number">
-          </div>
+          <input id="phoneInput" type="text">
 
           <label id="countryLabel" class="label">Country</label>
           <input id="countryInput" type="text">
@@ -412,10 +357,6 @@
           <label id="profileLanguageLabel" class="label">Language</label>
           <select id="profileLanguageInput" onchange="changeLanguage(this.value)">
             <option value="en">English</option>
-            <option value="hy">Հայերեն</option>
-            <option value="es">Español</option>
-            <option value="fr">Français</option>
-            <option value="de">Deutsch</option>
             <option value="ru">Русский</option>
           </select>
 
@@ -438,14 +379,6 @@
         </div>
 
         <div class="box">
-          <h2 id="complianceTitle">Compliance status</h2>
-          <div class="row"><strong id="complianceStatusLabel">Status</strong><span id="complianceStatusValue" class="pill green">Good standing</span></div>
-          <div class="row"><strong id="complianceNoteLabel">Note</strong><span id="complianceNoteValue">No violations</span></div>
-        </div>
-
-        <div class="box">
-          <button id="openVerificationBtn" class="secondary" type="button" onclick="openVerification()">Open verification center</button>
-          <button id="openSettingsBtn" class="secondary" type="button" onclick="openSettings()">Open settings</button>
           <button id="openMessageBtn" class="secondary" type="button" onclick="openMessages()">Contact support</button>
           <button id="logoutBtn" class="danger" type="button" onclick="logoutNow()">Logout</button>
         </div>
@@ -560,56 +493,105 @@
           <div id="messageHistory"></div>
         </div>
       </div>
+    </div>
+  </div>
 
-      <div id="screenSettings" class="hidden">
-        <div class="box">
-          <h2 id="settingsTitle">Settings</h2>
-          <div id="settingsSubtitle" class="subtitle">Manage password, payments and seller preferences.</div>
+  <div id="bottomNav" class="bottomNav hidden">
+    <div class="bottomNavInner">
+      <button id="navProfile" class="navBtn active" type="button" onclick="showScreen('profile')">Profile</button>
+      <button id="navDocuments" class="navBtn" type="button" onclick="showScreen('documents')">Documents</button>
+      <button id="navTariffs" class="navBtn" type="button" onclick="showScreen('tariffs')">Tariffs</button>
+      <button id="navStats" class="navBtn" type="button" onclick="showScreen('stats')">Stats</button>
+    </div>
+  </div>
 
-          <label id="newPasswordLabel" class="label">New password</label>
-          <input id="newPasswordInput" type="password">
+  <script>
+    const KEY = 'amarose_seller_v444';
 
-          <label id="confirmPasswordLabel" class="label">Confirm password</label>
-          <input id="confirmPasswordInput" type="password">
-
-          <button id="changePasswordBtn" class="primary" type="button" onclick="changePasswordNow()">Change password</button>
-        </div>
-
-        <div class="box">
-          <h2 id="paymentMethodsTitle">Payment methods</h2>
-
-          <div class="methodRow">
-            <span id="pmCard">Bank card</span>
-            <input id="payCard" class="methodToggle" type="checkbox">
-          </div>
-          <div class="methodRow">
-            <span id="pmBank">Bank transfer</span>
-            <input id="payBank" class="methodToggle" type="checkbox">
-          </div>
-          <div class="methodRow">
-            <span id="pmCrypto">Crypto</span>
-            <input id="payCrypto" class="methodToggle" type="checkbox">
-          </div>
-          <div class="methodRow">
-            <span id="pmCash">Cash</span>
-            <input id="payCash" class="methodToggle" type="checkbox">
-          </div>
-
-          <button id="savePaymentsBtn" class="primary" type="button" onclick="savePaymentsNow()">Save payment methods</button>
-        </div>
-
-        <div class="box">
-          <button id="backFromSettingsBtn" class="secondary" type="button" onclick="backToProfile()">Back</button>
-        </div>
-      </div>
-
-      <div id="screenVerification" class="hidden">
-        <div class="box">
-          <h2 id="verificationTitle">Verification center</h2>
-          <div id="verificationSubtitle" class="subtitle">Complete the security steps to verify seller identity.</div>
-
-          <div id="verificationRestrictionBox" class="warnBox hidden"></div>
-
-          <div class="stepCard">
-            <div id="stepDocTitle" class="stepTitle">1. Document scan</div>
-            <div
+    const I18N = {
+      en: {
+        brand: 'AMAROSE Seller App',
+        loginTitle: 'Seller Login',
+        loginSubtitle: 'Fast access to profile, documents, tariffs and stats.',
+        emailLabel: 'Email',
+        passwordLabel: 'Password',
+        demoTitle: 'Demo access',
+        demoText: 'You can login with any email and any password. Data is saved in this browser.',
+        loginBtn: 'Login',
+        createBtn: 'Create account',
+        resetBtn: 'Reset password',
+        resetTitle: 'Password reset',
+        resetMessage: 'Password reset request created successfully.',
+        overviewTitle: 'Account Overview',
+        ovEmail: 'Email',
+        ovRole: 'Role',
+        ovStatus: 'Status',
+        ovVerification: 'Verification',
+        ovTariff: 'Tariff',
+        ovCurrency: 'Currency',
+        accountStatusTitle: 'Account status',
+        miniDocsTitle: 'Documents',
+        miniPlanTitle: 'Current plan',
+        profileTitle: 'Seller Profile',
+        fullNameLabel: 'Full name',
+        companyLabel: 'Company name',
+        sellerTypeLabel: 'Seller type',
+        phoneLabel: 'Phone',
+        countryLabel: 'Country',
+        cityLabel: 'City',
+        profileLanguageLabel: 'Language',
+        currencyLabel: 'Currency',
+        saveProfileBtn: 'Save profile',
+        serviceRulesTitle: 'Service rules',
+        serviceRulesText: 'Seller must follow platform rules. Violations may lead to warning, manual review, temporary restriction, or removal from the system.',
+        openMessageBtn: 'Contact support',
+        logoutBtn: 'Logout',
+        documentsTitle: 'Documents',
+        documentsSubtitle: 'Upload seller verification files and keep comments together.',
+        docNameLabel: 'Document name',
+        docTypeLabel: 'Document type',
+        docCommentLabel: 'Comment',
+        addDocBtn: 'Upload document',
+        docListTitle: 'Uploaded documents',
+        tariffsTitle: 'Tariffs',
+        tariffsSubtitle: 'Choose the right plan and duration for seller growth.',
+        startDesc: 'Basic access for a new seller.',
+        proDesc: 'More visibility and more seller tools.',
+        statsTitle: 'Stats',
+        statsSubtitle: 'Quick seller performance overview.',
+        statsRatingLabel: 'Rating',
+        statsReviewsLabel: 'Reviews',
+        statsActivityLabel: 'Activity',
+        statsOrdersLabel: 'Orders',
+        statsTrendLabel: 'Trend',
+        messagesTitle: 'Support message',
+        messagesSubtitle: 'Send a request to support and keep your history below.',
+        messageSubjectLabel: 'Subject',
+        messageTextLabel: 'Message',
+        sendMessageBtn: 'Send message',
+        backFromMessagesBtn: 'Back',
+        messageHistoryTitle: 'Message history',
+        navProfile: 'Profile',
+        navDocuments: 'Documents',
+        navTariffs: 'Tariffs',
+        navStats: 'Stats',
+        loaded: 'Application loaded successfully.',
+        needEmail: 'Enter email first.',
+        needBoth: 'Enter email and password.',
+        loginOk: 'Logged in successfully.',
+        createOk: 'Account created successfully.',
+        resetOk: 'Password reset request created.',
+        logoutAsk: 'Do you want to logout?',
+        logoutOk: 'Logged out successfully.',
+        profileOk: 'Profile saved successfully.',
+        docOk: 'Document uploaded successfully.',
+        docDeleteOk: 'Document deleted successfully.',
+        tariffOk: 'Tariff selected successfully.',
+        messageNeed: 'Enter subject and message.',
+        messageOk: 'Message sent successfully.',
+        messageOpened: 'Message center opened.',
+        noDocs: 'No documents yet.',
+        noMessages: 'No messages yet.',
+        deleteBtn: 'Delete',
+        individual: 'Individual',
+        co
