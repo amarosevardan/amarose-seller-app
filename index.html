@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>AMAROSE Seller App</title>
+  <title>AMAROSE Seller App v4.3+</title>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -44,17 +44,6 @@
       background: #fff;
       font-size: 14px;
       color: #101828;
-    }
-    .status {
-      margin: 16px;
-      padding: 14px;
-      border-radius: 14px;
-      border: 1px solid #fedf89;
-      background: #fffaeb;
-      color: #b54708;
-      min-height: 48px;
-      font-size: 14px;
-      line-height: 1.4;
     }
     .content { padding: 16px; }
     .box {
@@ -106,21 +95,26 @@
     .primary { background: #175cd3; color: white; }
     .secondary { background: #e8eefc; color: #175cd3; }
     .danger { background: #fee4e2; color: #b42318; }
-    .warnBox {
-      background: #fff7ed;
-      border: 1px solid #fed7aa;
-      color: #9a3412;
-      border-radius: 16px;
+    .status {
+      margin: 16px;
       padding: 14px;
-      line-height: 1.45;
+      border-radius: 14px;
+      border: 1px solid #fedf89;
+      background: #fffaeb;
+      color: #b54708;
+      min-height: 48px;
+      font-size: 14px;
+      line-height: 1.4;
     }
-    .successBox {
+    .status.success {
+      border-color: #abefc6;
       background: #ecfdf3;
-      border: 1px solid #abefc6;
       color: #067647;
-      border-radius: 16px;
-      padding: 14px;
-      line-height: 1.45;
+    }
+    .status.info {
+      border-color: #b2ddff;
+      background: #eff8ff;
+      color: #175cd3;
     }
     .row {
       display: flex;
@@ -150,6 +144,22 @@
       background: #ecfdf3;
       color: #067647;
     }
+    .warnBox {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      color: #9a3412;
+      border-radius: 16px;
+      padding: 14px;
+      line-height: 1.45;
+    }
+    .successBox {
+      background: #ecfdf3;
+      border: 1px solid #abefc6;
+      color: #067647;
+      border-radius: 16px;
+      padding: 14px;
+      line-height: 1.45;
+    }
     .card {
       border: 1px solid #d0d5dd;
       border-radius: 18px;
@@ -163,7 +173,7 @@
       margin-bottom: 8px;
     }
     .price {
-      font-size: 32px;
+      font-size: 30px;
       font-weight: 800;
       color: #175cd3;
       margin-bottom: 8px;
@@ -253,7 +263,7 @@
         <div class="box">
           <h2 id="overviewTitle">Account Overview</h2>
           <div class="row"><strong id="ovEmail">Email</strong><span id="viewEmail">-</span></div>
-          <div class="row"><strong id="ovRole">Role</strong><span id="viewRole">seller</span></div>
+          <div class="row"><strong id="ovRole">Role</strong><span>seller</span></div>
           <div class="row"><strong id="ovStatus">Status</strong><span id="viewStatus">active</span></div>
           <div class="row"><strong id="ovVerification">Verification</strong><span class="pill" id="viewVerification">pending</span></div>
           <div class="row"><strong id="ovTariff">Tariff</strong><span id="viewTariff">START - 1 month</span></div>
@@ -303,9 +313,7 @@
 
         <div class="box">
           <h2 id="serviceRulesTitle">Service rules</h2>
-          <div id="serviceRulesText" class="warnBox">
-            Seller must follow platform rules. Violations may lead to warning, manual review, temporary restriction, or removal from the system.
-          </div>
+          <div id="serviceRulesText" class="warnBox">Seller must follow platform rules. Violations may lead to warning, manual review, temporary restriction, or removal from the system.</div>
         </div>
 
         <div class="box">
@@ -432,7 +440,7 @@
   </div>
 
   <script>
-    const KEY = 'amarose_seller_v43_fixed';
+    const KEY = 'amarose_seller_v43_plus';
 
     const I18N = {
       en: {
@@ -511,7 +519,8 @@
         noMessages:'No messages yet.',
         deleteBtn:'Delete',
         individual:'Individual',
-        company:'Company'
+        company:'Company',
+        sellerWord:'seller'
       },
       ru: {
         brand:'AMAROSE Seller App',
@@ -589,7 +598,8 @@
         noMessages:'Сообщений пока нет.',
         deleteBtn:'Удалить',
         individual:'Частный',
-        company:'Компания'
+        company:'Компания',
+        sellerWord:'seller'
       }
     };
 
@@ -639,6 +649,7 @@
     }
 
     function applyTranslations() {
+      document.documentElement.lang = state.language;
       document.getElementById('brand').innerText = t('brand');
       document.getElementById('loginTitle').innerText = t('loginTitle');
       document.getElementById('emailLabel').innerText = t('emailLabel');
@@ -697,6 +708,7 @@
       document.getElementById('navTariffs').innerText = t('navTariffs');
       document.getElementById('navStats').innerText = t('navStats');
       document.getElementById('langSelect').value = state.language;
+      document.getElementById('profileLanguageInput').value = state.profile.profileLanguage || state.language;
 
       const sellerType = document.getElementById('sellerTypeInput');
       sellerType.options[0].text = t('individual');
