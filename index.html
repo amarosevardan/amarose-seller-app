@@ -3,235 +3,212 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>AMAROSE Seller App v4.4.2</title>
+  <title>AMAROSE Seller App v4.4.3</title>
   <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f7fb;
-      color: #101828;
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial,sans-serif;
+      background:#f5f7fb;
+      color:#101828;
     }
-    .app {
-      max-width: 520px;
-      margin: 0 auto;
-      min-height: 100vh;
-      background: #f5f7fb;
-      padding-bottom: 94px;
+    .app{
+      max-width:520px;
+      margin:0 auto;
+      min-height:100vh;
+      background:#f5f7fb;
+      padding-bottom:95px;
     }
-    .topbar {
-      background: #175cd3;
-      color: #fff;
-      padding: 18px 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      position: sticky;
-      top: 0;
-      z-index: 40;
+    .topbar{
+      background:#175cd3;
+      color:#fff;
+      padding:18px 16px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      position:sticky;
+      top:0;
+      z-index:50;
     }
-    .brand {
-      font-size: 17px;
-      font-weight: 800;
-      line-height: 1.2;
+    .brand{
+      font-size:17px;
+      font-weight:800;
+      line-height:1.2;
     }
-    .lang {
-      width: 150px;
-      border: none;
-      border-radius: 12px;
-      padding: 10px 12px;
-      background: #fff;
-      font-size: 14px;
-      color: #101828;
+    .lang{
+      width:150px;
+      border:none;
+      border-radius:12px;
+      padding:10px 12px;
+      background:#fff;
+      font-size:14px;
+      color:#101828;
     }
-    .status {
-      margin: 16px;
-      padding: 14px;
-      border-radius: 14px;
-      border: 1px solid #fedf89;
-      background: #fffaeb;
-      color: #b54708;
-      min-height: 48px;
-      font-size: 14px;
-      line-height: 1.45;
+    .status{
+      margin:16px;
+      padding:14px;
+      border-radius:14px;
+      border:1px solid #fedf89;
+      background:#fffaeb;
+      color:#b54708;
+      min-height:48px;
+      font-size:14px;
+      line-height:1.45;
     }
-    .status.success {
-      border-color: #abefc6;
-      background: #ecfdf3;
-      color: #067647;
+    .status.success{
+      border-color:#abefc6;
+      background:#ecfdf3;
+      color:#067647;
     }
-    .status.info {
-      border-color: #b2ddff;
-      background: #eff8ff;
-      color: #175cd3;
+    .status.info{
+      border-color:#b2ddff;
+      background:#eff8ff;
+      color:#175cd3;
     }
-    .content { padding: 16px; }
-    .box {
-      background: #fff;
-      border: 1px solid #d0d5dd;
-      border-radius: 20px;
-      padding: 16px;
-      margin-bottom: 16px;
+    .content{padding:16px}
+    .box{
+      background:#fff;
+      border:1px solid #d0d5dd;
+      border-radius:20px;
+      padding:16px;
+      margin-bottom:16px;
     }
-    .hidden { display: none !important; }
-    h1 {
-      font-size: 32px;
-      margin: 0 0 20px;
-      font-weight: 800;
+    .hidden{display:none !important}
+    h1{
+      font-size:32px;
+      margin:0 0 20px;
+      font-weight:800;
     }
-    h2 {
-      font-size: 24px;
-      margin: 0 0 16px;
-      font-weight: 800;
+    h2{
+      font-size:24px;
+      margin:0 0 16px;
+      font-weight:800;
     }
-    .label {
-      display: block;
-      font-size: 13px;
-      font-weight: 700;
-      color: #344054;
-      margin-bottom: 6px;
+    .label{
+      display:block;
+      font-size:13px;
+      font-weight:700;
+      color:#344054;
+      margin-bottom:6px;
     }
-    input, select, textarea {
-      width: 100%;
-      padding: 14px;
-      border: 1px solid #d0d5dd;
-      border-radius: 14px;
-      font-size: 16px;
-      margin-bottom: 12px;
-      background: #fff;
-      color: #101828;
+    input,select,textarea{
+      width:100%;
+      padding:14px;
+      border:1px solid #d0d5dd;
+      border-radius:14px;
+      font-size:16px;
+      margin-bottom:12px;
+      background:#fff;
+      color:#101828;
     }
-    textarea {
-      min-height: 100px;
-      resize: vertical;
+    textarea{
+      min-height:100px;
+      resize:vertical;
     }
-    button {
-      width: 100%;
-      padding: 15px;
-      border: none;
-      border-radius: 14px;
-      font-size: 16px;
-      font-weight: 800;
-      margin-bottom: 10px;
-      cursor: pointer;
+    button{
+      width:100%;
+      padding:15px;
+      border:none;
+      border-radius:14px;
+      font-size:16px;
+      font-weight:800;
+      margin-bottom:10px;
+      cursor:pointer;
     }
-    .primary { background: #175cd3; color: #fff; }
-    .secondary { background: #e8eefc; color: #175cd3; }
-    .danger { background: #fee4e2; color: #b42318; }
-    .warnBox {
-      background: #fff7ed;
-      border: 1px solid #fed7aa;
-      color: #9a3412;
-      border-radius: 16px;
-      padding: 14px;
-      line-height: 1.45;
+    .primary{background:#175cd3;color:#fff}
+    .secondary{background:#e8eefc;color:#175cd3}
+    .danger{background:#fee4e2;color:#b42318}
+    .warnBox{
+      background:#fff7ed;
+      border:1px solid #fed7aa;
+      color:#9a3412;
+      border-radius:16px;
+      padding:14px;
+      line-height:1.45;
     }
-    .row {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 12px 0;
-      border-bottom: 1px solid #eaecf0;
-      font-size: 14px;
-      align-items: center;
+    .row{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 0;
+      border-bottom:1px solid #eaecf0;
+      font-size:14px;
+      align-items:center;
     }
-    .row:last-child { border-bottom: none; }
-    .small {
-      color: #667085;
-      font-size: 14px;
-      line-height: 1.5;
+    .row:last-child{border-bottom:none}
+    .small{
+      color:#667085;
+      font-size:14px;
+      line-height:1.5;
     }
-    .pill {
-      display: inline-block;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 800;
-      background: #fffaeb;
-      color: #b54708;
+    .pill{
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:800;
+      background:#fffaeb;
+      color:#b54708;
     }
-    .pill.green {
-      background: #ecfdf3;
-      color: #067647;
+    .card{
+      border:1px solid #d0d5dd;
+      border-radius:18px;
+      padding:14px;
+      background:#fff;
+      margin-bottom:12px;
     }
-    .pill.blue {
-      background: #eff8ff;
-      color: #175cd3;
+    .cardTitle{
+      font-size:18px;
+      font-weight:800;
+      margin-bottom:8px;
     }
-    .grid2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+    .price{
+      font-size:34px;
+      font-weight:800;
+      color:#175cd3;
+      margin-bottom:8px;
+      line-height:1;
     }
-    .miniCard, .card {
-      border: 1px solid #d0d5dd;
-      border-radius: 18px;
-      padding: 14px;
-      background: #fff;
-      margin-bottom: 12px;
+    .saveTag{
+      display:inline-block;
+      padding:5px 10px;
+      border-radius:999px;
+      background:#ecfdf3;
+      color:#067647;
+      font-size:12px;
+      font-weight:800;
+      margin:4px 0 8px;
     }
-    .miniTitle {
-      font-size: 13px;
-      color: #667085;
-      margin-bottom: 8px;
+    .bottomNav{
+      position:fixed;
+      bottom:0;
+      left:0;
+      right:0;
+      background:#fff;
+      border-top:1px solid #d0d5dd;
+      padding:10px 8px calc(10px + env(safe-area-inset-bottom));
+      z-index:60;
     }
-    .miniValue {
-      font-size: 22px;
-      font-weight: 800;
-      color: #175cd3;
+    .bottomNavInner{
+      max-width:520px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:8px;
     }
-    .cardTitle {
-      font-size: 18px;
-      font-weight: 800;
-      margin-bottom: 8px;
+    .navBtn{
+      margin:0;
+      padding:12px 8px;
+      border-radius:14px;
+      background:#eaecf0;
+      color:#344054;
+      font-size:13px;
+      font-weight:800;
     }
-    .price {
-      font-size: 34px;
-      font-weight: 800;
-      color: #175cd3;
-      margin-bottom: 8px;
-      line-height: 1;
-    }
-    .saveTag {
-      display: inline-block;
-      padding: 5px 10px;
-      border-radius: 999px;
-      background: #ecfdf3;
-      color: #067647;
-      font-size: 12px;
-      font-weight: 800;
-      margin: 4px 0 8px;
-    }
-    .bottomNav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: #fff;
-      border-top: 1px solid #d0d5dd;
-      padding: 10px 8px calc(10px + env(safe-area-inset-bottom));
-      z-index: 50;
-    }
-    .bottomNavInner {
-      max-width: 520px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-    }
-    .navBtn {
-      margin: 0;
-      padding: 12px 8px;
-      border-radius: 14px;
-      background: #eaecf0;
-      color: #344054;
-      font-size: 13px;
-      font-weight: 800;
-    }
-    .navBtn.active {
-      background: #175cd3;
-      color: #fff;
+    .navBtn.active{
+      background:#175cd3;
+      color:#fff;
     }
   </style>
 </head>
@@ -239,7 +216,7 @@
   <div class="app">
     <div class="topbar">
       <div id="brand" class="brand">AMAROSE Seller App</div>
-      <select id="langSelect" class="lang">
+      <select id="langSelect" class="lang" onchange="changeLanguage(this.value)">
         <option value="en">English</option>
         <option value="ru">Русский</option>
       </select>
@@ -257,9 +234,9 @@
         <label id="passwordLabel" class="label">Password</label>
         <input id="passwordInput" type="password" placeholder="Enter password">
 
-        <button id="loginBtn" class="primary" type="button">Login</button>
-        <button id="createBtn" class="secondary" type="button">Create account</button>
-        <button id="resetBtn" class="secondary" type="button">Reset password</button>
+        <button id="loginBtn" class="primary" type="button" onclick="loginNow()">Login</button>
+        <button id="createBtn" class="secondary" type="button" onclick="createNow()">Create account</button>
+        <button id="resetBtn" class="secondary" type="button" onclick="resetNow()">Reset password</button>
       </div>
 
       <div id="resetBox" class="box hidden">
@@ -278,25 +255,11 @@
         <div class="box">
           <h2 id="overviewTitle">Account Overview</h2>
           <div class="row"><strong id="ovEmail">Email</strong><span id="viewEmail">-</span></div>
-          <div class="row"><strong id="ovRole">Role</strong><span id="viewRole">seller</span></div>
-          <div class="row"><strong id="ovStatus">Status</strong><span id="viewStatus">active</span></div>
-          <div class="row"><strong id="ovVerification">Verification</strong><span class="pill" id="viewVerification">pending</span></div>
+          <div class="row"><strong id="ovRole">Role</strong><span id="viewRole">Seller</span></div>
+          <div class="row"><strong id="ovStatus">Status</strong><span id="viewStatus">Active</span></div>
+          <div class="row"><strong id="ovVerification">Verification</strong><span class="pill" id="viewVerification">Pending</span></div>
           <div class="row"><strong id="ovTariff">Tariff</strong><span id="viewTariff">START - 1 month</span></div>
           <div class="row"><strong id="ovCurrency">Currency</strong><span id="viewCurrency">EUR</span></div>
-        </div>
-
-        <div class="box">
-          <h2 id="accountStatusTitle">Account status</h2>
-          <div class="grid2">
-            <div class="miniCard">
-              <div id="miniDocsTitle" class="miniTitle">Documents</div>
-              <div id="miniDocsValue" class="miniValue">0</div>
-            </div>
-            <div class="miniCard">
-              <div id="miniPlanTitle" class="miniTitle">Current plan</div>
-              <div id="miniPlanValue" class="miniValue" style="font-size:18px;">START</div>
-            </div>
-          </div>
         </div>
 
         <div class="box">
@@ -324,7 +287,7 @@
           <input id="cityInput" type="text">
 
           <label id="profileLanguageLabel" class="label">Language</label>
-          <select id="profileLanguageInput">
+          <select id="profileLanguageInput" onchange="changeLanguage(this.value)">
             <option value="en">English</option>
             <option value="ru">Русский</option>
           </select>
@@ -337,7 +300,7 @@
             <option value="RUB">RUB</option>
           </select>
 
-          <button id="saveProfileBtn" class="primary" type="button">Save profile</button>
+          <button id="saveProfileBtn" class="primary" type="button" onclick="saveProfileNow()">Save profile</button>
         </div>
 
         <div class="box">
@@ -348,8 +311,8 @@
         </div>
 
         <div class="box">
-          <button id="openMessageBtn" class="secondary" type="button">Contact support</button>
-          <button id="logoutBtn" class="danger" type="button">Logout</button>
+          <button id="openMessageBtn" class="secondary" type="button" onclick="openMessages()">Contact support</button>
+          <button id="logoutBtn" class="danger" type="button" onclick="logoutNow()">Logout</button>
         </div>
       </div>
 
@@ -371,7 +334,7 @@
           <label id="docCommentLabel" class="label">Comment</label>
           <textarea id="docCommentInput"></textarea>
 
-          <button id="addDocBtn" class="primary" type="button">Upload document</button>
+          <button id="addDocBtn" class="primary" type="button" onclick="addDocNow()">Upload document</button>
         </div>
 
         <div class="box">
@@ -388,22 +351,22 @@
             <div class="cardTitle">START</div>
             <div class="price">€19</div>
             <div id="startDesc" class="small">Basic access for a new seller.</div>
-            <button type="button" class="secondary tariffBtn" data-plan="START" data-duration="1 month">START - 1 month</button>
+            <button type="button" class="secondary" onclick="buyTariffNow('START','1 month')">START - 1 month</button>
             <div id="save10Start" class="saveTag">save 10%</div>
-            <button type="button" class="secondary tariffBtn" data-plan="START" data-duration="6 months">START - 6 months</button>
+            <button type="button" class="secondary" onclick="buyTariffNow('START','6 months')">START - 6 months</button>
             <div id="save20Start" class="saveTag">save 20%</div>
-            <button type="button" class="secondary tariffBtn" data-plan="START" data-duration="1 year">START - 1 year</button>
+            <button type="button" class="secondary" onclick="buyTariffNow('START','1 year')">START - 1 year</button>
           </div>
 
           <div class="card">
             <div class="cardTitle">PRO</div>
             <div class="price">€49</div>
             <div id="proDesc" class="small">More visibility and more seller tools.</div>
-            <button type="button" class="secondary tariffBtn" data-plan="PRO" data-duration="1 month">PRO - 1 month</button>
+            <button type="button" class="secondary" onclick="buyTariffNow('PRO','1 month')">PRO - 1 month</button>
             <div id="save10Pro" class="saveTag">save 10%</div>
-            <button type="button" class="secondary tariffBtn" data-plan="PRO" data-duration="6 months">PRO - 6 months</button>
+            <button type="button" class="secondary" onclick="buyTariffNow('PRO','6 months')">PRO - 6 months</button>
             <div id="save20Pro" class="saveTag">save 20%</div>
-            <button type="button" class="secondary tariffBtn" data-plan="PRO" data-duration="1 year">PRO - 1 year</button>
+            <button type="button" class="secondary" onclick="buyTariffNow('PRO','1 year')">PRO - 1 year</button>
           </div>
         </div>
       </div>
@@ -449,8 +412,8 @@
           <label id="messageTextLabel" class="label">Message</label>
           <textarea id="messageTextInput"></textarea>
 
-          <button id="sendMessageBtn" class="primary" type="button">Send message</button>
-          <button id="backFromMessagesBtn" class="secondary" type="button">Back</button>
+          <button id="sendMessageBtn" class="primary" type="button" onclick="sendMessageNow()">Send message</button>
+          <button id="backFromMessagesBtn" class="secondary" type="button" onclick="backToProfile()">Back</button>
         </div>
 
         <div class="box">
@@ -463,15 +426,15 @@
 
   <div id="bottomNav" class="bottomNav hidden">
     <div class="bottomNavInner">
-      <button id="navProfile" class="navBtn active" type="button">Profile</button>
-      <button id="navDocuments" class="navBtn" type="button">Documents</button>
-      <button id="navTariffs" class="navBtn" type="button">Tariffs</button>
-      <button id="navStats" class="navBtn" type="button">Stats</button>
+      <button id="navProfile" class="navBtn active" type="button" onclick="showScreen('profile')">Profile</button>
+      <button id="navDocuments" class="navBtn" type="button" onclick="showScreen('documents')">Documents</button>
+      <button id="navTariffs" class="navBtn" type="button" onclick="showScreen('tariffs')">Tariffs</button>
+      <button id="navStats" class="navBtn" type="button" onclick="showScreen('stats')">Stats</button>
     </div>
   </div>
 
   <script>
-    const KEY = 'amarose_seller_v442';
+    const KEY = 'amarose_seller_v443_stable';
 
     const I18N = {
       en: {
@@ -493,9 +456,6 @@
         ovVerification:'Verification',
         ovTariff:'Tariff',
         ovCurrency:'Currency',
-        accountStatusTitle:'Account status',
-        miniDocsTitle:'Documents',
-        miniPlanTitle:'Current plan',
         profileTitle:'Seller Profile',
         fullNameLabel:'Full name',
         companyLabel:'Company name',
@@ -582,9 +542,6 @@
         ovVerification:'Проверка',
         ovTariff:'Тариф',
         ovCurrency:'Валюта',
-        accountStatusTitle:'Состояние аккаунта',
-        miniDocsTitle:'Документы',
-        miniPlanTitle:'Текущий тариф',
         profileTitle:'Профиль продавца',
         fullNameLabel:'Полное имя',
         companyLabel:'Название компании',
@@ -608,4 +565,427 @@
         tariffsTitle:'Тарифы',
         startDesc:'Базовый доступ для нового продавца.',
         proDesc:'Больше видимости и больше инструментов продавца.',
+        statsTitle:'Статистика',
+        statsRatingLabel:'Рейтинг',
+        statsReviewsLabel:'Отзывы',
+        statsActivityLabel:'Активность',
+        statsOrdersLabel:'Заказы',
+        statsTrendLabel:'Тренд',
+        messagesTitle:'Сообщение в поддержку',
+        messageSubjectLabel:'Тема',
+        messageTextLabel:'Сообщение',
+        sendMessageBtn:'Отправить сообщение',
+        backFromMessagesBtn:'Назад',
+        messageHistoryTitle:'История сообщений',
+        navProfile:'Профиль',
+        navDocuments:'Документы',
+        navTariffs:'Тарифы',
+        navStats:'Статистика',
+        loaded:'Приложение загружено.',
+        needEmail:'Сначала введите почту.',
+        needBoth:'Введите почту и пароль.',
+        loginOk:'Вход выполнен успешно.',
+        createOk:'Аккаунт успешно создан.',
+        resetOk:'Запрос на сброс пароля создан.',
+        logoutAsk:'Вы точно хотите выйти?',
+        logoutOk:'Вы вышли из аккаунта.',
+        profileOk:'Профиль успешно сохранён.',
+        docOk:'Документ успешно загружен.',
+        docDeleteOk:'Документ успешно удалён.',
+        tariffOk:'Тариф успешно выбран.',
+        messageNeed:'Введите тему и сообщение.',
+        messageOk:'Сообщение успешно отправлено.',
+        messageOpened:'Центр сообщений открыт.',
+        noDocs:'Документов пока нет.',
+        noMessages:'Сообщений пока нет.',
+        deleteBtn:'Удалить',
+        individual:'Частный',
+        company:'Компания',
+        sellerWord:'Продавец',
+        pendingWord:'На проверке',
+        activeWord:'Активен',
+        save10:'скидка 10%',
+        save20:'скидка 20%',
+        stableWord:'Стабильно',
+        upWord:'Рост'
+      }
+    };
+
+    let state = {
+      language:'en',
+      loggedIn:false,
+      email:'',
+      resetShown:false,
+      activeScreen:'profile',
+      tariff:'START - 1 month',
+      profile:{
+        fullName:'',
+        company:'',
+        sellerType:'individual',
+        phone:'',
+        country:'',
+        city:'',
+        profileLanguage:'en',
+        currency:'EUR'
+      },
+      docs:[],
+      messages:[]
+    };
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(KEY);
+        if (raw) state = JSON.parse(raw);
+      } catch (e) {}
+    }
+
+    function saveState() {
+      localStorage.setItem(KEY, JSON.stringify(state));
+    }
+
+    function t(key) {
+      const lang = I18N[state.language] ? state.language : 'en';
+      return I18N[lang][key] || I18N.en[key] || key;
+    }
+
+    function setStatus(text, type) {
+      const el = document.getElementById('status');
+      el.className = 'status';
+      if (type === 'success') el.classList.add('success');
+      if (type === 'info') el.classList.add('info');
+      el.innerText = text;
+    }
+
+    function esc(str) {
+      return String(str).replace(/[&<>"']/g, function(m) {
+        return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]);
+      });
+    }
+
+    function applyTranslations() {
+      document.getElementById('brand').innerText = t('brand');
+      document.getElementById('loginTitle').innerText = t('loginTitle');
+      document.getElementById('emailLabel').innerText = t('emailLabel');
+      document.getElementById('passwordLabel').innerText = t('passwordLabel');
+      document.getElementById('demoTitle').innerText = t('demoTitle');
+      document.getElementById('demoText').innerText = t('demoText');
+      document.getElementById('loginBtn').innerText = t('loginBtn');
+      document.getElementById('createBtn').innerText = t('createBtn');
+      document.getElementById('resetBtn').innerText = t('resetBtn');
+      document.getElementById('resetTitle').innerText = t('resetTitle');
+      document.getElementById('resetMessage').innerText = t('resetMessage');
+
+      document.getElementById('overviewTitle').innerText = t('overviewTitle');
+      document.getElementById('ovEmail').innerText = t('ovEmail');
+      document.getElementById('ovRole').innerText = t('ovRole');
+      document.getElementById('ovStatus').innerText = t('ovStatus');
+      document.getElementById('ovVerification').innerText = t('ovVerification');
+      document.getElementById('ovTariff').innerText = t('ovTariff');
+      document.getElementById('ovCurrency').innerText = t('ovCurrency');
+
+      document.getElementById('profileTitle').innerText = t('profileTitle');
+      document.getElementById('fullNameLabel').innerText = t('fullNameLabel');
+      document.getElementById('companyLabel').innerText = t('companyLabel');
+      document.getElementById('sellerTypeLabel').innerText = t('sellerTypeLabel');
+      document.getElementById('phoneLabel').innerText = t('phoneLabel');
+      document.getElementById('countryLabel').innerText = t('countryLabel');
+      document.getElementById('cityLabel').innerText = t('cityLabel');
+      document.getElementById('profileLanguageLabel').innerText = t('profileLanguageLabel');
+      document.getElementById('currencyLabel').innerText = t('currencyLabel');
+      document.getElementById('saveProfileBtn').innerText = t('saveProfileBtn');
+
+      document.getElementById('serviceRulesTitle').innerText = t('serviceRulesTitle');
+      document.getElementById('serviceRulesText').innerText = t('serviceRulesText');
+      document.getElementById('openMessageBtn').innerText = t('openMessageBtn');
+      document.getElementById('logoutBtn').innerText = t('logoutBtn');
+
+      document.getElementById('documentsTitle').innerText = t('documentsTitle');
+      document.getElementById('docNameLabel').innerText = t('docNameLabel');
+      document.getElementById('docTypeLabel').innerText = t('docTypeLabel');
+      document.getElementById('docCommentLabel').innerText = t('docCommentLabel');
+      document.getElementById('addDocBtn').innerText = t('addDocBtn');
+      document.getElementById('docListTitle').innerText = t('docListTitle');
+
+      document.getElementById('tariffsTitle').innerText = t('tariffsTitle');
+      document.getElementById('startDesc').innerText = t('startDesc');
+      document.getElementById('proDesc').innerText = t('proDesc');
+      document.getElementById('save10Start').innerText = t('save10');
+      document.getElementById('save20Start').innerText = t('save20');
+      document.getElementById('save10Pro').innerText = t('save10');
+      document.getElementById('save20Pro').innerText = t('save20');
+
+      document.getElementById('statsTitle').innerText = t('statsTitle');
+      document.getElementById('statsRatingLabel').innerText = t('statsRatingLabel');
+      document.getElementById('statsReviewsLabel').innerText = t('statsReviewsLabel');
+      document.getElementById('statsActivityLabel').innerText = t('statsActivityLabel');
+      document.getElementById('statsOrdersLabel').innerText = t('statsOrdersLabel');
+      document.getElementById('statsTrendLabel').innerText = t('statsTrendLabel');
+      document.getElementById('statsActivityValue').innerText = t('stableWord');
+      document.getElementById('statsTrendValue').innerText = t('upWord');
+
+      document.getElementById('messagesTitle').innerText = t('messagesTitle');
+      document.getElementById('messageSubjectLabel').innerText = t('messageSubjectLabel');
+      document.getElementById('messageTextLabel').innerText = t('messageTextLabel');
+      document.getElementById('sendMessageBtn').innerText = t('sendMessageBtn');
+      document.getElementById('backFromMessagesBtn').innerText = t('backFromMessagesBtn');
+      document.getElementById('messageHistoryTitle').innerText = t('messageHistoryTitle');
+
+      document.getElementById('navProfile').innerText = t('navProfile');
+      document.getElementById('navDocuments').innerText = t('navDocuments');
+      document.getElementById('navTariffs').innerText = t('navTariffs');
+      document.getElementById('navStats').innerText = t('navStats');
+
+      document.getElementById('langSelect').value = state.language;
+      document.getElementById('profileLanguageInput').value = state.language;
+
+      const sellerType = document.getElementById('sellerTypeInput');
+      sellerType.options[0].text = t('individual');
+      sellerType.options[1].text = t('company');
+    }
+
+    function renderDocs() {
+      const wrap = document.getElementById('docList');
+      if (!state.docs.length) {
+        wrap.innerHTML = '<div class="small">' + t('noDocs') + '</div>';
+        return;
+      }
+      wrap.innerHTML = state.docs.map(function(d, i) {
+        return `
+          <div class="card">
+            <div class="cardTitle">${esc(d.name)}</div>
+            <div class="small">${esc(d.type)}</div>
+            <div class="small">${esc(d.comment || '')}</div>
+            <div style="margin:10px 0 12px;"><span class="pill">${t('pendingWord')}</span></div>
+            <button type="button" class="danger" onclick="deleteDoc(${i})">${t('deleteBtn')}</button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderMessages() {
+      const wrap = document.getElementById('messageHistory');
+      if (!state.messages.length) {
+        wrap.innerHTML = '<div class="small">' + t('noMessages') + '</div>';
+        return;
+      }
+      wrap.innerHTML = state.messages.map(function(m) {
+        return `
+          <div class="card">
+            <div class="cardTitle">${esc(m.subject)}</div>
+            <div class="small">${esc(m.text)}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderProfile() {
+      document.getElementById('viewEmail').innerText = state.email || '-';
+      document.getElementById('viewRole').innerText = t('sellerWord');
+      document.getElementById('viewStatus').innerText = t('activeWord');
+      document.getElementById('viewVerification').innerText = t('pendingWord');
+      document.getElementById('viewTariff').innerText = state.tariff;
+      document.getElementById('viewCurrency').innerText = state.profile.currency || 'EUR';
+
+      document.getElementById('fullNameInput').value = state.profile.fullName || '';
+      document.getElementById('companyInput').value = state.profile.company || '';
+      document.getElementById('sellerTypeInput').value = state.profile.sellerType || 'individual';
+      document.getElementById('phoneInput').value = state.profile.phone || '';
+      document.getElementById('countryInput').value = state.profile.country || '';
+      document.getElementById('cityInput').value = state.profile.city || '';
+      document.getElementById('currencyInput').value = state.profile.currency || 'EUR';
+    }
+
+    function showScreen(name) {
+      state.activeScreen = name;
+      saveState();
+
+      document.getElementById('screenProfile').classList.add('hidden');
+      document.getElementById('screenDocuments').classList.add('hidden');
+      document.getElementById('screenTariffs').classList.add('hidden');
+      document.getElementById('screenStats').classList.add('hidden');
+      document.getElementById('screenMessages').classList.add('hidden');
+
+      document.getElementById('navProfile').classList.remove('active');
+      document.getElementById('navDocuments').classList.remove('active');
+      document.getElementById('navTariffs').classList.remove('active');
+      document.getElementById('navStats').classList.remove('active');
+
+      if (name === 'profile') {
+        document.getElementById('screenProfile').classList.remove('hidden');
+        document.getElementById('navProfile').classList.add('active');
+      }
+      if (name === 'documents') {
+        document.getElementById('screenDocuments').classList.remove('hidden');
+        document.getElementById('navDocuments').classList.add('active');
+      }
+      if (name === 'tariffs') {
+        document.getElementById('screenTariffs').classList.remove('hidden');
+        document.getElementById('navTariffs').classList.add('active');
+      }
+      if (name === 'stats') {
+        document.getElementById('screenStats').classList.remove('hidden');
+        document.getElementById('navStats').classList.add('active');
+      }
+      if (name === 'messages') {
+        document.getElementById('screenMessages').classList.remove('hidden');
+      }
+    }
+
+    function render() {
+      applyTranslations();
+      renderProfile();
+      renderDocs();
+      renderMessages();
+
+      document.getElementById('resetBox').classList.toggle('hidden', !(state.resetShown && !state.loggedIn));
+      document.getElementById('authView').classList.toggle('hidden', state.loggedIn);
+      document.getElementById('appView').classList.toggle('hidden', !state.loggedIn);
+      document.getElementById('bottomNav').classList.toggle('hidden', !state.loggedIn);
+
+      if (state.loggedIn) {
+        showScreen(state.activeScreen || 'profile');
+        setStatus(t('loginOk'));
+      } else if (state.resetShown) {
+        setStatus(t('resetOk'), 'success');
+      } else {
+        setStatus(t('loaded'), 'info');
+      }
+    }
+
+    function changeLanguage(lang) {
+      state.language = (lang === 'ru') ? 'ru' : 'en';
+      state.profile.profileLanguage = state.language;
+      saveState();
+      render();
+    }
+
+    function loginNow() {
+      const email = document.getElementById('emailInput').value.trim();
+      const password = document.getElementById('passwordInput').value.trim();
+      if (!email || !password) {
+        setStatus(t('needBoth'));
+        return;
+      }
+      state.loggedIn = true;
+      state.email = email;
+      state.resetShown = false;
+      saveState();
+      render();
+      setStatus(t('loginOk'), 'success');
+    }
+
+    function createNow() {
+      const email = document.getElementById('emailInput').value.trim();
+      const password = document.getElementById('passwordInput').value.trim();
+      if (!email || !password) {
+        setStatus(t('needBoth'));
+        return;
+      }
+      state.loggedIn = true;
+      state.email = email;
+      state.resetShown = false;
+      saveState();
+      render();
+      setStatus(t('createOk'), 'success');
+    }
+
+    function resetNow() {
+      const email = document.getElementById('emailInput').value.trim();
+      if (!email) {
+        setStatus(t('needEmail'));
+        return;
+      }
+      state.loggedIn = false;
+      state.email = email;
+      state.resetShown = true;
+      saveState();
+      render();
+      setStatus(t('resetOk'), 'success');
+    }
+
+    function saveProfileNow() {
+      state.profile.fullName = document.getElementById('fullNameInput').value.trim();
+      state.profile.company = document.getElementById('companyInput').value.trim();
+      state.profile.sellerType = document.getElementById('sellerTypeInput').value;
+      state.profile.phone = document.getElementById('phoneInput').value.trim();
+      state.profile.country = document.getElementById('countryInput').value.trim();
+      state.profile.city = document.getElementById('cityInput').value.trim();
+      state.profile.currency = document.getElementById('currencyInput').value;
+      saveState();
+      render();
+      setStatus(t('profileOk'), 'success');
+    }
+
+    function addDocNow() {
+      const name = document.getElementById('docNameInput').value.trim();
+      const type = document.getElementById('docTypeInput').value;
+      const comment = document.getElementById('docCommentInput').value.trim();
+      if (!name) {
+        setStatus(t('docNameLabel'));
+        return;
+      }
+      state.docs.unshift({name, type, comment});
+      document.getElementById('docNameInput').value = '';
+      document.getElementById('docCommentInput').value = '';
+      saveState();
+      render();
+      showScreen('documents');
+      setStatus(t('docOk'), 'success');
+    }
+
+    function deleteDoc(index) {
+      state.docs.splice(index, 1);
+      saveState();
+      render();
+      showScreen('documents');
+      setStatus(t('docDeleteOk'), 'info');
+    }
+
+    function buyTariffNow(plan, duration) {
+      state.tariff = plan + ' - ' + duration;
+      saveState();
+      render();
+      showScreen('tariffs');
+      setStatus(t('tariffOk'), 'success');
+    }
+
+    function openMessages() {
+      showScreen('messages');
+      setStatus(t('messageOpened'), 'info');
+    }
+
+    function backToProfile() {
+      showScreen('profile');
+    }
+
+    function sendMessageNow() {
+      const subject = document.getElementById('messageSubjectInput').value.trim();
+      const text = document.getElementById('messageTextInput').value.trim();
+      if (!subject || !text) {
+        setStatus(t('messageNeed'));
+        return;
+      }
+      state.messages.unshift({subject, text});
+      document.getElementById('messageSubjectInput').value = '';
+      document.getElementById('messageTextInput').value = '';
+      saveState();
+      render();
+      showScreen('messages');
+      setStatus(t('messageOk'), 'success');
+    }
+
+    function logoutNow() {
+      if (!confirm(t('logoutAsk'))) return;
+      state.loggedIn = false;
+      state.resetShown = false;
+      saveState();
+      render();
+      setStatus(t('logoutOk'), 'info');
+    }
+
+    loadState();
+    render();
+  </script>
+</body>
+</html> и больше инструментов продавца.',
         statsTit
