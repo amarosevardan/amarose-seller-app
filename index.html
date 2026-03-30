@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>AMAROSE Seller App v4.4.4</title>
+  <title>AMAROSE Seller App v4.5 small patch</title>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -312,7 +312,7 @@
           <div class="row"><strong id="ovRole">Role</strong><span id="viewRole">Seller</span></div>
           <div class="row"><strong id="ovStatus">Status</strong><span id="viewStatus" class="pill green">Active</span></div>
           <div class="row"><strong id="ovVerification">Verification</strong><span id="viewVerification" class="pill">Pending</span></div>
-          <div class="row"><strong id="ovTariff">Tariff</strong><span id="viewTariff">START - 1 month</span></div>
+          <div class="row"><strong id="ovTariff">Tariff</strong><span id="viewTariff" class="pill green">START - 1 month</span></div>
           <div class="row"><strong id="ovCurrency">Currency</strong><span id="viewCurrency">EUR</span></div>
         </div>
 
@@ -400,6 +400,14 @@
             <option value="Tax document">Tax document</option>
           </select>
 
+          <label id="docStatusLabel" class="label">Document status</label>
+          <select id="docStatusInput">
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="manual_review">Manual review</option>
+            <option value="rejected">Rejected</option>
+          </select>
+
           <label id="docCommentLabel" class="label">Comment</label>
           <textarea id="docCommentInput"></textarea>
 
@@ -478,6 +486,14 @@
           <h2 id="messagesTitle">Support message</h2>
           <div id="messagesSubtitle" class="subtitle">Send a request to support and keep your history below.</div>
 
+          <label id="messageTypeLabel" class="label">Message type</label>
+          <select id="messageTypeInput">
+            <option value="support">Support</option>
+            <option value="verification">Verification</option>
+            <option value="tariff">Tariff</option>
+            <option value="complaint">Complaint</option>
+          </select>
+
           <label id="messageSubjectLabel" class="label">Subject</label>
           <input id="messageSubjectInput" type="text">
 
@@ -506,7 +522,7 @@
   </div>
 
   <script>
-    const KEY = 'amarose_seller_v444';
+    const KEY = 'amarose_seller_v45_small_patch';
 
     const I18N = {
       en: {
@@ -550,6 +566,7 @@
         documentsSubtitle: 'Upload seller verification files and keep comments together.',
         docNameLabel: 'Document name',
         docTypeLabel: 'Document type',
+        docStatusLabel: 'Document status',
         docCommentLabel: 'Comment',
         addDocBtn: 'Upload document',
         docListTitle: 'Uploaded documents',
@@ -566,6 +583,7 @@
         statsTrendLabel: 'Trend',
         messagesTitle: 'Support message',
         messagesSubtitle: 'Send a request to support and keep your history below.',
+        messageTypeLabel: 'Message type',
         messageSubjectLabel: 'Subject',
         messageTextLabel: 'Message',
         sendMessageBtn: 'Send message',
@@ -575,534 +593,4 @@
         navDocuments: 'Documents',
         navTariffs: 'Tariffs',
         navStats: 'Stats',
-        loaded: 'Application loaded successfully.',
-        needEmail: 'Enter email first.',
-        needBoth: 'Enter email and password.',
-        loginOk: 'Logged in successfully.',
-        createOk: 'Account created successfully.',
-        resetOk: 'Password reset request created.',
-        logoutAsk: 'Do you want to logout?',
-        logoutOk: 'Logged out successfully.',
-        profileOk: 'Profile saved successfully.',
-        docOk: 'Document uploaded successfully.',
-        docDeleteOk: 'Document deleted successfully.',
-        tariffOk: 'Tariff selected successfully.',
-        messageNeed: 'Enter subject and message.',
-        messageOk: 'Message sent successfully.',
-        messageOpened: 'Message center opened.',
-        noDocs: 'No documents yet.',
-        noMessages: 'No messages yet.',
-        deleteBtn: 'Delete',
-        individual: 'Individual',
-        company: 'Company',
-        sellerWord: 'Seller',
-        pendingWord: 'Pending',
-        activeWord: 'Active',
-        save10: 'save 10%',
-        save20: 'save 20%',
-        stableWord: 'Stable',
-        upWord: 'Up'
-      },
-      ru: {
-        brand: 'AMAROSE Seller App',
-        loginTitle: 'Вход продавца',
-        loginSubtitle: 'Спокойный доступ к профилю, документам, тарифам и статистике.',
-        emailLabel: 'Почта',
-        passwordLabel: 'Пароль',
-        demoTitle: 'Демо доступ',
-        demoText: 'Можно войти с любой почтой и любым паролем. Данные сохраняются в браузере.',
-        loginBtn: 'Войти',
-        createBtn: 'Создать аккаунт',
-        resetBtn: 'Сбросить пароль',
-        resetTitle: 'Сброс пароля',
-        resetMessage: 'Запрос на сброс пароля успешно создан.',
-        overviewTitle: 'Обзор аккаунта',
-        ovEmail: 'Почта',
-        ovRole: 'Роль',
-        ovStatus: 'Статус',
-        ovVerification: 'Проверка',
-        ovTariff: 'Тариф',
-        ovCurrency: 'Валюта',
-        accountStatusTitle: 'Состояние аккаунта',
-        miniDocsTitle: 'Документы',
-        miniPlanTitle: 'Текущий тариф',
-        profileTitle: 'Профиль продавца',
-        fullNameLabel: 'Полное имя',
-        companyLabel: 'Название компании',
-        sellerTypeLabel: 'Тип продавца',
-        phoneLabel: 'Телефон',
-        countryLabel: 'Страна',
-        cityLabel: 'Город',
-        profileLanguageLabel: 'Язык',
-        currencyLabel: 'Валюта',
-        saveProfileBtn: 'Сохранить профиль',
-        serviceRulesTitle: 'Правила сервиса',
-        serviceRulesText: 'Продавец обязан соблюдать правила платформы. Нарушения могут привести к предупреждению, ручной проверке, временным ограничениям или удалению из системы.',
-        openMessageBtn: 'Написать в поддержку',
-        logoutBtn: 'Выйти',
-        documentsTitle: 'Документы',
-        documentsSubtitle: 'Загружайте файлы проверки продавца и храните комментарии в одном месте.',
-        docNameLabel: 'Название документа',
-        docTypeLabel: 'Тип документа',
-        docCommentLabel: 'Комментарий',
-        addDocBtn: 'Загрузить документ',
-        docListTitle: 'Загруженные документы',
-        tariffsTitle: 'Тарифы',
-        tariffsSubtitle: 'Выберите подходящий план и срок для роста продавца.',
-        startDesc: 'Базовый доступ для нового продавца.',
-        proDesc: 'Больше видимости и больше инструментов продавца.',
-        statsTitle: 'Статистика',
-        statsSubtitle: 'Быстрый обзор показателей продавца.',
-        statsRatingLabel: 'Рейтинг',
-        statsReviewsLabel: 'Отзывы',
-        statsActivityLabel: 'Активность',
-        statsOrdersLabel: 'Заказы',
-        statsTrendLabel: 'Тренд',
-        messagesTitle: 'Сообщение в поддержку',
-        messagesSubtitle: 'Отправьте запрос в поддержку и храните историю ниже.',
-        messageSubjectLabel: 'Тема',
-        messageTextLabel: 'Сообщение',
-        sendMessageBtn: 'Отправить сообщение',
-        backFromMessagesBtn: 'Назад',
-        messageHistoryTitle: 'История сообщений',
-        navProfile: 'Профиль',
-        navDocuments: 'Документы',
-        navTariffs: 'Тарифы',
-        navStats: 'Статистика',
-        loaded: 'Приложение загружено.',
-        needEmail: 'Сначала введите почту.',
-        needBoth: 'Введите почту и пароль.',
-        loginOk: 'Вход выполнен успешно.',
-        createOk: 'Аккаунт успешно создан.',
-        resetOk: 'Запрос на сброс пароля создан.',
-        logoutAsk: 'Вы точно хотите выйти?',
-        logoutOk: 'Вы вышли из аккаунта.',
-        profileOk: 'Профиль успешно сохранён.',
-        docOk: 'Документ успешно загружен.',
-        docDeleteOk: 'Документ успешно удалён.',
-        tariffOk: 'Тариф успешно выбран.',
-        messageNeed: 'Введите тему и сообщение.',
-        messageOk: 'Сообщение успешно отправлено.',
-        messageOpened: 'Центр сообщений открыт.',
-        noDocs: 'Документов пока нет.',
-        noMessages: 'Сообщений пока нет.',
-        deleteBtn: 'Удалить',
-        individual: 'Частный',
-        company: 'Компания',
-        sellerWord: 'Продавец',
-        pendingWord: 'На проверке',
-        activeWord: 'Активен',
-        save10: 'скидка 10%',
-        save20: 'скидка 20%',
-        stableWord: 'Стабильно',
-        upWord: 'Рост'
-      }
-    };
-
-    let state = {
-      language: 'en',
-      loggedIn: false,
-      email: '',
-      resetShown: false,
-      activeScreen: 'profile',
-      tariff: 'START - 1 month',
-      profile: {
-        fullName: '',
-        company: '',
-        sellerType: 'individual',
-        phone: '',
-        country: '',
-        city: '',
-        profileLanguage: 'en',
-        currency: 'EUR'
-      },
-      docs: [],
-      messages: []
-    };
-
-    function t(key) {
-      const lang = I18N[state.language] ? state.language : 'en';
-      return I18N[lang][key] || I18N.en[key] || key;
-    }
-
-    function saveState() {
-      localStorage.setItem(KEY, JSON.stringify(state));
-    }
-
-    function loadState() {
-      try {
-        const raw = localStorage.getItem(KEY);
-        if (raw) state = JSON.parse(raw);
-      } catch (e) {}
-    }
-
-    function setStatus(msg, variant) {
-      const el = document.getElementById('status');
-      el.className = 'status';
-      if (variant === 'success') el.classList.add('success');
-      if (variant === 'warn') el.classList.add('warn');
-      el.innerText = msg;
-    }
-
-    function esc(str) {
-      return String(str).replace(/[&<>"']/g, function(m) {
-        return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]);
-      });
-    }
-
-    function applyTranslations() {
-      document.getElementById('brand').innerText = t('brand');
-      document.getElementById('loginTitle').innerText = t('loginTitle');
-      document.getElementById('loginSubtitle').innerText = t('loginSubtitle');
-      document.getElementById('emailLabel').innerText = t('emailLabel');
-      document.getElementById('passwordLabel').innerText = t('passwordLabel');
-      document.getElementById('demoTitle').innerText = t('demoTitle');
-      document.getElementById('demoText').innerText = t('demoText');
-      document.getElementById('loginBtn').innerText = t('loginBtn');
-      document.getElementById('createBtn').innerText = t('createBtn');
-      document.getElementById('resetBtn').innerText = t('resetBtn');
-      document.getElementById('resetTitle').innerText = t('resetTitle');
-      document.getElementById('resetMessage').innerText = t('resetMessage');
-
-      document.getElementById('overviewTitle').innerText = t('overviewTitle');
-      document.getElementById('ovEmail').innerText = t('ovEmail');
-      document.getElementById('ovRole').innerText = t('ovRole');
-      document.getElementById('ovStatus').innerText = t('ovStatus');
-      document.getElementById('ovVerification').innerText = t('ovVerification');
-      document.getElementById('ovTariff').innerText = t('ovTariff');
-      document.getElementById('ovCurrency').innerText = t('ovCurrency');
-
-      document.getElementById('accountStatusTitle').innerText = t('accountStatusTitle');
-      document.getElementById('miniDocsTitle').innerText = t('miniDocsTitle');
-      document.getElementById('miniPlanTitle').innerText = t('miniPlanTitle');
-
-      document.getElementById('profileTitle').innerText = t('profileTitle');
-      document.getElementById('fullNameLabel').innerText = t('fullNameLabel');
-      document.getElementById('companyLabel').innerText = t('companyLabel');
-      document.getElementById('sellerTypeLabel').innerText = t('sellerTypeLabel');
-      document.getElementById('phoneLabel').innerText = t('phoneLabel');
-      document.getElementById('countryLabel').innerText = t('countryLabel');
-      document.getElementById('cityLabel').innerText = t('cityLabel');
-      document.getElementById('profileLanguageLabel').innerText = t('profileLanguageLabel');
-      document.getElementById('currencyLabel').innerText = t('currencyLabel');
-      document.getElementById('saveProfileBtn').innerText = t('saveProfileBtn');
-
-      document.getElementById('serviceRulesTitle').innerText = t('serviceRulesTitle');
-      document.getElementById('serviceRulesText').innerText = t('serviceRulesText');
-      document.getElementById('openMessageBtn').innerText = t('openMessageBtn');
-      document.getElementById('logoutBtn').innerText = t('logoutBtn');
-
-      document.getElementById('documentsTitle').innerText = t('documentsTitle');
-      document.getElementById('documentsSubtitle').innerText = t('documentsSubtitle');
-      document.getElementById('docNameLabel').innerText = t('docNameLabel');
-      document.getElementById('docTypeLabel').innerText = t('docTypeLabel');
-      document.getElementById('docCommentLabel').innerText = t('docCommentLabel');
-      document.getElementById('addDocBtn').innerText = t('addDocBtn');
-      document.getElementById('docListTitle').innerText = t('docListTitle');
-
-      document.getElementById('tariffsTitle').innerText = t('tariffsTitle');
-      document.getElementById('tariffsSubtitle').innerText = t('tariffsSubtitle');
-      document.getElementById('startDesc').innerText = t('startDesc');
-      document.getElementById('proDesc').innerText = t('proDesc');
-      document.getElementById('save10Start').innerText = t('save10');
-      document.getElementById('save20Start').innerText = t('save20');
-      document.getElementById('save10Pro').innerText = t('save10');
-      document.getElementById('save20Pro').innerText = t('save20');
-
-      document.getElementById('statsTitle').innerText = t('statsTitle');
-      document.getElementById('statsSubtitle').innerText = t('statsSubtitle');
-      document.getElementById('statsRatingLabel').innerText = t('statsRatingLabel');
-      document.getElementById('statsReviewsLabel').innerText = t('statsReviewsLabel');
-      document.getElementById('statsActivityLabel').innerText = t('statsActivityLabel');
-      document.getElementById('statsOrdersLabel').innerText = t('statsOrdersLabel');
-      document.getElementById('statsTrendLabel').innerText = t('statsTrendLabel');
-      document.getElementById('statsActivityValue').innerText = t('stableWord');
-      document.getElementById('statsTrendValue').innerText = t('upWord');
-
-      document.getElementById('messagesTitle').innerText = t('messagesTitle');
-      document.getElementById('messagesSubtitle').innerText = t('messagesSubtitle');
-      document.getElementById('messageSubjectLabel').innerText = t('messageSubjectLabel');
-      document.getElementById('messageTextLabel').innerText = t('messageTextLabel');
-      document.getElementById('sendMessageBtn').innerText = t('sendMessageBtn');
-      document.getElementById('backFromMessagesBtn').innerText = t('backFromMessagesBtn');
-      document.getElementById('messageHistoryTitle').innerText = t('messageHistoryTitle');
-
-      document.getElementById('navProfile').innerText = t('navProfile');
-      document.getElementById('navDocuments').innerText = t('navDocuments');
-      document.getElementById('navTariffs').innerText = t('navTariffs');
-      document.getElementById('navStats').innerText = t('navStats');
-
-      document.getElementById('langSelect').value = state.language;
-      document.getElementById('profileLanguageInput').value = state.language;
-
-      const sellerType = document.getElementById('sellerTypeInput');
-      sellerType.options[0].text = t('individual');
-      sellerType.options[1].text = t('company');
-    }
-
-    function renderProfile() {
-      document.getElementById('viewEmail').innerText = state.email || '-';
-      document.getElementById('viewRole').innerText = t('sellerWord');
-      document.getElementById('viewStatus').innerText = t('activeWord');
-      document.getElementById('viewVerification').innerText = t('pendingWord');
-      document.getElementById('viewTariff').innerText = state.tariff;
-      document.getElementById('viewCurrency').innerText = state.profile.currency || 'EUR';
-
-      document.getElementById('miniDocsValue').innerText = String(state.docs.length);
-      document.getElementById('miniPlanValue').innerText = state.tariff.split(' - ')[0] || 'START';
-
-      document.getElementById('fullNameInput').value = state.profile.fullName || '';
-      document.getElementById('companyInput').value = state.profile.company || '';
-      document.getElementById('sellerTypeInput').value = state.profile.sellerType || 'individual';
-      document.getElementById('phoneInput').value = state.profile.phone || '';
-      document.getElementById('countryInput').value = state.profile.country || '';
-      document.getElementById('cityInput').value = state.profile.city || '';
-      document.getElementById('currencyInput').value = state.profile.currency || 'EUR';
-    }
-
-    function renderDocs() {
-      const wrap = document.getElementById('docList');
-      if (!state.docs.length) {
-        wrap.innerHTML = '<div class="small">' + t('noDocs') + '</div>';
-        return;
-      }
-
-      wrap.innerHTML = state.docs.map(function(doc, index) {
-        return `
-          <div class="card">
-            <div class="cardTitle">${esc(doc.name)}</div>
-            <div class="small">${esc(doc.type)}</div>
-            <div class="small" style="margin-top:6px;">${esc(doc.comment || '')}</div>
-            <div style="margin:10px 0 12px;"><span class="pill">${t('pendingWord')}</span></div>
-            <button class="danger" type="button" onclick="deleteDoc(${index})">${t('deleteBtn')}</button>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function renderMessages() {
-      const wrap = document.getElementById('messageHistory');
-      if (!state.messages.length) {
-        wrap.innerHTML = '<div class="small">' + t('noMessages') + '</div>';
-        return;
-      }
-
-      wrap.innerHTML = state.messages.map(function(msg) {
-        return `
-          <div class="messageItem">
-            <div class="messageHead">${esc(msg.subject)}</div>
-            <div class="messageMeta">${esc(msg.time)}</div>
-            <div class="small">${esc(msg.text)}</div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function showScreen(name) {
-      state.activeScreen = name;
-      saveState();
-
-      document.getElementById('screenProfile').classList.add('hidden');
-      document.getElementById('screenDocuments').classList.add('hidden');
-      document.getElementById('screenTariffs').classList.add('hidden');
-      document.getElementById('screenStats').classList.add('hidden');
-      document.getElementById('screenMessages').classList.add('hidden');
-
-      document.getElementById('navProfile').classList.remove('active');
-      document.getElementById('navDocuments').classList.remove('active');
-      document.getElementById('navTariffs').classList.remove('active');
-      document.getElementById('navStats').classList.remove('active');
-
-      if (name === 'profile') {
-        document.getElementById('screenProfile').classList.remove('hidden');
-        document.getElementById('navProfile').classList.add('active');
-      }
-      if (name === 'documents') {
-        document.getElementById('screenDocuments').classList.remove('hidden');
-        document.getElementById('navDocuments').classList.add('active');
-      }
-      if (name === 'tariffs') {
-        document.getElementById('screenTariffs').classList.remove('hidden');
-        document.getElementById('navTariffs').classList.add('active');
-      }
-      if (name === 'stats') {
-        document.getElementById('screenStats').classList.remove('hidden');
-        document.getElementById('navStats').classList.add('active');
-      }
-      if (name === 'messages') {
-        document.getElementById('screenMessages').classList.remove('hidden');
-      }
-    }
-
-    function render() {
-      applyTranslations();
-      renderProfile();
-      renderDocs();
-      renderMessages();
-
-      document.getElementById('resetBox').classList.toggle('hidden', !(state.resetShown && !state.loggedIn));
-      document.getElementById('authView').classList.toggle('hidden', state.loggedIn);
-      document.getElementById('appView').classList.toggle('hidden', !state.loggedIn);
-      document.getElementById('bottomNav').classList.toggle('hidden', !state.loggedIn);
-
-      if (state.loggedIn) {
-        showScreen(state.activeScreen || 'profile');
-        setStatus(t('loginOk'));
-      } else if (state.resetShown) {
-        setStatus(t('resetOk'), 'success');
-      } else {
-        setStatus(t('loaded'));
-      }
-    }
-
-    function changeLanguage(lang) {
-      state.language = lang === 'ru' ? 'ru' : 'en';
-      state.profile.profileLanguage = state.language;
-      saveState();
-      render();
-    }
-
-    function loginNow() {
-      const email = document.getElementById('emailInput').value.trim();
-      const password = document.getElementById('passwordInput').value.trim();
-
-      if (!email || !password) {
-        setStatus(t('needBoth'), 'warn');
-        return;
-      }
-
-      state.loggedIn = true;
-      state.email = email;
-      state.resetShown = false;
-      saveState();
-      render();
-      setStatus(t('loginOk'), 'success');
-    }
-
-    function createNow() {
-      const email = document.getElementById('emailInput').value.trim();
-      const password = document.getElementById('passwordInput').value.trim();
-
-      if (!email || !password) {
-        setStatus(t('needBoth'), 'warn');
-        return;
-      }
-
-      state.loggedIn = true;
-      state.email = email;
-      state.resetShown = false;
-      saveState();
-      render();
-      setStatus(t('createOk'), 'success');
-    }
-
-    function resetNow() {
-      const email = document.getElementById('emailInput').value.trim();
-
-      if (!email) {
-        setStatus(t('needEmail'), 'warn');
-        return;
-      }
-
-      state.loggedIn = false;
-      state.email = email;
-      state.resetShown = true;
-      saveState();
-      render();
-      setStatus(t('resetOk'), 'success');
-    }
-
-    function saveProfileNow() {
-      state.profile.fullName = document.getElementById('fullNameInput').value.trim();
-      state.profile.company = document.getElementById('companyInput').value.trim();
-      state.profile.sellerType = document.getElementById('sellerTypeInput').value;
-      state.profile.phone = document.getElementById('phoneInput').value.trim();
-      state.profile.country = document.getElementById('countryInput').value.trim();
-      state.profile.city = document.getElementById('cityInput').value.trim();
-      state.profile.currency = document.getElementById('currencyInput').value;
-      saveState();
-      render();
-      setStatus(t('profileOk'), 'success');
-    }
-
-    function addDocNow() {
-      const name = document.getElementById('docNameInput').value.trim();
-      const type = document.getElementById('docTypeInput').value;
-      const comment = document.getElementById('docCommentInput').value.trim();
-
-      if (!name) {
-        setStatus(t('docNameLabel'), 'warn');
-        return;
-      }
-
-      state.docs.unshift({ name, type, comment });
-      document.getElementById('docNameInput').value = '';
-      document.getElementById('docCommentInput').value = '';
-      saveState();
-      render();
-      showScreen('documents');
-      setStatus(t('docOk'), 'success');
-    }
-
-    function deleteDoc(index) {
-      state.docs.splice(index, 1);
-      saveState();
-      render();
-      showScreen('documents');
-      setStatus(t('docDeleteOk'));
-    }
-
-    function buyTariffNow(plan, duration) {
-      state.tariff = plan + ' - ' + duration;
-      saveState();
-      render();
-      showScreen('tariffs');
-      setStatus(t('tariffOk'), 'success');
-    }
-
-    function openMessages() {
-      showScreen('messages');
-      setStatus(t('messageOpened'));
-    }
-
-    function backToProfile() {
-      showScreen('profile');
-    }
-
-    function sendMessageNow() {
-      const subject = document.getElementById('messageSubjectInput').value.trim();
-      const text = document.getElementById('messageTextInput').value.trim();
-
-      if (!subject || !text) {
-        setStatus(t('messageNeed'), 'warn');
-        return;
-      }
-
-      state.messages.unshift({
-        subject,
-        text,
-        time: new Date().toLocaleString()
-      });
-
-      document.getElementById('messageSubjectInput').value = '';
-      document.getElementById('messageTextInput').value = '';
-      saveState();
-      render();
-      showScreen('messages');
-      setStatus(t('messageOk'), 'success');
-    }
-
-    function logoutNow() {
-      if (!confirm(t('logoutAsk'))) return;
-      state.loggedIn = false;
-      state.resetShown = false;
-      saveState();
-      render();
-      setStatus(t('logoutOk'));
-    }
-
-    loadState();
-    render();
-  </script>
-</body>
-</html>
+        loaded: 'Application loaded
